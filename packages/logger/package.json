@@ -1,5 +1,5 @@
 {
-  "name": "logger",
+  "name": "@hub/logger",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,5 +8,15 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "pino": "^9.7.0",
+    "pino-http": "^10.5.0"
+  },
+  "devDependencies": {
+    "@hub/eslint-config": "workspace:*",
+    "@hub/tsconfig": "workspace:*",
+    "@types/node": "^22.15.3",
+    "typescript": "^5.9.2"
+  }
 }
