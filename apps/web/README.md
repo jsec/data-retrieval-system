@@ -30,6 +30,26 @@ pnpm test
 This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
 
 
+## Linting & Formatting
+
+
+This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+
+```bash
+pnpm lint
+pnpm format
+pnpm check
+```
+
+
+## Shadcn
+
+Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
+
+```bash
+pnpx shadcn@latest add button
+```
+
 
 
 ## Routing
