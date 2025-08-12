@@ -10,7 +10,7 @@
     "@hub/config": "workspace:*",
     "@hono/node-server": "^1.14.3",
     "hono": "^4.7.10",
-    "kysely": "^0.28.2"
+    "kysely": "^0.28.5"
   },
   "devDependencies": {
     "@hub/eslint-config": "workspace:*",
