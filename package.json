@@ -2,11 +2,12 @@
     "name": "f1-data-hub",
     "private": true,
     "scripts": {
-        "build": "turbo run build",
-        "predev": "docker compose up -d",
-        "dev": "turbo run dev",
-        "lint": "turbo run lint",
-        "check-types": "turbo run check-types"
+        "build": "dotenvx run -- turbo run build",
+        "check-types": "dotenvx run -- turbo run check-types",
+        "dev": "dotenvx run -- turbo run dev",
+        "codegen": "dotenvx run -- turbo run codegen",
+        "lint": "dotenvx run -- turbo run lint",
+        "predev": "dotenvx run -- docker compose up -d"
     },
     "engines": {
         "node": ">=20"
