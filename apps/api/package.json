@@ -9,7 +9,7 @@
   "dependencies": {
     "@hub/config": "workspace:*",
     "@hono/node-server": "^1.14.3",
-    "hono": "^4.7.10",
+    "hono": "^4.9.0",
     "kysely": "^0.28.2"
   },
   "devDependencies": {
