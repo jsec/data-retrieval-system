@@ -1,13 +1,11 @@
-import { Hono } from 'hono';
-import { logger } from 'hono/logger';
+import Fastify from 'fastify';
 
-const app = new Hono();
-app.use(logger());
+const app = Fastify({
+    logger: true,
+});
 
-app.get('/status', (ctx) => {
-    return ctx.json({
-        service: true,
-    });
+app.get('/', (req, res) => {
+    res.send({ status: 'up' });
 });
 
 export { app };

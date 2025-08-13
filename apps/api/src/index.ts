@@ -1,26 +1,11 @@
-import { serve } from '@hono/node-server';
-
 import { app } from './app.js';
 
-const server = serve({
-    fetch: app.fetch,
-    port: 3000,
-}, (info) => {
-    console.log(`Server is running on http://localhost:${info.port}`);
-});
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+app.listen({ port: 3333 }), (err: never, address: never) => {
+    if (err) {
+        app.log.error(err);
+        process.exit(1);
+    }
 
-process.on('SIGINT', () => {
-    server.close();
-    process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-    server.close((error) => {
-        if (error) {
-            console.error(error);
-            process.exit(1);
-        }
-
-        process.exit(0);
-    });
-});
+    app.log.info(`Server is now listening on ${address}`);
+};

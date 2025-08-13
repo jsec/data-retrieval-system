@@ -8,9 +8,7 @@
   },
   "dependencies": {
     "@hub/config": "workspace:*",
-    "@hono/node-server": "^1.14.3",
-    "hono": "^4.7.10",
-    "kysely": "^0.28.2"
+    "fastify": "^5.5.0"
   },
   "devDependencies": {
     "@hub/eslint-config": "workspace:*",
