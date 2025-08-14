@@ -24,6 +24,5 @@
         "cz-conventional-changelog": "^3.3.0",
         "turbo": "^2.5.3",
         "typescript": "5.8.2"
-    },
-    "packageManager": "pnpm@9.0.0"
+    }
 }
