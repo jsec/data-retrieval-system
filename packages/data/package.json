@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "build": "tsdown",
-        "codegen": "dotenvx run -f ../../.env -- drizzle-kit pull"
+        "db:schema": "kysely-codegen --camel-case --out-file ./src/types/db.d.ts"
     },
     "exports": {
         "db": {
@@ -17,16 +17,17 @@
         "@hub/tsconfig": "workspace:*",
         "@types/node": "^22.15.3",
         "@types/pg": "^8.15.5",
-        "drizzle-kit": "^0.31.4",
         "eslint": "^9.32.0",
+        "kysely-codegen": "^0.18.5",
+        "kysely-ctl": "^0.17.0",
         "tsdown": "^0.13.0",
         "tsx": "^4.7.1",
         "typescript": "catalog:"
     },
     "dependencies": {
-        "@hub/config": "workspace:*",
         "@dotenvx/dotenvx": "^1.48.4",
-        "drizzle-orm": "^0.44.4",
+        "@hub/config": "workspace:*",
+        "kysely": "^0.28.5",
         "pg": "^8.16.3"
     }
 }
