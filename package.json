@@ -10,7 +10,7 @@
         "predev": "dotenvx run -- docker compose up -d"
     },
     "engines": {
-        "node": ">=20"
+        "node": ">=22.19.0"
     },
     "config": {
         "commitizen": {
