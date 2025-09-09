@@ -4,11 +4,13 @@
   "typescript": true,
   "tailwind": true,
   "packageManager": "pnpm",
-  "git": false,
+  "git": true,
   "version": 1,
   "framework": "react-cra",
   "chosenAddOns": [
+    "eslint",
     "shadcn",
+    "table",
     "tanstack-query"
   ]
 }
