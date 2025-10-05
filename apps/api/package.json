@@ -1,21 +1,26 @@
 {
-  "name": "api",
+  "name": "@hub/api",
   "type": "module",
   "scripts": {
+    "db:schema:pull": "drizzle-kit pull",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@hub/config": "workspace:*",
-    "fastify": "^5.5.0"
+    "@hono/node-server": "^1.19.5",
+    "drizzle-orm": "^0.44.5",
+    "hono": "^4.9.10",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@hub/eslint-config": "workspace:*",
     "@hub/tsconfig": "workspace:*",
     "@types/node": "^22.18.0",
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.5",
     "eslint": "^9.36.0",
-    "tsx": "^4.7.1",
+    "tsx": "^4.19.4",
     "typescript": "catalog:"
   }
 }

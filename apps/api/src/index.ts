@@ -1,11 +1,18 @@
-import { app } from './app.js';
+import { serve } from '@hono/node-server'
+import { Hono } from 'hono'
+import { logger } from 'hono/logger'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-app.listen({ port: 3333 }), (err: never, address: never) => {
-    if (err) {
-        app.log.error(err);
-        process.exit(1);
-    }
+const app = new Hono()
 
-    app.log.info(`Server is now listening on ${address}`);
-};
+app.use(logger())
+
+app.get('/', (c) => {
+    return c.text('Hello Hono!')
+})
+
+serve({
+    fetch: app.fetch,
+    port: 3000
+}, (info) => {
+    console.log(`Server is running on http://localhost:${info.port}`)
+})
