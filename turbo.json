@@ -1,6 +1,9 @@
 {
     "$schema": "https://turborepo.com/schema.json",
     "ui": "stream",
+    "globalEnv": [
+        "DATABASE_URL"
+    ],
     "tasks": {
         "build": {
             "dependsOn": [
@@ -31,6 +34,9 @@
         },
         "codegen": {
             "cache": false
-        }
+        },
+        "db:schema:pull": {
+            "cache": false
+        },
     }
 }

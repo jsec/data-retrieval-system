@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-      "build": "tsdown"
+      "build": "tsdown",
+      "dev": "tsdown --watch"
   },
   "exports": {
       ".": {
