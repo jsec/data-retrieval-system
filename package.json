@@ -6,7 +6,6 @@
     "check-types": "turbo run check-types",
     "db:schema:pull": "turbo run db:schema:pull",
     "dev": "turbo run dev",
-    "codegen": "turbo run codegen",
     "lint": "turbo run lint",
     "predev": "docker compose up -d"
   },

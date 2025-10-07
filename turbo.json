@@ -32,9 +32,6 @@
             "cache": false,
             "persistent": true
         },
-        "codegen": {
-            "cache": false
-        },
         "db:schema:pull": {
             "cache": false
         },

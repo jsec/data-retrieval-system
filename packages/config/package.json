@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
       "build": "tsdown",
-      "dev": "tsdown --watch"
+      "postinstall": "tsdown"
   },
   "exports": {
       ".": {
