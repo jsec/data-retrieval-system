@@ -10,9 +10,12 @@
   "dependencies": {
     "@hono/node-server": "^1.19.6",
     "@hub/config": "workspace:*",
+    "@orpc/openapi": "^1.13.0",
+    "@orpc/server": "^1.13.0",
     "drizzle-orm": "^0.44.5",
     "hono": "^4.10.3",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@hub/eslint-config": "workspace:*",
