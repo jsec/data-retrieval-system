@@ -17,6 +17,6 @@
     "typescript-eslint": "^8.41.0"
   },
   "dependencies": {
-    "@jarsec/eslint-config": "6.2.3"
+    "@jarsec/eslint-config": "6.4.0"
   }
 }
