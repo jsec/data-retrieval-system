@@ -68,7 +68,7 @@ code {
   --chart-5:
     oklch(0.55 0.15 299.88);
   --radius:
-    0.95rem;
+    1.025rem;
   --sidebar:
     oklch(0.93 0.01 238.46);
   --sidebar-foreground:
@@ -90,7 +90,7 @@ code {
   --font-serif:
     'Source Serif 4', 'Geist', 'Geist Fallback', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
   --font-mono:
-    Fira Code, monospace;
+    JetBrains Mono, monospace;
   --shadow-color:
     oklch(0.49 0.09 235.45);
   --shadow-opacity:
@@ -272,13 +272,13 @@ code {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --font-sans:
-    Inter, sans-serif;
+    var(--font-sans);
   --font-mono:
-    Fira Code, monospace;
+    var(--font-mono);
   --font-serif:
-    'Source Serif 4', 'Geist', 'Geist Fallback', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    var(--font-serif);
   --radius:
-    0.95rem;
+    var(--radius);
   --tracking-tighter:
     calc(var(--tracking-normal) - 0.05em);
   --tracking-tight:
