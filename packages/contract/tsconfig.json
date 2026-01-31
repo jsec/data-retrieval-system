@@ -1,0 +1,3 @@
+{
+    "extends": "@hub/tsconfig/lib.json"
+}
