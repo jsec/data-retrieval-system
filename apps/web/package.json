@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.0.0",
+    "@hub/contract": "workspace:*",
     "@orpc/client": "^1.13.4",
     "@orpc/contract": "catalog:",
     "@orpc/tanstack-query": "^1.13.4",
