@@ -5,6 +5,7 @@ packages:
 catalog:
   typescript: 5.9.2
   zod: 4.2.1
+  '@orpc/contract': 1.13.4
 
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'

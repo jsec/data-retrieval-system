@@ -14,7 +14,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@orpc/contract": "^1.13.4",
+    "@orpc/contract": "catalog:",
     "zod": "catalog:"
   }
 }

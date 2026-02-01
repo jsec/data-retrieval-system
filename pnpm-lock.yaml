@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@orpc/contract':
+      specifier: 1.13.4
+      version: 1.13.4
     typescript:
       specifier: 5.9.2
       version: 5.9.2
@@ -90,6 +93,15 @@ importers:
       '@faker-js/faker':
         specifier: ^10.0.0
         version: 10.1.0
+      '@orpc/client':
+        specifier: ^1.13.4
+        version: 1.13.4
+      '@orpc/contract':
+        specifier: 'catalog:'
+        version: 1.13.4
+      '@orpc/tanstack-query':
+        specifier: ^1.13.4
+        version: 1.13.4(@orpc/client@1.13.4)(@tanstack/query-core@5.90.12)
       '@radix-ui/react-avatar':
         specifier: ^1.1.11
         version: 1.1.11(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -211,11 +223,8 @@ importers:
       jsdom:
         specifier: ^27.0.0
         version: 27.3.0
-      prettier:
-        specifier: ^3.5.3
-        version: 3.7.4
       typescript:
-        specifier: ^5.7.2
+        specifier: 'catalog:'
         version: 5.9.2
       vite:
         specifier: ^7.1.7
@@ -255,7 +264,7 @@ importers:
   packages/contract:
     dependencies:
       '@orpc/contract':
-        specifier: ^1.13.4
+        specifier: 'catalog:'
         version: 1.13.4
       zod:
         specifier: 'catalog:'
@@ -1225,6 +1234,12 @@ packages:
 
   '@orpc/standard-server@1.13.4':
     resolution: {integrity: sha512-ZOzgfVp6XUg+wVYw+gqesfRfGPtQbnBIrIiSnFMtZF+6ncmFJeF2Shc4RI2Guqc0Qz25juy8Ogo4tX3YqysOcg==}
+
+  '@orpc/tanstack-query@1.13.4':
+    resolution: {integrity: sha512-gCL/kh3kf6OUGKfXxSoOZpcX1jNYzxGfo/PkLQKX7ui4xiTbfWw3sCDF30sNS4I7yAOnBwDwJ3N2xzfkTftOBg==}
+    peerDependencies:
+      '@orpc/client': 1.13.4
+      '@tanstack/query-core': '>=5.80.2'
 
   '@oxc-project/types@0.95.0':
     resolution: {integrity: sha512-vACy7vhpMPhjEJhULNxrdR0D943TkA/MigMpJCHmBHvMXxRStRi/dPtTlfQ3uDwWSzRpT8z+7ImjZVf8JWBocQ==}
@@ -5959,6 +5974,14 @@ snapshots:
   '@orpc/standard-server@1.13.4':
     dependencies:
       '@orpc/shared': 1.13.4
+    transitivePeerDependencies:
+      - '@opentelemetry/api'
+
+  '@orpc/tanstack-query@1.13.4(@orpc/client@1.13.4)(@tanstack/query-core@5.90.12)':
+    dependencies:
+      '@orpc/client': 1.13.4
+      '@orpc/shared': 1.13.4
+      '@tanstack/query-core': 5.90.12
     transitivePeerDependencies:
       - '@opentelemetry/api'
 
