@@ -13,7 +13,7 @@ export type RpcClientOutputs = InferContractRouterOutputs<typeof contract>;
 
 export const rpcClient: ContractRouterClient<typeof contract> = createORPCClient(
     new RPCLink({
-        url: `${import.meta.VITE_API_URL}/api`
+        url: `${import.meta.env.VITE_API_URL}/api`
     })
 );
 
