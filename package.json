@@ -21,7 +21,7 @@
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "turbo": "^2.5.6",
-    "typescript": "5.9.2"
+    "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.14.0"
 }
