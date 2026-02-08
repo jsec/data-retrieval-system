@@ -20,6 +20,14 @@ app.doc('/spec', {
 });
 
 app.get('/', Scalar({
+    agent: {
+        disabled: true,
+    },
+    defaultHttpClient: {
+        clientKey: 'fetch',
+        targetKey: 'js',
+    },
+    hideTestRequestButton: true,
     pageTitle: 'DRS API Documentation',
     url: '/spec',
 }));

@@ -11,6 +11,7 @@ import {
 } from './schemas.js';
 
 const driverStandingsRoute = createRoute({
+    description: 'Retrieves the final drivers standings for a given year',
     method: 'get',
     path: '/{year}/drivers/standings',
     request: {
@@ -23,13 +24,15 @@ const driverStandingsRoute = createRoute({
                     schema: DriverStandingResponseSchema,
                 },
             },
-            description: 'Retrieves the final drivers standings for a given year',
+            description: 'Array of drivers and their points tallies for the year',
         },
     },
+    summary: 'Get driver standings by year',
     tags: ['Seasons'],
 });
 
 const constructorStandingsRoute = createRoute({
+    description: 'Retrieves the final constructors standings for a given year',
     method: 'get',
     path: '/{year}/constructors/standings',
     request: {
@@ -42,9 +45,10 @@ const constructorStandingsRoute = createRoute({
                     schema: ConstructorStandingResponseSchema,
                 },
             },
-            description: 'Retrieves the final constructors standings for a given year',
+            description: 'Array of constructors and their points tallies for the year',
         },
     },
+    summary: 'Get constructor standings by year',
     tags: ['Seasons'],
 });
 
