@@ -7,7 +7,7 @@ import {
     races,
     results,
 } from '../../drizzle/schema.js';
-import { db } from './db.js';
+import { db } from '../data/db.js';
 
 // FIXME: need to get sprint points too
 export const getDriverStandingsBySeason = async (year: number) => {

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
+    "@hono/zod-openapi": "^1.2.1",
     "@hub/config": "workspace:*",
     "drizzle-orm": "^0.44.5",
     "hono": "^4.11.7",
