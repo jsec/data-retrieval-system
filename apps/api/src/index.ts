@@ -1,36 +1,6 @@
 import { serve } from '@hono/node-server';
-import { OpenAPIHono } from '@hono/zod-openapi';
-import { Scalar } from '@scalar/hono-api-reference';
-import { logger } from 'hono/logger';
 
-import { router as seasonsRouter } from './seasons/router.js';
-
-const app = new OpenAPIHono();
-
-app.use(logger());
-
-app.route('/seasons', seasonsRouter);
-
-app.doc('/spec', {
-    info: {
-        title: 'DRS API Specification',
-        version: '1.0.0',
-    },
-    openapi: '3.0.0',
-});
-
-app.get('/', Scalar({
-    agent: {
-        disabled: true,
-    },
-    defaultHttpClient: {
-        clientKey: 'fetch',
-        targetKey: 'js',
-    },
-    hideTestRequestButton: true,
-    pageTitle: 'DRS API Documentation',
-    url: '/spec',
-}));
+import { app } from './app.js';
 
 // TODO: set port and hostname in config
 serve({

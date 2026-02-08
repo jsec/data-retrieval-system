@@ -42,7 +42,31 @@ export const DriverStandingSchema = z.object({
         }),
 });
 
-export const DriverStandingResponseSchema = z.array(DriverStandingSchema);
+export const DriverStandingResponseSchema = z
+    .array(DriverStandingSchema)
+    .openapi({
+        description: 'A list of drivers and their accrued points for the given year',
+        example: [
+            {
+                driverId: 830,
+                firstName: 'Max',
+                lastName: 'Verstappen',
+                points: 399,
+            },
+            {
+                driverId: 846,
+                firstName: 'Lando',
+                lastName: 'Norris',
+                points: 344,
+            },
+            {
+                driverId: 844,
+                firstName: 'Charles',
+                lastName: 'Leclerc',
+                points: 327,
+            },
+        ],
+    });
 
 export const ConstructorStandingSchema = z.object({
     constructorId: z
@@ -65,4 +89,25 @@ export const ConstructorStandingSchema = z.object({
         }),
 });
 
-export const ConstructorStandingResponseSchema = z.array(ConstructorStandingSchema);
+export const ConstructorStandingResponseSchema = z
+    .array(ConstructorStandingSchema)
+    .openapi({
+        description: 'A list of constructors and their accrued points for the given year',
+        example: [
+            {
+                constructorId: 131,
+                constructorName: 'Mercedes',
+                points: 573,
+            },
+            {
+                constructorId: 9,
+                constructorName: 'Red Bull',
+                points: 319,
+            },
+            {
+                constructorId: 211,
+                constructorName: 'Racing Point',
+                points: 210,
+            },
+        ],
+    });
