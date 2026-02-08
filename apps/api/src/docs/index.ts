@@ -1,4 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
+import { config } from '@hub/config';
 import { Scalar } from '@scalar/hono-api-reference';
 
 const description = `
@@ -37,8 +38,7 @@ export const configureDocumentation = (app: OpenAPIHono) => {
         servers: [
             {
                 description: 'TBD server URL',
-                // TODO: source the server URL from config
-                url: 'http://localhost:3000',
+                url: config.api.hostname,
             },
         ],
         tags: [
