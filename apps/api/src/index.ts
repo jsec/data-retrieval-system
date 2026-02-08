@@ -1,5 +1,6 @@
 import { serve } from '@hono/node-server';
 import { OpenAPIHono } from '@hono/zod-openapi';
+import { Scalar } from '@scalar/hono-api-reference';
 import { logger } from 'hono/logger';
 
 import { router as seasonsRouter } from './seasons/router.js';
@@ -17,6 +18,11 @@ app.doc('/spec', {
     },
     openapi: '3.0.0',
 });
+
+app.get('/', Scalar({
+    pageTitle: 'DRS API Documentation',
+    url: '/spec',
+}));
 
 // TODO: set port and hostname in config
 serve({

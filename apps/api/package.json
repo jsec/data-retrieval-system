@@ -11,6 +11,7 @@
     "@hono/node-server": "^1.19.6",
     "@hono/zod-openapi": "^1.2.1",
     "@hub/config": "workspace:*",
+    "@scalar/hono-api-reference": "^0.9.40",
     "drizzle-orm": "^0.44.5",
     "hono": "^4.11.7",
     "pg": "^8.16.3",
