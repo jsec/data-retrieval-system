@@ -4,6 +4,9 @@ export const YearParamsSchema = z.object({
     year: z
         .string()
         .transform(value => Number.parseInt(value))
+        .pipe(
+            z.number().min(1950).max(2024),
+        )
         .openapi({
             description: 'The year the season was contested',
             example: 2024,
