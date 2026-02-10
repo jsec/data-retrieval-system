@@ -2,32 +2,16 @@ import type { ComponentType } from 'react'
 
 import {
     ActivityIcon,
+    AudioWaveformIcon,
     BellIcon,
     CalendarIcon,
-    ChartLineIcon,
     ChartPieIcon,
     ChevronRightIcon,
-    CircleQuestionMarkIcon,
     CircleUserIcon,
-    CopyIcon,
-    DollarSignIcon,
-    FacebookIcon,
-    FolderIcon,
-    InstagramIcon,
+    FlagIcon,
     LanguagesIcon,
-    LayoutGridIcon,
-    LayoutListIcon,
-    LinkedinIcon,
-    LockKeyholeIcon,
-    MailIcon,
-    MapPinIcon,
-    MessageSquareTextIcon,
     SearchIcon,
-    SettingsIcon,
-    ShieldCheckIcon,
-    TrendingUpIcon,
-    TwitterIcon,
-    UserIcon
+    WrenchIcon
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -88,128 +72,30 @@ const menuItems: MenuItem[] = [
 
 const pagesItems: MenuItem[] = [
     {
-        icon: CircleUserIcon,
-        label: 'User Profile',
-        href: '#'
-    },
-    {
-        icon: SettingsIcon,
-        label: 'Account Settings',
-        href: '#'
-    },
-    {
-        icon: CircleQuestionMarkIcon,
-        label: 'FAQ',
-        href: '#'
-    },
-    {
-        icon: DollarSignIcon,
-        label: 'Pricing',
-        href: '#',
-        badge: '3'
-    },
-    {
-        icon: LayoutGridIcon,
-        label: 'Misc',
-        items: [
-            { label: 'Error', href: '#' },
-            { label: 'Coming Soon', href: '#' },
-            { label: 'Not Authorized', href: '#' },
-            { label: 'Under Maintenance', href: '#' }
-        ]
-    },
-    {
-        icon: LockKeyholeIcon,
-        label: 'Authentication',
-        items: [
-            { label: 'Login', href: '#' },
-            { label: 'Register', href: '#' },
-            { label: 'Verify Email', href: '#' },
-            { label: 'Forget Password', href: '#' },
-            { label: 'Reset Password', href: '#' },
-            { label: 'Two Steps', href: '#' }
-        ]
-    },
-    {
-        icon: LayoutListIcon,
-        label: 'Wizard Examples',
-        items: [
-            { label: 'Checkout', href: '#' },
-            { label: 'Property Listing', href: '#' },
-            { label: 'Create Deal', href: '#' }
-        ]
-    },
-    {
-        icon: CopyIcon,
-        label: 'Modal Examples',
-        href: '#'
-    }
-]
-
-const chartMapsItems: MenuItem[] = [
-    {
-        icon: ChartLineIcon,
-        label: 'Charts',
-        href: '#'
-    },
-    {
-        icon: MapPinIcon,
-        label: 'Maps',
-        href: '#'
-    }
-]
-
-const applicationsItems: MenuItem[] = [
-    {
-        icon: MailIcon,
-        label: 'Email',
-        href: '#'
-    },
-    {
-        icon: MessageSquareTextIcon,
-        label: 'Chat',
-        href: '#'
-    },
-    {
-        icon: UserIcon,
-        label: 'Users',
-        items: [
-            { label: 'List', href: '#' },
-            { label: 'View', href: '#' }
-        ]
-    },
-    {
-        icon: ShieldCheckIcon,
-        label: 'Roles & Permissions',
-        items: [
-            { label: 'Roles', href: '#', badge: '4' },
-            { label: 'Permissions', href: '#' }
-        ]
-    },
-    {
         icon: CalendarIcon,
-        label: 'Calendar',
+        label: 'Seasons',
         href: '#'
     },
     {
-        icon: FolderIcon,
-        label: 'File Manager',
+        icon: CircleUserIcon,
+        label: 'Drivers',
         href: '#'
     },
     {
-        icon: LayoutGridIcon,
-        label: 'Kanban',
+        icon: WrenchIcon,
+        label: 'Constructors',
         href: '#'
     },
     {
-        icon: TrendingUpIcon,
-        label: 'Point of Sale',
-        items: [
-            { label: 'New Order', href: '#' },
-            { label: 'Order List', href: '#' },
-            { label: 'Customers', href: '#' }
-        ]
-    }
+        icon: AudioWaveformIcon,
+        label: 'Circuits',
+        href: '#',
+    },
+    {
+        icon: FlagIcon,
+        label: 'Races',
+        href: '#'
+    },
 ]
 
 const SidebarGroupedMenuItems = ({ data, groupLabel }: { data: MenuItem[]; groupLabel?: string }) => {
@@ -279,8 +165,8 @@ const ApplicationShell = () => {
                                     <a href='#'>
                                         <LogoSvg className='[&_rect]:fill-sidebar [&_rect:first-child]:fill-primary' />
                                         <div className='flex flex-col items-start'>
-                                            <span className='text-lg font-semibold'>shadcn/studio</span>
-                                            <span className='text-xs font-light'>Dashboard Template</span>
+                                            <span className='text-lg font-semibold'>DRS</span>
+                                            <span className='text-xs font-light'>Data Retrieval System</span>
                                         </div>
                                     </a>
                                 </SidebarMenuButton>
@@ -290,8 +176,6 @@ const ApplicationShell = () => {
                     <SidebarContent>
                         <SidebarGroupedMenuItems data={menuItems} />
                         <SidebarGroupedMenuItems data={pagesItems} groupLabel='Pages' />
-                        <SidebarGroupedMenuItems data={chartMapsItems} groupLabel='Charts & Maps' />
-                        <SidebarGroupedMenuItems data={applicationsItems} groupLabel='Applications' />
                     </SidebarContent>
                 </Sidebar>
                 <div className='flex flex-1 flex-col'>
@@ -362,27 +246,7 @@ const ApplicationShell = () => {
                     </main>
                     <footer>
                         <div className='text-muted-foreground mx-auto flex size-full max-w-7xl items-center justify-between gap-3 px-4 py-3 max-sm:flex-col sm:gap-6 sm:px-6'>
-                            <p className='text-sm text-balance max-sm:text-center'>
-                                {`©${new Date().getFullYear()}`}{' '}
-                                <a href='#' className='text-primary'>
-                                    shadcn/studio
-                                </a>
-                                , Made for better web design
-                            </p>
-                            <div className='flex items-center gap-5'>
-                                <a href='#'>
-                                    <FacebookIcon className='size-4' />
-                                </a>
-                                <a href='#'>
-                                    <InstagramIcon className='size-4' />
-                                </a>
-                                <a href='#'>
-                                    <LinkedinIcon className='size-4' />
-                                </a>
-                                <a href='#'>
-                                    <TwitterIcon className='size-4' />
-                                </a>
-                            </div>
+                            bleh
                         </div>
                     </footer>
                 </div>
