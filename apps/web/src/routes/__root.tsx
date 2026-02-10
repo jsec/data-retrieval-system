@@ -14,8 +14,9 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
     component: () => (
         <>
-            <ApplicationShell></ApplicationShell>
-            <Outlet />
+            <ApplicationShell>
+                <Outlet />
+            </ApplicationShell>
             <TanStackDevtools
                 config={{
                     position: 'bottom-right',
