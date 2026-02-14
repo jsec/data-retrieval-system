@@ -16,7 +16,7 @@
     "@hub/eslint-config": "workspace:*",
     "@hub/tsconfig": "workspace:*",
     "@types/node": "^22.18.0",
-    "eslint": "^9.36.0",
+    "eslint": "^9.39.2",
     "tsdown": "^0.15.12",
     "typescript": "catalog:"
   },
