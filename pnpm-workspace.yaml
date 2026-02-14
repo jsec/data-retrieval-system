@@ -9,4 +9,5 @@ onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
   - msw
+  - protobufjs
   - unrs-resolver

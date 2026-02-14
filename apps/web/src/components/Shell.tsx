@@ -1,15 +1,11 @@
 import type { ComponentType } from 'react'
 
 import {
-    ActivityIcon,
     AudioWaveformIcon,
-    BellIcon,
     CalendarIcon,
-    ChartPieIcon,
     ChevronRightIcon,
     CircleUserIcon,
     FlagIcon,
-    LanguagesIcon,
     SearchIcon,
     WrenchIcon
 } from 'lucide-react'
@@ -39,14 +35,12 @@ import {
 
 import LogoSvg from '@/assets/svg/logo'
 import SearchDialog from '@/components/shadcn-studio/blocks/dialog-search'
-import LanguageDropdown from '@/components/shadcn-studio/blocks/dropdown-language'
-import ActivityDialog from '@/components/shadcn-studio/blocks/dialog-activity'
-import NotificationDropdown from '@/components/shadcn-studio/blocks/dropdown-notification'
 import ProfileDropdown from '@/components/shadcn-studio/blocks/dropdown-profile'
+import { Link, Outlet } from '@tanstack/react-router'
 
 type MenuSubItem = {
     label: string
-    href: string
+    linkTo: string
     badge?: string
 }
 
@@ -55,46 +49,38 @@ type MenuItem = {
     label: string
 } & (
         | {
-            href: string
+            linkTo: string
             badge?: string
             items?: never
         }
-        | { href?: never; badge?: never; items: MenuSubItem[] }
+        | { linkTo?: never; badge?: never; items: MenuSubItem[] }
     )
 
-const menuItems: MenuItem[] = [
-    {
-        icon: ChartPieIcon,
-        label: 'Dashboard',
-        href: '#'
-    }
-]
-
-const pagesItems: MenuItem[] = [
+const pages: MenuItem[] = [
     {
         icon: CalendarIcon,
         label: 'Seasons',
-        href: '#'
+        linkTo: '/seasons'
     },
     {
         icon: CircleUserIcon,
         label: 'Drivers',
-        href: '#'
+        linkTo: '/drivers'
     },
     {
         icon: WrenchIcon,
         label: 'Constructors',
-        href: '#'
+        linkTo: '/constructors'
     },
     {
         icon: AudioWaveformIcon,
         label: 'Circuits',
-        href: '#',
+        linkTo: '/circuits',
     },
     {
         icon: FlagIcon,
         label: 'Races',
-        href: '#'
+        linkTo: '/races'
     },
 ]
 
@@ -120,7 +106,7 @@ const SidebarGroupedMenuItems = ({ data, groupLabel }: { data: MenuItem[]; group
                                             {item.items.map(subItem => (
                                                 <SidebarMenuSubItem key={subItem.label}>
                                                     <SidebarMenuSubButton className='justify-between' asChild>
-                                                        <a href={subItem.href}>
+                                                        <a href={subItem.linkTo}>
                                                             {subItem.label}
                                                             {subItem.badge && (
                                                                 <span className='bg-primary/10 flex h-5 min-w-5 items-center justify-center rounded-full text-xs'>
@@ -138,10 +124,10 @@ const SidebarGroupedMenuItems = ({ data, groupLabel }: { data: MenuItem[]; group
                         ) : (
                             <SidebarMenuItem key={item.label}>
                                 <SidebarMenuButton tooltip={item.label} asChild>
-                                    <a href={item.href}>
+                                    <Link to={item.linkTo}>
                                         <item.icon />
                                         <span>{item.label}</span>
-                                    </a>
+                                    </Link>
                                 </SidebarMenuButton>
                                 {item.badge && <SidebarMenuBadge className='bg-primary/10 rounded-full'>{item.badge}</SidebarMenuBadge>}
                             </SidebarMenuItem>
@@ -174,8 +160,7 @@ const ApplicationShell = () => {
                         </SidebarMenu>
                     </SidebarHeader>
                     <SidebarContent>
-                        <SidebarGroupedMenuItems data={menuItems} />
-                        <SidebarGroupedMenuItems data={pagesItems} groupLabel='Pages' />
+                        <SidebarGroupedMenuItems data={pages} />
                     </SidebarContent>
                 </Sidebar>
                 <div className='flex flex-1 flex-col'>
@@ -202,28 +187,6 @@ const ApplicationShell = () => {
                                 />
                             </div>
                             <div className='flex items-center gap-1.5'>
-                                <LanguageDropdown
-                                    trigger={
-                                        <Button variant='ghost' size='icon'>
-                                            <LanguagesIcon />
-                                        </Button>
-                                    }
-                                />
-                                <ActivityDialog
-                                    trigger={
-                                        <Button variant='ghost' size='icon'>
-                                            <ActivityIcon />
-                                        </Button>
-                                    }
-                                />
-                                <NotificationDropdown
-                                    trigger={
-                                        <Button variant='ghost' size='icon' className='relative'>
-                                            <BellIcon />
-                                            <span className='bg-destructive absolute top-2 right-2.5 size-2 rounded-full' />
-                                        </Button>
-                                    }
-                                />
                                 <ProfileDropdown
                                     trigger={
                                         <Button variant='ghost' size='icon' className='size-9.5'>
@@ -240,7 +203,7 @@ const ApplicationShell = () => {
                     <main className='mx-auto size-full max-w-7xl flex-1 px-4 py-6 sm:px-6'>
                         <Card className='h-250 shadow-none'>
                             <CardContent className='h-full'>
-                                <div className='h-full rounded-md border bg-[repeating-linear-gradient(45deg,var(--muted),var(--muted)_1px,var(--card)_2px,var(--card)_15px)]' />
+                                <Outlet />
                             </CardContent>
                         </Card>
                     </main>

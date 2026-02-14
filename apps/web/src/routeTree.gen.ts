@@ -9,10 +9,40 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SeasonsRouteImport } from './routes/seasons'
+import { Route as RacesRouteImport } from './routes/races'
+import { Route as DriversRouteImport } from './routes/drivers'
+import { Route as ConstructorsRouteImport } from './routes/constructors'
+import { Route as CircuitsRouteImport } from './routes/circuits'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 
+const SeasonsRoute = SeasonsRouteImport.update({
+  id: '/seasons',
+  path: '/seasons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RacesRoute = RacesRouteImport.update({
+  id: '/races',
+  path: '/races',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DriversRoute = DriversRouteImport.update({
+  id: '/drivers',
+  path: '/drivers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConstructorsRoute = ConstructorsRouteImport.update({
+  id: '/constructors',
+  path: '/constructors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CircuitsRoute = CircuitsRouteImport.update({
+  id: '/circuits',
+  path: '/circuits',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +61,116 @@ const DemoTableRoute = DemoTableRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/circuits': typeof CircuitsRoute
+  '/constructors': typeof ConstructorsRoute
+  '/drivers': typeof DriversRoute
+  '/races': typeof RacesRoute
+  '/seasons': typeof SeasonsRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/circuits': typeof CircuitsRoute
+  '/constructors': typeof ConstructorsRoute
+  '/drivers': typeof DriversRoute
+  '/races': typeof RacesRoute
+  '/seasons': typeof SeasonsRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/circuits': typeof CircuitsRoute
+  '/constructors': typeof ConstructorsRoute
+  '/drivers': typeof DriversRoute
+  '/races': typeof RacesRoute
+  '/seasons': typeof SeasonsRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/table' | '/demo/tanstack-query'
+  fullPaths:
+    | '/'
+    | '/circuits'
+    | '/constructors'
+    | '/drivers'
+    | '/races'
+    | '/seasons'
+    | '/demo/table'
+    | '/demo/tanstack-query'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/table' | '/demo/tanstack-query'
-  id: '__root__' | '/' | '/demo/table' | '/demo/tanstack-query'
+  to:
+    | '/'
+    | '/circuits'
+    | '/constructors'
+    | '/drivers'
+    | '/races'
+    | '/seasons'
+    | '/demo/table'
+    | '/demo/tanstack-query'
+  id:
+    | '__root__'
+    | '/'
+    | '/circuits'
+    | '/constructors'
+    | '/drivers'
+    | '/races'
+    | '/seasons'
+    | '/demo/table'
+    | '/demo/tanstack-query'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CircuitsRoute: typeof CircuitsRoute
+  ConstructorsRoute: typeof ConstructorsRoute
+  DriversRoute: typeof DriversRoute
+  RacesRoute: typeof RacesRoute
+  SeasonsRoute: typeof SeasonsRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/seasons': {
+      id: '/seasons'
+      path: '/seasons'
+      fullPath: '/seasons'
+      preLoaderRoute: typeof SeasonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/races': {
+      id: '/races'
+      path: '/races'
+      fullPath: '/races'
+      preLoaderRoute: typeof RacesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/drivers': {
+      id: '/drivers'
+      path: '/drivers'
+      fullPath: '/drivers'
+      preLoaderRoute: typeof DriversRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/constructors': {
+      id: '/constructors'
+      path: '/constructors'
+      fullPath: '/constructors'
+      preLoaderRoute: typeof ConstructorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/circuits': {
+      id: '/circuits'
+      path: '/circuits'
+      fullPath: '/circuits'
+      preLoaderRoute: typeof CircuitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +197,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CircuitsRoute: CircuitsRoute,
+  ConstructorsRoute: ConstructorsRoute,
+  DriversRoute: DriversRoute,
+  RacesRoute: RacesRoute,
+  SeasonsRoute: SeasonsRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
