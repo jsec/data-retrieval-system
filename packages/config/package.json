@@ -21,6 +21,6 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "envalid": "^8.1.0"
+    "envalid": "^8.1.1"
   }
 }
