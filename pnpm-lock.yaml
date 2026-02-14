@@ -211,11 +211,8 @@ importers:
       jsdom:
         specifier: ^27.0.0
         version: 27.3.0
-      prettier:
-        specifier: ^3.5.3
-        version: 3.7.4
       typescript:
-        specifier: ^5.9.3
+        specifier: 'catalog:'
         version: 5.9.3
       vite:
         specifier: ^7.3.1
