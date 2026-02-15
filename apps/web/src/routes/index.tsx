@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import DashboardShell from '@/components/Shell'
 
 export const Route = createFileRoute('/')({
     component: App,
@@ -7,6 +6,6 @@ export const Route = createFileRoute('/')({
 
 function App() {
     return (
-        <DashboardShell />
+        <div>Placeholder for home</div>
     )
 }
