@@ -2,10 +2,9 @@ import { createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-
 import type { QueryClient } from '@tanstack/react-query'
 import ApplicationShell from '@/components/Shell'
+import { TanStackQueryDevtools } from '@/lib/devtools'
 
 interface MyRouterContext {
     queryClient: QueryClient
