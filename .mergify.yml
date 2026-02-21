@@ -5,3 +5,13 @@ pull_request_rules:
     actions:
       merge:
         method: squash
+queue_rules:
+  - name: Renovate PRs
+    merge_method: squash
+    update_method: rebase
+    batch_size: 10
+    autoqueue: true
+    queue_conditions:
+      - and:
+          - label = dependencies
+    branch_protection_injection_mode: merge
