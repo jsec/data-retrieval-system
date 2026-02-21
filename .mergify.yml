@@ -1,3 +1,10 @@
+pull_request_rules:
+  - name: Automatic merge on approval
+    conditions:
+      - "#approved-reviews-by>=1"
+    actions:
+      merge:
+        method: squash
 queue_rules:
   - name: Renovate PRs
     merge_method: squash
@@ -7,4 +14,4 @@ queue_rules:
     queue_conditions:
       - and:
           - label = dependencies
-    branch_protection_injection_mode: merge
+    branch_protection_injection_mode: queue
