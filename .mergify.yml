@@ -1,55 +1,8 @@
 pull_request_rules:
-  - name: "request review"
+  - name: Automatic merge on approval
     conditions:
-      - -merged
-      - -closed
-      - "#approved-reviews-by=0"
-    actions:
-      request_reviews:
-        users:
-          - jsec
-
-  - name: add conflict label
-    conditions:
-      - conflict
-    actions:
-      label:
-        add:
-          - conflict
-
-  - name: remove conflict label
-    conditions:
-      - -conflict
-    actions:
-      label:
-        remove:
-          - conflict
-
-  - name: add queued label
-    conditions:
-      - queue-position>=0
-    actions:
-      label:
-        add:
-          - merge-queued
-
-  - name: remove queued label
-    conditions:
-      - queue-position<0
-    actions:
-      label:
-        remove:
-          - merge-queued
-
-queue_rules:
-  - name: Renovate PRs
-    merge_method: squash
-    update_method: rebase
-    batch_size: 5
-    autoqueue: true
-    queue_conditions:
-      - "base=develop"
-      - "label=dependencies"
-    merge_conditions:
+      - author=renovate[bot]
       - "#approved-reviews-by>=1"
-    branch_protection_injection_mode: merge
+    actions:
+      merge:
+        method: squash
