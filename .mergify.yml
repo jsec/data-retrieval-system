@@ -12,6 +12,7 @@ queue_rules:
     batch_size: 10
     autoqueue: true
     queue_conditions:
+      - ""
       - and:
           - label = dependencies
-    branch_protection_injection_mode: queue
+    branch_protection_injection_mode: merge
