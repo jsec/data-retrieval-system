@@ -1,55 +1,38 @@
 pull_request_rules:
-  - name: "request review"
+  - name: request review
     conditions:
+      - base=develop
+      - author=renovate[bot]
+      - label=dependencies
+      - "#approved-reviews-by=0"
       - -merged
       - -closed
-      - "#approved-reviews-by=0"
     actions:
       request_reviews:
         users:
           - jsec
 
-  - name: add conflict label
+  - name: queue approved renovate PRs
     conditions:
-      - conflict
+      - base=develop
+      - author=renovate[bot]
+      - label=dependencies
+      - approved-reviews-by=jsec
+      - -merged
+      - -closed
+      - check-success=renovate/stability-days
+      - check-success=security/snyk (jsec)
     actions:
-      label:
-        add:
-          - conflict
-
-  - name: remove conflict label
-    conditions:
-      - -conflict
-    actions:
-      label:
-        remove:
-          - conflict
-
-  - name: add queued label
-    conditions:
-      - queue-position>=0
-    actions:
-      label:
-        add:
-          - merge-queued
-
-  - name: remove queued label
-    conditions:
-      - queue-position<0
-    actions:
-      label:
-        remove:
-          - merge-queued
+      queue:
+        name: Renovate PRs
 
 queue_rules:
   - name: Renovate PRs
     merge_method: squash
     update_method: rebase
     batch_size: 5
-    autoqueue: true
-    queue_conditions:
-      - "base=develop"
-      - "label=dependencies"
-    merge_conditions:
-      - "#approved-reviews-by>=1"
-    branch_protection_injection_mode: merge
+    conditions:
+      - base=develop
+      - -conflict
+      - check-success=renovate/stability-days
+      - check-success=security/snyk (jsec)
