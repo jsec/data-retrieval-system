@@ -10,7 +10,7 @@
     "predev": "docker compose up -d"
   },
   "engines": {
-    "node": ">=22.22.0"
+    "node": ">=24.13.0"
   },
   "config": {
     "commitizen": {
