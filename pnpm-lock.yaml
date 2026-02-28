@@ -45,7 +45,7 @@ importers:
         specifier: ^0.45.1
         version: 0.45.1(@types/pg@8.16.0)(kysely@0.28.5)(pg@8.18.0)
       hono:
-        specifier: ^4.11.10
+        specifier: ^4.12.1
         version: 4.12.1
       http-status-codes:
         specifier: ^2.3.0
