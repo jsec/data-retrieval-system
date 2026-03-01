@@ -1,4 +1,4 @@
-import config from '@hub/eslint-config/base';
+import config from '@drs/eslint-config/base';
 
 export default [
     ...config,
