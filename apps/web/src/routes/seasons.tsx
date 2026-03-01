@@ -1,3 +1,4 @@
+import { SeasonSummaryTable } from '@/components/SeasonSummaryTable'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/seasons')({
@@ -5,5 +6,7 @@ export const Route = createFileRoute('/seasons')({
 })
 
 function RouteComponent() {
-    return <div>Placeholder for seasons</div>
+    return (
+        <SeasonSummaryTable />
+    )
 }
