@@ -1,5 +1,5 @@
+import { config } from '@drs/config';
 import { serve } from '@hono/node-server';
-import { config } from '@hub/config';
 
 import { app } from './app.js';
 

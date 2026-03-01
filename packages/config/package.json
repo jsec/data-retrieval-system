@@ -1,5 +1,5 @@
 {
-  "name": "@hub/config",
+  "name": "@drs/config",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -13,8 +13,8 @@
       }
   },
   "devDependencies": {
-    "@hub/eslint-config": "workspace:*",
-    "@hub/tsconfig": "workspace:*",
+    "@drs/eslint-config": "workspace:*",
+    "@drs/tsconfig": "workspace:*",
     "@types/node": "^22.19.13",
     "eslint": "^9.39.3",
     "tsdown": "^0.20.3",

@@ -1,5 +1,5 @@
 {
-  "name": "@hub/eslint-config",
+  "name": "@drs/eslint-config",
   "version": "0.0.0",
   "type": "module",
   "private": true,

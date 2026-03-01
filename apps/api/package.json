@@ -8,9 +8,9 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@drs/config": "workspace:*",
     "@hono/node-server": "^1.19.9",
     "@hono/zod-openapi": "^1.2.2",
-    "@hub/config": "workspace:*",
     "@scalar/hono-api-reference": "^0.9.46",
     "drizzle-orm": "^0.45.1",
     "hono": "^4.12.1",
@@ -19,8 +19,8 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@hub/eslint-config": "workspace:*",
-    "@hub/tsconfig": "workspace:*",
+    "@drs/eslint-config": "workspace:*",
+    "@drs/tsconfig": "workspace:*",
     "@types/node": "^22.19.13",
     "@types/pg": "^8.16.0",
     "drizzle-kit": "^0.31.9",

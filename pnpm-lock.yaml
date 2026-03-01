@@ -29,15 +29,15 @@ importers:
 
   apps/api:
     dependencies:
+      '@drs/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@hono/node-server':
         specifier: ^1.19.9
         version: 1.19.9(hono@4.12.1)
       '@hono/zod-openapi':
         specifier: ^1.2.2
         version: 1.2.2(hono@4.12.1)(zod@4.3.6)
-      '@hub/config':
-        specifier: workspace:*
-        version: link:../../packages/config
       '@scalar/hono-api-reference':
         specifier: ^0.9.46
         version: 0.9.46(hono@4.12.1)
@@ -57,10 +57,10 @@ importers:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      '@hub/eslint-config':
+      '@drs/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@hub/tsconfig':
+      '@drs/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
       '@types/node':
@@ -230,10 +230,10 @@ importers:
         specifier: ^8.1.1
         version: 8.1.1
     devDependencies:
-      '@hub/eslint-config':
+      '@drs/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@hub/tsconfig':
+      '@drs/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@types/node':

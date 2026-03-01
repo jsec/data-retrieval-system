@@ -1,5 +1,5 @@
+import { config } from '@drs/config';
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { config } from '@hub/config';
 import { Scalar } from '@scalar/hono-api-reference';
 
 const description = `

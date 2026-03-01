@@ -1,4 +1,4 @@
-import { config } from '@hub/config';
+import { config } from '@drs/config';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
