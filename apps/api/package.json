@@ -11,7 +11,7 @@
     "@drs/config": "workspace:*",
     "@hono/node-server": "^1.19.9",
     "@hono/zod-openapi": "^1.2.2",
-    "@scalar/hono-api-reference": "^0.9.46",
+    "@scalar/hono-api-reference": "^0.9.48",
     "drizzle-orm": "^0.45.1",
     "hono": "^4.12.1",
     "http-status-codes": "^2.3.0",
