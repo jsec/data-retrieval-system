@@ -15,7 +15,7 @@ type Props = {
 
 export const SeasonSummaryTable = ({ data }: Props) => {
     return (
-        <div className='grid [&>div]:max-h-70 [&>div]:rounded-sm [&>div]:border'>
+        <div className='grid h-full [&>div]:overflow-y-auto [&>div]:rounded-sm [&>div]:border'>
             <Table>
                 <TableHeader>
                     <TableRow>
