@@ -1,5 +1,5 @@
 {
-  "name": "@drs/config",
+  "name": "@drs/shared",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -10,6 +10,10 @@
       ".": {
           "default": "./dist/index.js",
           "types": "./dist/index.d.ts"
+      },
+      "./types": {
+          "default": "./dist/types/index.js",
+          "types": "./dist/types/index.d.ts"
       }
   },
   "devDependencies": {
@@ -21,6 +25,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "envalid": "^8.1.1"
+    "envalid": "^8.1.1",
+    "zod": "catalog:"
   }
 }

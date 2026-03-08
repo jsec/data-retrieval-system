@@ -1,4 +1,4 @@
-import { config } from '@drs/config';
+import { config } from '@drs/shared';
 import { serve } from '@hono/node-server';
 
 import { app } from './app.js';

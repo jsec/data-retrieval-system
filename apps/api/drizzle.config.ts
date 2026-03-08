@@ -1,4 +1,4 @@
-import { config } from '@drs/config';
+import { config } from '@drs/shared';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({

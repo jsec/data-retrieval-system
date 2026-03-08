@@ -1,15 +1,12 @@
-import { OpenAPIHono } from '@hono/zod-openapi';
+import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 
-import { configureDocumentation } from './docs/index.js';
-import { router as seasonsRouter } from './seasons/router.js';
+import { router as seasonsRouter } from './seasons/season.router.js';
 
-const app = new OpenAPIHono();
+const app = new Hono();
 
 app.use(logger());
 
 app.route('/seasons', seasonsRouter);
-
-configureDocumentation(app);
 
 export { app };
