@@ -7,54 +7,40 @@ import {
     drivers,
     races,
     results,
-} from '../../drizzle/schema.js';
-import { db } from '../data/db.js';
+} from '../db/schema.js';
+import { db } from '../db/db.js';
 
 // FIXME: need to get sprint points too
 export const getDriverStandingsBySeason = async (year: number) => {
-    try {
-        const result = await db
-            .select({
-                driverId: drivers.id,
-                firstName: drivers.firstName,
-                lastName: drivers.lastName,
-                points: sum(results.points).mapWith(Number),
-            })
-            .from(results)
-            .innerJoin(drivers, eq(results.driverId, drivers.id))
-            .innerJoin(races, eq(results.raceId, races.id))
-            .where(eq(races.year, year))
-            .groupBy(drivers.id)
-            .orderBy(desc(sum(results.points)));
-
-        return result;
-    } catch (error) {
-        console.error('Error fetching driver standings', error);
-        throw error;
-    }
+    return db
+        .select({
+            driverId: drivers.id,
+            firstName: drivers.firstName,
+            lastName: drivers.lastName,
+            points: sum(results.points).mapWith(Number),
+        })
+        .from(results)
+        .innerJoin(drivers, eq(results.driverId, drivers.id))
+        .innerJoin(races, eq(results.raceId, races.id))
+        .where(eq(races.year, year))
+        .groupBy(drivers.id)
+        .orderBy(desc(sum(results.points)));
 };
 
 // FIXME: need to get sprint points too
 export const getConstructorStandingsBySeason = async (year: number) => {
-    try {
-        const result = await db
-            .select({
-                constructorId: constructors.id,
-                constructorName: constructors.name,
-                points: sum(constructorResults.points).mapWith(Number),
-            })
-            .from(constructorResults)
-            .innerJoin(constructors, eq(constructorResults.constructorId, constructors.id))
-            .innerJoin(races, eq(constructorResults.raceId, races.id))
-            .where(eq(races.year, year))
-            .groupBy(constructors.id)
-            .orderBy(desc(sum(constructorResults.points)));
-
-        return result;
-    } catch (error) {
-        console.error('Error fetching constructor standings', error);
-        throw error;
-    }
+    return db
+        .select({
+            constructorId: constructors.id,
+            constructorName: constructors.name,
+            points: sum(constructorResults.points).mapWith(Number),
+        })
+        .from(constructorResults)
+        .innerJoin(constructors, eq(constructorResults.constructorId, constructors.id))
+        .innerJoin(races, eq(constructorResults.raceId, races.id))
+        .where(eq(races.year, year))
+        .groupBy(constructors.id)
+        .orderBy(desc(sum(constructorResults.points)));
 };
 
 const getConstructorsChampions = async () => {
@@ -87,7 +73,7 @@ const getConstructorsChampions = async () => {
             .from(seasonTotals),
     );
 
-    const result = await db
+    return db
         .with(seasonTotals, sortedByYear)
         .select({
             id: sortedByYear.constructorId,
@@ -97,8 +83,6 @@ const getConstructorsChampions = async () => {
         .from(sortedByYear)
         .where(eq(sortedByYear.rn, 1))
         .orderBy(desc(sortedByYear.year));
-
-    return result;
 };
 
 const getDriversChampions = async () => {
@@ -129,7 +113,7 @@ const getDriversChampions = async () => {
             .from(driverTotals),
     );
 
-    const result = await db
+    const rows = await db
         .with(driverTotals, sortedByYear)
         .select({
             firstName: drivers.firstName,
@@ -142,7 +126,7 @@ const getDriversChampions = async () => {
         .where(eq(sortedByYear.rank, 1))
         .orderBy(desc(sortedByYear.year));
 
-    return result.map(driver => ({
+    return rows.map(driver => ({
         ...driver,
         name: `${driver.firstName} ${driver.lastName}`,
     }));
@@ -154,18 +138,14 @@ export const getSeasonSummaries = async (): Promise<SeasonSummaries> => {
         getConstructorsChampions(),
     ]);
 
-    const response = driversChampions.map((item, idx) => {
-        const wcc = constructorsChampions[idx];
+    const wccByYear = new Map(constructorsChampions.map(c => [c.year, c]));
 
-        return {
-            wcc,
-            wdc: {
-                id: item.id,
-                name: item.name,
-            },
-            year: item.year,
-        };
-    });
-
-    return response;
+    return driversChampions.map(item => ({
+        wcc: wccByYear.get(item.year),
+        wdc: {
+            id: item.id,
+            name: item.name,
+        },
+        year: item.year,
+    }));
 };
