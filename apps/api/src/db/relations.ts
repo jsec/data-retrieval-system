@@ -1,6 +1,20 @@
 import { relations } from 'drizzle-orm/relations';
 
-import { circuits, constructorResults, constructors, constructorStandings, drivers, driverStandings, lapTimes, pitStops, qualifying, races, results, sprintResults, status } from './schema.js';
+import {
+    circuits,
+    constructorResults,
+    constructors,
+    constructorStandings,
+    drivers,
+    driverStandings,
+    lapTimes,
+    pitStops,
+    qualifying,
+    races,
+    results,
+    sprintResults,
+    status,
+} from './schema.js';
 
 export const racesRelations = relations(races, ({ many, one }) => ({
     circuit: one(circuits, {
@@ -150,4 +164,3 @@ export const pitStopsRelations = relations(pitStops, ({ one }) => ({
         references: [races.id],
     }),
 }));
-

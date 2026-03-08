@@ -7,9 +7,13 @@
     "build": "tsc",
     "start": "node dist/index.js"
   },
+  "imports": {
+    "#db/*": "./src/db/*.ts"
+  },
   "dependencies": {
     "@drs/shared": "workspace:*",
     "@hono/node-server": "^1.19.9",
+    "@hono/zod-validator": "^0.7.6",
     "drizzle-orm": "^0.45.1",
     "hono": "^4.12.1",
     "http-status-codes": "^2.3.0",

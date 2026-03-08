@@ -1,14 +1,7 @@
+import { db } from '#db/connection';
+import { constructorResults, constructors, drivers, races, results } from '#db/schema';
 import { SeasonSummaries } from '@drs/shared/types';
 import { desc, eq, sql, sum } from 'drizzle-orm';
-
-import {
-    constructorResults,
-    constructors,
-    drivers,
-    races,
-    results,
-} from '../db/schema.js';
-import { db } from '../db/db.js';
 
 // FIXME: need to get sprint points too
 export const getDriverStandingsBySeason = async (year: number) => {
