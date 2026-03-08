@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 
 import * as TanStackQueryProvider from './providers/queryProvider.tsx'
+import { ThemeProvider } from './providers/themeProvider.tsx'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -38,11 +39,13 @@ if (rootElement && !rootElement.innerHTML) {
     const root = ReactDOM.createRoot(rootElement)
     root.render(
         <StrictMode>
-            <TooltipProvider>
-                <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
-                    <RouterProvider router={router} />
-                </TanStackQueryProvider.Provider>
-            </TooltipProvider>
+            <ThemeProvider>
+                <TooltipProvider>
+                    <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
+                        <RouterProvider router={router} />
+                    </TanStackQueryProvider.Provider>
+                </TooltipProvider>
+            </ThemeProvider>
         </StrictMode>,
     )
 }

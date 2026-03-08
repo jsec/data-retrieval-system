@@ -37,6 +37,7 @@ import LogoSvg from '@/assets/svg/logo'
 import SearchDialog from '@/components/shadcn-studio/blocks/dialog-search'
 import ProfileDropdown from '@/components/shadcn-studio/blocks/dropdown-profile'
 import { Link, Outlet } from '@tanstack/react-router'
+import { ThemeToggle } from './ThemeToggle'
 
 type MenuSubItem = {
     label: string
@@ -187,6 +188,7 @@ const ApplicationShell = () => {
                                 />
                             </div>
                             <div className='flex items-center gap-1.5'>
+                                <ThemeToggle />
                                 <ProfileDropdown
                                     trigger={
                                         <Button variant='ghost' size='icon' className='size-9.5'>

@@ -18,6 +18,8 @@ function RouteComponent() {
     })
 
     return (
-        <SeasonSummaryTable data={query.data ?? []} />
+        <div className='h-full w-full'>
+            <SeasonSummaryTable data={query.data ?? []} />
+        </div>
     )
 }
