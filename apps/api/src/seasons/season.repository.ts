@@ -1,128 +1,103 @@
-import { db } from '#db/connection';
-import { constructorResults, constructors, drivers, races, results } from '#db/schema';
+import { db } from '#db';
 import { SeasonSummaries } from '@drs/shared/types';
-import { desc, eq, sql, sum } from 'drizzle-orm';
+import { sql } from 'kysely';
 
 // FIXME: need to get sprint points too
 export const getDriverStandingsBySeason = async (year: number) => {
-    return db
-        .select({
-            driverId: drivers.id,
-            firstName: drivers.firstName,
-            lastName: drivers.lastName,
-            points: sum(results.points).mapWith(Number),
-        })
-        .from(results)
-        .innerJoin(drivers, eq(results.driverId, drivers.id))
-        .innerJoin(races, eq(results.raceId, races.id))
-        .where(eq(races.year, year))
-        .groupBy(drivers.id)
-        .orderBy(desc(sum(results.points)));
+    return db.selectFrom('results')
+        .innerJoin('drivers', 'results.driverId', 'drivers.id')
+        .innerJoin('races', 'results.raceId', 'races.id')
+        .where('races.year', '=', year)
+        .select(eb => [
+            'drivers.id as driverId',
+            'drivers.firstName as firstName',
+            'drivers.lastName as lastName',
+            eb.fn.sum<number>('results.points').as('points'),
+        ])
+        .groupBy('drivers.id')
+        .orderBy('points', 'desc')
+        .execute();
 };
 
 // FIXME: need to get sprint points too
 export const getConstructorStandingsBySeason = async (year: number) => {
-    return db
-        .select({
-            constructorId: constructors.id,
-            constructorName: constructors.name,
-            points: sum(constructorResults.points).mapWith(Number),
-        })
-        .from(constructorResults)
-        .innerJoin(constructors, eq(constructorResults.constructorId, constructors.id))
-        .innerJoin(races, eq(constructorResults.raceId, races.id))
-        .where(eq(races.year, year))
-        .groupBy(constructors.id)
-        .orderBy(desc(sum(constructorResults.points)));
+    return db.selectFrom('constructorResults')
+        .innerJoin('constructors', 'constructorResults.constructorId', 'constructors.id')
+        .innerJoin('races', 'constructorResults.raceId', 'races.id')
+        .where('races.year', '=', year)
+        .select(eb => [
+            'constructors.id as constructorId',
+            'constructors.name as constructorName',
+            eb.fn.sum<number>('constructorResults.points').as('points'),
+        ])
+        .groupBy('constructors.id')
+        .orderBy('points', 'desc')
+        .execute();
 };
 
 const getConstructorsChampions = async () => {
-    const seasonTotals = db.$with('season_totals').as(
-        db.select({
-            constructorId: constructorResults.constructorId,
-            name: constructors.name,
-            seasonPoints: sum(constructorResults.points).as('season_points'),
-            year: races.year,
-        })
-            .from(constructorResults)
-            .innerJoin(races, eq(races.id, constructorResults.raceId))
-            .innerJoin(constructors, eq(constructors.id, constructorResults.constructorId))
-            .groupBy(races.year, constructorResults.constructorId, constructors.name),
-    );
-
-    const sortedByYear = db.$with('ranked').as(
-        db.select({
-            constructorId: seasonTotals.constructorId,
-            name: seasonTotals.name,
-            rn: sql<number>`
-              ROW_NUMBER() OVER (
-                              PARTITION BY ${seasonTotals.year}
-                              ORDER BY ${seasonTotals.seasonPoints} DESC
-                          )
-            `.as('rn'),
-            seasonPoints: seasonTotals.seasonPoints,
-            year: seasonTotals.year,
-        })
-            .from(seasonTotals),
-    );
-
     return db
-        .with(seasonTotals, sortedByYear)
-        .select({
-            id: sortedByYear.constructorId,
-            name: sortedByYear.name,
-            year: sortedByYear.year,
-        })
-        .from(sortedByYear)
-        .where(eq(sortedByYear.rn, 1))
-        .orderBy(desc(sortedByYear.year));
+        .with('wdc_totals', db =>
+            db.selectFrom('constructorResults')
+                .innerJoin('races', 'races.id', 'constructorResults.raceId')
+                .innerJoin('constructors', 'constructors.id', 'constructorResults.constructorId')
+                .groupBy(['races.year', 'constructorResults.constructorId', 'constructors.name'])
+                .select(eb => [
+                    'constructorResults.constructorId',
+                    'constructors.name',
+                    eb.fn.sum('constructorResults.points').as('season_points'),
+                    'races.year',
+                ]),
+        )
+        .with('ranked', db =>
+            db.selectFrom('wdc_totals')
+                .select([
+                    'constructorId',
+                    'name',
+                    'season_points',
+                    'year',
+                    sql<number>`ROW_NUMBER() OVER (PARTITION BY year ORDER BY season_points DESC)`.as('rn'),
+                ]),
+        )
+        .selectFrom('ranked')
+        .select(['constructorId as id', 'name', 'year'])
+        .where('rn', '=', 1)
+        .orderBy('year', 'desc')
+        .execute();
 };
 
 const getDriversChampions = async () => {
-    const driverTotals = db.$with('points_totals').as(
-        db.select({
-            driverId: results.driverId,
-            totalPoints: sum(results.points).as('total_points'),
-            wins: sql<number>`COUNT(*) FILTER (WHERE ${results.position} = 1)`.as('wins'),
-            year: races.year,
-        })
-            .from(results)
-            .innerJoin(races, eq(races.id, results.raceId))
-            .groupBy(races.year, results.driverId),
-    );
-
-    const sortedByYear = db.$with('ranked').as(
-        db.select({
-            driverId: driverTotals.driverId,
-            rank: sql<number>`
-              DENSE_RANK() OVER (
-                    PARTITION BY ${driverTotals.year}
-                    ORDER BY ${driverTotals.totalPoints} DESC, ${driverTotals.wins} DESC
-                  )
-            `.as('rank'),
-            totalPoints: driverTotals.totalPoints,
-            year: driverTotals.year,
-        })
-            .from(driverTotals),
-    );
-
-    const rows = await db
-        .with(driverTotals, sortedByYear)
-        .select({
-            firstName: drivers.firstName,
-            id: sortedByYear.driverId,
-            lastName: drivers.lastName,
-            year: sortedByYear.year,
-        })
-        .from(sortedByYear)
-        .innerJoin(drivers, eq(drivers.id, sortedByYear.driverId))
-        .where(eq(sortedByYear.rank, 1))
-        .orderBy(desc(sortedByYear.year));
-
-    return rows.map(driver => ({
-        ...driver,
-        name: `${driver.firstName} ${driver.lastName}`,
-    }));
+    return db
+        .with('wcc_totals', db =>
+            db.selectFrom('results')
+                .innerJoin('races', 'races.id', 'results.raceId')
+                .groupBy(['races.year', 'results.driverId'])
+                .select(eb => [
+                    'results.driverId',
+                    eb.fn.sum('results.points').as('total_points'),
+                    sql<number>`COUNT(*) FILTER (WHERE results.position = 1)`.as('wins'),
+                    'races.year',
+                ]),
+        )
+        .with('ranked', db =>
+            db.selectFrom('wcc_totals')
+                .select([
+                    'driverId',
+                    'year',
+                    sql<number>`DENSE_RANK() OVER (PARTITION BY year ORDER BY total_points DESC, wins DESC)`.as('rank'),
+                ]),
+        )
+        .selectFrom('ranked')
+        .innerJoin('drivers', 'drivers.id', 'ranked.driverId')
+        .select([
+            'drivers.firstName',
+            'ranked.driverId as id',
+            'drivers.lastName',
+            'ranked.year',
+        ])
+        .where('rank', '=', 1)
+        .orderBy('ranked.year', 'desc')
+        .execute();
 };
 
 export const getSeasonSummaries = async (): Promise<SeasonSummaries> => {
@@ -131,14 +106,16 @@ export const getSeasonSummaries = async (): Promise<SeasonSummaries> => {
         getConstructorsChampions(),
     ]);
 
-    const wccByYear = new Map(constructorsChampions.map(c => [c.year, c]));
+    return driversChampions.map((wdc, idx) => {
+        const wcc = constructorsChampions[idx];
 
-    return driversChampions.map(item => ({
-        wcc: wccByYear.get(item.year),
-        wdc: {
-            id: item.id,
-            name: item.name,
-        },
-        year: item.year,
-    }));
+        return {
+            wcc,
+            wdc: {
+                id: wdc.id,
+                name: `${wdc.firstName} ${wdc.lastName}`,
+            },
+            year: wdc.year,
+        };
+    });
 };
