@@ -1,12 +1,15 @@
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 
-import { router as seasonsRouter } from './seasons/season.router.js';
+import { circuitsRouter } from './features/circuits/circuits.router.js';
+import { seasonsRouter } from './features/seasons/season.router.js';
 
 const app = new Hono();
 
 app.use(logger());
 
-app.route('/seasons', seasonsRouter);
+app
+    .route('/seasons', seasonsRouter)
+    .route('/circuits', circuitsRouter);
 
 export { app };

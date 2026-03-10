@@ -38,4 +38,4 @@ router.get('/summary', async (ctx) => {
     return ctx.json(response, StatusCodes.OK);
 });
 
-export { router };
+export { router as seasonsRouter };
