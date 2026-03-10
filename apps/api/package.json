@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@drs/shared": "workspace:*",
-    "@hono/node-server": "^1.19.9",
+    "@hono/node-server": "^1.19.11",
     "@hono/zod-validator": "^0.7.6",
-    "hono": "^4.12.1",
+    "hono": "^4.12.7",
     "http-status-codes": "^2.3.0",
     "kysely": "^0.28.11",
     "pg": "^8.18.0",
