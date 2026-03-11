@@ -20,7 +20,7 @@
     "@drs/eslint-config": "workspace:*",
     "@drs/tsconfig": "workspace:*",
     "@types/node": "catalog:",
-    "eslint": "^9.39.3",
+    "eslint": "^9.39.4",
     "tsdown": "^0.20.3",
     "typescript": "catalog:"
   },
