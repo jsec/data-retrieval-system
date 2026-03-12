@@ -1,4 +1,4 @@
-import z from 'zod';
+import { z } from 'zod';
 
 export const CircuitSummarySchema = z.object({
     circuitId: z.number().int(),
