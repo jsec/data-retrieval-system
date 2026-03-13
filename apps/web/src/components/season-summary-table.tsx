@@ -1,25 +1,25 @@
+import { type SeasonSummary } from '@drs/shared/types';
+
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow
-} from "./ui/table"
-
-import { type SeasonSummary } from '@drs/shared/types';
+    TableRow,
+} from './ui/table';
 
 type Props = {
-    data: SeasonSummary[]
-}
+    data: SeasonSummary[];
+};
 
-export const SeasonSummaryTable = ({ data }: Props) => {
+export const SeasonSummaryTable = ({ data }: Readonly<Props>) => {
     return (
-        <div className='grid h-full [&>div]:overflow-y-auto [&>div]:rounded-sm [&>div]:border'>
+        <div className="grid h-full [&>div]:overflow-y-auto [&>div]:rounded-sm [&>div]:border">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className='w-25'>Year</TableHead>
+                        <TableHead className="w-25">Year</TableHead>
                         <TableHead>Driver's Champion</TableHead>
                         <TableHead>Constructor's Champion</TableHead>
                     </TableRow>
@@ -27,7 +27,7 @@ export const SeasonSummaryTable = ({ data }: Props) => {
                 <TableBody>
                     {data.map(data => (
                         <TableRow key={data.year}>
-                            <TableCell className='font-medium'>{data.year}</TableCell>
+                            <TableCell className="font-medium">{data.year}</TableCell>
                             <TableCell>{data.wdc.name}</TableCell>
                             <TableCell>{data.wcc?.name}</TableCell>
                         </TableRow>
@@ -35,5 +35,5 @@ export const SeasonSummaryTable = ({ data }: Props) => {
                 </TableBody>
             </Table>
         </div>
-    )
-}
+    );
+};

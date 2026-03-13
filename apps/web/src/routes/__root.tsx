@@ -1,14 +1,15 @@
-import { createRootRouteWithContext } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import type { QueryClient } from '@tanstack/react-query';
 
-import type { QueryClient } from '@tanstack/react-query'
-import ApplicationShell from '@/components/Shell'
-import { TanStackQueryDevtools } from '@/lib/devtools'
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import { createRootRouteWithContext } from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 
-interface MyRouterContext {
-    queryClient: QueryClient
-}
+import ApplicationShell from '@/components/shell';
+import { TanStackQueryDevtools } from '@/lib/devtools';
+
+type MyRouterContext = {
+    queryClient: QueryClient;
+};
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
     component: () => (
@@ -28,4 +29,4 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
             />
         </>
     ),
-})
+});

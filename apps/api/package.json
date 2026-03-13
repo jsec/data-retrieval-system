@@ -5,6 +5,7 @@
     "db:pull": "kysely-codegen",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "lint": "eslint",
     "start": "node dist/index.js"
   },
   "imports": {

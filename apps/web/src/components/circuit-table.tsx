@@ -1,24 +1,25 @@
+import { type CircuitSummary } from '@drs/shared/types';
+
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow
-} from "./ui/table"
-import { type CircuitSummary } from '@drs/shared/types';
+    TableRow,
+} from './ui/table';
 
 type Props = {
-    data: CircuitSummary[]
-}
+    data: CircuitSummary[];
+};
 
-export const CircuitTable = ({ data }: Props) => {
+export const CircuitTable = ({ data }: Readonly<Props>) => {
     return (
-        <div className='grid h-full [&>div]:overflow-y-auto [&>div]:rounded-sm [&>div]:border'>
+        <div className="grid h-full [&>div]:overflow-y-auto [&>div]:rounded-sm [&>div]:border">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className='w-25'>Circuit</TableHead>
+                        <TableHead className="w-25">Circuit</TableHead>
                         <TableHead>Country</TableHead>
                         <TableHead>First Race</TableHead>
                         <TableHead>Last Race</TableHead>
@@ -27,7 +28,7 @@ export const CircuitTable = ({ data }: Props) => {
                 <TableBody>
                     {data.map(data => (
                         <TableRow key={data.circuitId}>
-                            <TableCell className='font-medium'>{data.name}</TableCell>
+                            <TableCell className="font-medium">{data.name}</TableCell>
                             <TableCell>{data.country}</TableCell>
                             <TableCell>{data.firstRace}</TableCell>
                             <TableCell>{data.lastRace}</TableCell>
@@ -36,5 +37,5 @@ export const CircuitTable = ({ data }: Props) => {
                 </TableBody>
             </Table>
         </div>
-    )
-}
+    );
+};

@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
       "build": "tsdown",
+      "lint": "eslint",
       "postinstall": "tsdown"
   },
   "exports": {

@@ -1,64 +1,65 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
+
+import { useState } from 'react';
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 type Props = {
-  trigger: ReactNode
-  defaultOpen?: boolean
-  align?: 'start' | 'center' | 'end'
-}
+    align?: 'center' | 'end' | 'start';
+    defaultOpen?: boolean;
+    trigger: ReactNode;
+};
 
-const LanguageDropdown = ({ defaultOpen, align, trigger }: Props) => {
-  const [language, setLanguage] = useState('english')
+const LanguageDropdown = ({ align, defaultOpen, trigger }: Readonly<Props>) => {
+    const [language, setLanguage] = useState('english');
 
-  return (
-    <DropdownMenu defaultOpen={defaultOpen}>
-      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent className='w-50' align={align || 'end'}>
-        <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
-          <DropdownMenuRadioItem
-            value='english'
-            className='data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden'
-          >
-            English
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value='german'
-            className='data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden'
-          >
-            Deutsch
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value='spanish'
-            className='data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden'
-          >
-            Española
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value='portuguese'
-            className='data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden'
-          >
-            Português
-          </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value='korean'
-            className='data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden'
-          >
-            한국인
-          </DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
+    return (
+        <DropdownMenu defaultOpen={defaultOpen}>
+            <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+            <DropdownMenuContent align={align || 'end'} className="w-50">
+                <DropdownMenuRadioGroup onValueChange={setLanguage} value={language}>
+                    <DropdownMenuRadioItem
+                        className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+                        value="english"
+                    >
+                        English
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem
+                        className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+                        value="german"
+                    >
+                        Deutsch
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem
+                        className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+                        value="spanish"
+                    >
+                        Española
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem
+                        className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+                        value="portuguese"
+                    >
+                        Português
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem
+                        className="data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground pl-2 text-base [&>span]:hidden"
+                        value="korean"
+                    >
+                        한국인
+                    </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+};
 
-export default LanguageDropdown
+export default LanguageDropdown;

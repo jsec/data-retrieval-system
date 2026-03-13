@@ -1,38 +1,40 @@
-import DataTable from '@/components/DataTable'
-import { AvatarImage, AvatarFallback, Avatar } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import type { ColumnDef } from '@tanstack/react-table';
+
+import { createFileRoute } from '@tanstack/react-router';
+import { Badge, BrushIcon, CrownIcon, EllipsisVerticalIcon, EyeIcon, PencilLineIcon, PencilRulerIcon, Trash2Icon, UserRoundIcon } from 'lucide-react';
+
+import DataTable from '@/components/data-table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
-import { cn } from '@/lib/utils'
-import { createFileRoute } from '@tanstack/react-router'
-import type { ColumnDef } from '@tanstack/react-table'
-import { UserRoundIcon, PencilLineIcon, BrushIcon, PencilRulerIcon, CrownIcon, Badge, Trash2Icon, EyeIcon, EllipsisVerticalIcon } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 type Item = {
-    id: string
-    avatar: string
-    fallback: string
-    user: string
-    email: string
-    role: 'admin' | 'author' | 'editor' | 'maintainer' | 'subscriber'
-    plan: 'basic' | 'company' | 'enterprise' | 'team'
-    billing: 'auto-debit' | 'manual-cash' | 'manual-paypal'
-    status: 'active' | 'inactive' | 'pending'
-}
+    avatar: string;
+    billing: 'auto-debit' | 'manual-cash' | 'manual-paypal';
+    email: string;
+    fallback: string;
+    id: string;
+    plan: 'basic' | 'company' | 'enterprise' | 'team';
+    role: 'admin' | 'author' | 'editor' | 'maintainer' | 'subscriber';
+    status: 'active' | 'inactive' | 'pending';
+    user: string;
+};
 
 const RowActions = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div className='flex'>
-                    <Button size='icon' variant='ghost' className='rounded-full p-2' aria-label='Edit item'>
-                        <EllipsisVerticalIcon className='size-4.5' aria-hidden='true' />
+                <div className="flex">
+                    <Button aria-label="Edit item" className="rounded-full p-2" size="icon" variant="ghost">
+                        <EllipsisVerticalIcon aria-hidden="true" className="size-4.5" />
                     </Button>
                 </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='start'>
+            <DropdownMenuContent align="start">
                 <DropdownMenuGroup>
                     <DropdownMenuItem>
                         <span>Edit</span>
@@ -43,368 +45,367 @@ const RowActions = () => {
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
-}
+    );
+};
 
 const userData: Item[] = [
     {
-        id: '1',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-1.png',
-        fallback: 'JA',
-        user: 'Jack Alfredo',
+        billing: 'auto-debit',
         email: 'jack.alfredo@shadcnstudio.com',
-        role: 'maintainer',
+        fallback: 'JA',
+        id: '1',
         plan: 'enterprise',
-        billing: 'auto-debit',
-        status: 'active'
+        role: 'maintainer',
+        status: 'active',
+        user: 'Jack Alfredo',
     },
     {
-        id: '2',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-2.png',
-        fallback: 'SM',
-        user: 'Sarah Mitchell',
+        billing: 'auto-debit',
         email: 'sarah.mitchell@company.com',
-        role: 'admin',
-        plan: 'enterprise',
-        billing: 'auto-debit',
-        status: 'active'
-    },
-    {
-        id: '3',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-3.png',
-        fallback: 'RC',
-        user: 'Robert Chen',
-        email: 'robert.chen@startup.io',
-        role: 'editor',
-        plan: 'team',
-        billing: 'manual-paypal',
-        status: 'pending'
-    },
-    {
-        id: '4',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-4.png',
-        fallback: 'EW',
-        user: 'Emily Wilson',
-        email: 'emily.wilson@freelance.com',
-        role: 'author',
-        plan: 'basic',
-        billing: 'manual-cash',
-        status: 'inactive'
-    },
-    {
-        id: '5',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png',
-        fallback: 'DG',
-        user: 'David Garcia',
-        email: 'david.garcia@agency.net',
-        role: 'subscriber',
-        plan: 'company',
-        billing: 'auto-debit',
-        status: 'active'
-    },
-    {
-        id: '6',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-6.png',
-        fallback: 'LT',
-        user: 'Lisa Thompson',
-        email: 'lisa.thompson@design.co',
-        role: 'editor',
-        plan: 'team',
-        billing: 'manual-paypal',
-        status: 'active'
-    },
-    {
-        id: '7',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-7.png',
-        fallback: 'MA',
-        user: 'Michael Anderson',
-        email: 'michael.anderson@tech.com',
-        role: 'maintainer',
-        plan: 'enterprise',
-        billing: 'auto-debit',
-        status: 'pending'
-    },
-    {
-        id: '8',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-8.png',
-        fallback: 'JR',
-        user: 'Jessica Rodriguez',
-        email: 'jessica.rodriguez@startup.com',
-        role: 'author',
-        plan: 'basic',
-        billing: 'manual-cash',
-        status: 'active'
-    },
-    {
-        id: '9',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-9.png',
-        fallback: 'CB',
-        user: 'Christopher Brown',
-        email: 'chris.brown@corporate.org',
-        role: 'admin',
-        plan: 'company',
-        billing: 'auto-debit',
-        status: 'inactive'
-    },
-    {
-        id: '10',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-10.png',
-        fallback: 'AD',
-        user: 'Amanda Davis',
-        email: 'amanda.davis@marketing.io',
-        role: 'subscriber',
-        plan: 'basic',
-        billing: 'manual-paypal',
-        status: 'active'
-    },
-    {
-        id: '11',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-11.png',
-        fallback: 'JJ',
-        user: 'James Johnson',
-        email: 'james.johnson@development.com',
-        role: 'maintainer',
-        plan: 'team',
-        billing: 'auto-debit',
-        status: 'pending'
-    },
-    {
-        id: '12',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-12.png',
-        fallback: 'MW',
-        user: 'Maria Williams',
-        email: 'maria.williams@creative.net',
-        role: 'editor',
-        plan: 'company',
-        billing: 'manual-cash',
-        status: 'active'
-    },
-    {
-        id: '13',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-13.png',
-        fallback: 'RT',
-        user: 'Ryan Taylor',
-        email: 'ryan.taylor@studio.com',
-        role: 'author',
-        plan: 'enterprise',
-        billing: 'auto-debit',
-        status: 'inactive'
-    },
-    {
-        id: '14',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-14.png',
-        fallback: 'NK',
-        user: 'Nicole Kim',
-        email: 'nicole.kim@digital.agency',
-        role: 'subscriber',
-        plan: 'team',
-        billing: 'manual-paypal',
-        status: 'active'
-    },
-    {
-        id: '15',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-15.png',
-        fallback: 'AL',
-        user: 'Andrew Lee',
-        email: 'andrew.lee@consulting.biz',
-        role: 'admin',
-        plan: 'enterprise',
-        billing: 'auto-debit',
-        status: 'pending'
-    },
-    {
-        id: '16',
-        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-16.png',
         fallback: 'SM',
-        user: 'Stephanie Martinez',
+        id: '2',
+        plan: 'enterprise',
+        role: 'admin',
+        status: 'active',
+        user: 'Sarah Mitchell',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-3.png',
+        billing: 'manual-paypal',
+        email: 'robert.chen@startup.io',
+        fallback: 'RC',
+        id: '3',
+        plan: 'team',
+        role: 'editor',
+        status: 'pending',
+        user: 'Robert Chen',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-4.png',
+        billing: 'manual-cash',
+        email: 'emily.wilson@freelance.com',
+        fallback: 'EW',
+        id: '4',
+        plan: 'basic',
+        role: 'author',
+        status: 'inactive',
+        user: 'Emily Wilson',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png',
+        billing: 'auto-debit',
+        email: 'david.garcia@agency.net',
+        fallback: 'DG',
+        id: '5',
+        plan: 'company',
+        role: 'subscriber',
+        status: 'active',
+        user: 'David Garcia',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-6.png',
+        billing: 'manual-paypal',
+        email: 'lisa.thompson@design.co',
+        fallback: 'LT',
+        id: '6',
+        plan: 'team',
+        role: 'editor',
+        status: 'active',
+        user: 'Lisa Thompson',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-7.png',
+        billing: 'auto-debit',
+        email: 'michael.anderson@tech.com',
+        fallback: 'MA',
+        id: '7',
+        plan: 'enterprise',
+        role: 'maintainer',
+        status: 'pending',
+        user: 'Michael Anderson',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-8.png',
+        billing: 'manual-cash',
+        email: 'jessica.rodriguez@startup.com',
+        fallback: 'JR',
+        id: '8',
+        plan: 'basic',
+        role: 'author',
+        status: 'active',
+        user: 'Jessica Rodriguez',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-9.png',
+        billing: 'auto-debit',
+        email: 'chris.brown@corporate.org',
+        fallback: 'CB',
+        id: '9',
+        plan: 'company',
+        role: 'admin',
+        status: 'inactive',
+        user: 'Christopher Brown',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-10.png',
+        billing: 'manual-paypal',
+        email: 'amanda.davis@marketing.io',
+        fallback: 'AD',
+        id: '10',
+        plan: 'basic',
+        role: 'subscriber',
+        status: 'active',
+        user: 'Amanda Davis',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-11.png',
+        billing: 'auto-debit',
+        email: 'james.johnson@development.com',
+        fallback: 'JJ',
+        id: '11',
+        plan: 'team',
+        role: 'maintainer',
+        status: 'pending',
+        user: 'James Johnson',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-12.png',
+        billing: 'manual-cash',
+        email: 'maria.williams@creative.net',
+        fallback: 'MW',
+        id: '12',
+        plan: 'company',
+        role: 'editor',
+        status: 'active',
+        user: 'Maria Williams',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-13.png',
+        billing: 'auto-debit',
+        email: 'ryan.taylor@studio.com',
+        fallback: 'RT',
+        id: '13',
+        plan: 'enterprise',
+        role: 'author',
+        status: 'inactive',
+        user: 'Ryan Taylor',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-14.png',
+        billing: 'manual-paypal',
+        email: 'nicole.kim@digital.agency',
+        fallback: 'NK',
+        id: '14',
+        plan: 'team',
+        role: 'subscriber',
+        status: 'active',
+        user: 'Nicole Kim',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-15.png',
+        billing: 'auto-debit',
+        email: 'andrew.lee@consulting.biz',
+        fallback: 'AL',
+        id: '15',
+        plan: 'enterprise',
+        role: 'admin',
+        status: 'pending',
+        user: 'Andrew Lee',
+    },
+    {
+        avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-16.png',
+        billing: 'manual-cash',
         email: 'stephanie.martinez@media.com',
-        role: 'editor',
+        fallback: 'SM',
+        id: '16',
         plan: 'basic',
-        billing: 'manual-cash',
-        status: 'active'
+        role: 'editor',
+        status: 'active',
+        user: 'Stephanie Martinez',
     },
     {
-        id: '17',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-17.png',
-        fallback: 'KW',
-        user: 'Kevin White',
+        billing: 'auto-debit',
         email: 'kevin.white@innovation.co',
-        role: 'maintainer',
+        fallback: 'KW',
+        id: '17',
         plan: 'company',
-        billing: 'auto-debit',
-        status: 'inactive'
+        role: 'maintainer',
+        status: 'inactive',
+        user: 'Kevin White',
     },
     {
-        id: '18',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-18.png',
-        fallback: 'RH',
-        user: 'Rachel Harris',
+        billing: 'manual-paypal',
         email: 'rachel.harris@solutions.org',
-        role: 'author',
+        fallback: 'RH',
+        id: '18',
         plan: 'team',
-        billing: 'manual-paypal',
-        status: 'active'
+        role: 'author',
+        status: 'active',
+        user: 'Rachel Harris',
     },
     {
-        id: '19',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-19.png',
-        fallback: 'BT',
-        user: 'Brian Turner',
+        billing: 'auto-debit',
         email: 'brian.turner@platform.io',
-        role: 'subscriber',
+        fallback: 'BT',
+        id: '19',
         plan: 'enterprise',
-        billing: 'auto-debit',
-        status: 'pending'
+        role: 'subscriber',
+        status: 'pending',
+        user: 'Brian Turner',
     },
     {
-        id: '20',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-20.png',
-        fallback: 'CM',
-        user: 'Catherine Moore',
+        billing: 'manual-cash',
         email: 'catherine.moore@ventures.com',
-        role: 'admin',
+        fallback: 'CM',
+        id: '20',
         plan: 'basic',
-        billing: 'manual-cash',
-        status: 'active'
+        role: 'admin',
+        status: 'active',
+        user: 'Catherine Moore',
     },
     {
-        id: '21',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-21.png',
-        fallback: 'TN',
-        user: 'Thomas Nelson',
+        billing: 'auto-debit',
         email: 'thomas.nelson@design.studio',
+        fallback: 'TN',
+        id: '21',
+        plan: 'enterprise',
         role: 'editor',
-        plan: 'enterprise',
-        billing: 'auto-debit',
-        status: 'active'
+        status: 'active',
+        user: 'Thomas Nelson',
     },
     {
-        id: '22',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-22.png',
-        fallback: 'SP',
-        user: 'Sophie Parker',
+        billing: 'manual-paypal',
         email: 'sophie.parker@freelance.pro',
-        role: 'author',
+        fallback: 'SP',
+        id: '22',
         plan: 'team',
-        billing: 'manual-paypal',
-        status: 'inactive'
+        role: 'author',
+        status: 'inactive',
+        user: 'Sophie Parker',
     },
     {
-        id: '23',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-23.png',
-        fallback: 'AR',
-        user: 'Alexander Reed',
-        email: 'alex.reed@innovation.labs',
-        role: 'maintainer',
-        plan: 'company',
         billing: 'manual-cash',
-        status: 'pending'
+        email: 'alex.reed@innovation.labs',
+        fallback: 'AR',
+        id: '23',
+        plan: 'company',
+        role: 'maintainer',
+        status: 'pending',
+        user: 'Alexander Reed',
     },
     {
-        id: '24',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-24.png',
-        fallback: 'MG',
-        user: 'Maya Gonzalez',
-        email: 'maya.gonzalez@creative.agency',
-        role: 'subscriber',
-        plan: 'basic',
         billing: 'auto-debit',
-        status: 'active'
+        email: 'maya.gonzalez@creative.agency',
+        fallback: 'MG',
+        id: '24',
+        plan: 'basic',
+        role: 'subscriber',
+        status: 'active',
+        user: 'Maya Gonzalez',
     },
     {
-        id: '25',
         avatar: 'https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-25.png',
-        fallback: 'JS',
-        user: 'Jordan Smith',
-        email: 'jordan.smith@tech.solutions',
-        role: 'admin',
-        plan: 'enterprise',
         billing: 'manual-paypal',
-        status: 'pending'
-    }
-]
+        email: 'jordan.smith@tech.solutions',
+        fallback: 'JS',
+        id: '25',
+        plan: 'enterprise',
+        role: 'admin',
+        status: 'pending',
+        user: 'Jordan Smith',
+    },
+];
 
 const columns: ColumnDef<Item>[] = [
     {
-        id: 'select',
-        header: ({ table }) => (
-            <Checkbox
-                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                onCheckedChange={value => table.toggleAllRowsSelected(!!value)}
-                aria-label='Select all'
-            />
-        ),
         cell: ({ row }) => (
             <Checkbox
+                aria-label="Select row"
                 checked={row.getIsSelected()}
                 onCheckedChange={value => row.toggleSelected(!!value)}
-                aria-label='Select row'
             />
         ),
-        size: 50
+        header: ({ table }) => (
+            <Checkbox
+                aria-label="Select all"
+                checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+                onCheckedChange={value => table.toggleAllRowsSelected(!!value)}
+            />
+        ),
+        id: 'select',
+        size: 50,
     },
     {
-        header: 'User',
         accessorKey: 'user',
         cell: ({ row }) => (
-            <div className='flex items-center gap-2'>
-                <Avatar className='size-9'>
-                    <AvatarImage src={row.original.avatar} alt={row.getValue('user')} />
-                    <AvatarFallback className='text-xs'>{row.original.fallback}</AvatarFallback>
+            <div className="flex items-center gap-2">
+                <Avatar className="size-9">
+                    <AvatarImage alt={row.getValue('user')} src={row.original.avatar} />
+                    <AvatarFallback className="text-xs">{row.original.fallback}</AvatarFallback>
                 </Avatar>
-                <div className='flex flex-col'>
-                    <span className='font-medium'>{row.getValue('user')}</span>
-                    <span className='text-muted-foreground'>{row.original.email}</span>
+                <div className="flex flex-col">
+                    <span className="font-medium">{row.getValue('user')}</span>
+                    <span className="text-muted-foreground">{row.original.email}</span>
                 </div>
             </div>
         ),
-        size: 360
+        header: 'User',
+        size: 360,
     },
     {
-        header: 'Role',
         accessorKey: 'role',
         cell: ({ row }) => {
-            const role = row.getValue('role') as string
+            const role = row.getValue('role') as string;
 
             const roles = {
-                admin: <UserRoundIcon className='size-4 text-green-600 dark:text-green-400' />,
-                author: <PencilLineIcon className='text-chart-1 size-4' />,
-                editor: <BrushIcon className='text-chart-2 size-4' />,
-                maintainer: <PencilRulerIcon className='text-chart-3 size-4' />,
-                subscriber: <CrownIcon className='text-chart-5 size-4' />
-            }[role]
+                admin: <UserRoundIcon className="size-4 text-green-600 dark:text-green-400" />,
+                author: <PencilLineIcon className="text-chart-1 size-4" />,
+                editor: <BrushIcon className="text-chart-2 size-4" />,
+                maintainer: <PencilRulerIcon className="text-chart-3 size-4" />,
+                subscriber: <CrownIcon className="text-chart-5 size-4" />,
+            }[role];
 
             return (
-                <div className='flex items-center gap-2'>
+                <div className="flex items-center gap-2">
                     {roles}
-                    <span className='capitalize'>{role}</span>
+                    <span className="capitalize">{role}</span>
                 </div>
-            )
-        }
+            );
+        },
+        header: 'Role',
     },
     {
-        header: 'Plan',
         accessorKey: 'plan',
-        cell: ({ row }) => <span className='text-muted-foreground capitalize'>{row.getValue('plan')}</span>
+        cell: ({ row }) => <span className="text-muted-foreground capitalize">{row.getValue('plan')}</span>,
+        header: 'Plan',
     },
     {
-        header: 'Billing',
         accessorKey: 'billing',
         cell: ({ row }) => (
-            <span className='text-muted-foreground'>
+            <span className="text-muted-foreground">
                 {row.getValue('billing') === 'auto-debit'
                     ? 'Auto debit'
-                    : row.getValue('billing') === 'manual-cash'
-                        ? 'Manual - cash'
-                        : 'Manual - PayPal'}
+                    : (row.getValue('billing') === 'manual-cash'
+                            ? 'Manual - cash'
+                            : 'Manual - PayPal')}
             </span>
-        )
+        ),
+        header: 'Billing',
     },
     {
-        header: 'Status',
         accessorKey: 'status',
         cell: ({ row }) => {
-            const status = row.getValue('status') as string
+            const status = row.getValue('status') as string;
 
             const styles = {
                 active:
@@ -412,25 +413,24 @@ const columns: ColumnDef<Item>[] = [
                 inactive:
                     'bg-destructive/10 [a&]:hover:bg-destructive/5 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-destructive',
                 pending:
-                    'bg-amber-600/10 text-amber-600 focus-visible:ring-amber-600/20 dark:bg-amber-400/10 dark:text-amber-400 dark:focus-visible:ring-amber-400/40 [a&]:hover:bg-amber-600/5 dark:[a&]:hover:bg-amber-400/5'
-            }[status]
+                    'bg-amber-600/10 text-amber-600 focus-visible:ring-amber-600/20 dark:bg-amber-400/10 dark:text-amber-400 dark:focus-visible:ring-amber-400/40 [a&]:hover:bg-amber-600/5 dark:[a&]:hover:bg-amber-400/5',
+            }[status];
 
             return (
                 <Badge className={cn('rounded-sm border-none capitalize focus-visible:outline-none', styles)}>
                     {row.getValue('status')}
                 </Badge>
-            )
-        }
+            );
+        },
+        header: 'Status',
     },
     {
-        id: 'actions',
-        header: () => 'Actions',
         cell: () => (
-            <div className='flex items-center gap-1'>
+            <div className="flex items-center gap-1">
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button variant='ghost' size={'icon'} aria-label='Delete item'>
-                            <Trash2Icon className='size-4.5' />
+                        <Button aria-label="Delete item" size="icon" variant="ghost">
+                            <Trash2Icon className="size-4.5" />
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -439,8 +439,8 @@ const columns: ColumnDef<Item>[] = [
                 </Tooltip>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button variant='ghost' size={'icon'} aria-label='View item'>
-                            <EyeIcon className='size-4.5' />
+                        <Button aria-label="View item" size="icon" variant="ghost">
+                            <EyeIcon className="size-4.5" />
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -450,22 +450,24 @@ const columns: ColumnDef<Item>[] = [
                 <RowActions />
             </div>
         ),
-        enableHiding: false
-    }
-]
+        enableHiding: false,
+        header: () => 'Actions',
+        id: 'actions',
+    },
+];
 
 export const Route = createFileRoute('/constructors')({
     component: RouteComponent,
-})
+});
 
 function RouteComponent() {
     return (
-        <div className='py-8 sm:py-16 lg:py-24'>
-            <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-                <Card className='mx-auto w-full max-w-275 py-0'>
-                    <DataTable data={userData} columns={columns} />
+        <div className="py-8 sm:py-16 lg:py-24">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <Card className="mx-auto w-full max-w-275 py-0">
+                    <DataTable columns={columns} data={userData} />
                 </Card>
             </div>
         </div>
-    )
+    );
 }
