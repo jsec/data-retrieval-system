@@ -1,12 +1,9 @@
-Welcome to your new TanStack app! 
-
-# Getting Started
+# Webs
 
 To run this application:
 
 ```bash
-npm install
-npm run start
+pnpm dev
 ```
 
 # Building For Production
@@ -14,7 +11,7 @@ npm run start
 To build this application for production:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 ## Testing
@@ -22,7 +19,7 @@ npm run build
 This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
 
 ```bash
-npm run test
+pnpm test
 ```
 
 ## Styling
@@ -33,12 +30,12 @@ This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
 ## Linting & Formatting
 
 
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+This project uses [eslint](https://eslint.org/) for linting and formatting. Eslint is configured using [@jarsec/eslint-config](https://github.com/jsec/code-quality-tools/blob/develop/packages/eslint-config/configs/react.js). The following scripts are available:
 
 ```bash
-npm run lint
-npm run format
-npm run check
+pnpm lint
+pnpm format
+pnpm check
 ```
 
 
