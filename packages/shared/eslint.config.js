@@ -1,4 +1,4 @@
-import config from '@drs/eslint-config/base';
+import config from '@jarsec/eslint-config';
 
 export default [
     ...config,

@@ -17,10 +17,10 @@
       }
   },
   "devDependencies": {
-    "@drs/eslint-config": "workspace:*",
     "@drs/tsconfig": "workspace:*",
+    "@jarsec/eslint-config": "catalog:",
     "@types/node": "catalog:",
-    "eslint": "^9.39.3",
+    "eslint": "catalog:",
     "tsdown": "^0.20.3",
     "typescript": "catalog:"
   },

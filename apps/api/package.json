@@ -21,11 +21,11 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@drs/eslint-config": "workspace:*",
     "@drs/tsconfig": "workspace:*",
+    "@jarsec/eslint-config": "catalog:",
     "@types/node": "catalog:",
     "@types/pg": "^8.16.0",
-    "eslint": "^9.39.3",
+    "eslint": "catalog:",
     "kysely-codegen": "^0.20.0",
     "tsx": "^4.21.0",
     "typescript": "catalog:"
