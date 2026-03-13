@@ -4,8 +4,8 @@ export const DriverSummarySchema = z.object({
     driverId: z.number().int(),
     firstGrandPrix: z.string().nullish(),
     firstName: z.string(),
+    lastGrandPrix: z.string().nullish(),
     lastName: z.string(),
-    localGrandPrix: z.string().nullish(),
     nationality: z.string().nullish(),
 });
 

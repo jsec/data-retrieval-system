@@ -396,8 +396,8 @@ const columns: ColumnDef<Item>[] = [
                 {row.getValue('billing') === 'auto-debit'
                     ? 'Auto debit'
                     : (row.getValue('billing') === 'manual-cash'
-                            ? 'Manual - cash'
-                            : 'Manual - PayPal')}
+                        ? 'Manual - cash'
+                        : 'Manual - PayPal')}
             </span>
         ),
         header: 'Billing',
