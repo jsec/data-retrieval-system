@@ -1,17 +1,23 @@
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 
-import { circuitsRouter } from './features/circuits/circuits.router.js';
-import { driversRouter } from './features/drivers/drivers.router.js';
-import { seasonsRouter } from './features/seasons/season.router.js';
+import { handler } from './rpc.js';
 
 const app = new Hono();
 
 app.use(logger());
 
-app
-    .route('/seasons', seasonsRouter)
-    .route('/circuits', circuitsRouter)
-    .route('/drivers', driversRouter);
+app.use('/rpc/*', async (c, next) => {
+    const { matched, response } = await handler.handle(c.req.raw, {
+        context: {},
+        prefix: '/rpc',
+    });
+
+    if (matched) {
+        return c.newResponse(response.body, response);
+    }
+
+    await next();
+});
 
 export { app };

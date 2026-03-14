@@ -8,8 +8,14 @@ export default defineConfig([
     },
     {
         dts: true,
-        entry: 'src/types/index.ts',
-        outDir: 'dist/types',
+        entry: 'src/config/index.ts',
+        outDir: 'dist/config',
+        platform: 'neutral',
+    },
+    {
+        dts: true,
+        entry: 'src/contract/index.ts',
+        outDir: 'dist/contract',
         platform: 'neutral',
     },
 ]);

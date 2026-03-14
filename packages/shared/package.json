@@ -1,32 +1,37 @@
 {
-  "name": "@drs/shared",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-      "build": "tsdown",
-      "lint": "eslint",
-      "postinstall": "tsdown"
-  },
-  "exports": {
-      ".": {
-          "default": "./dist/index.js",
-          "types": "./dist/index.d.ts"
-      },
-      "./types": {
-          "default": "./dist/types/index.js",
-          "types": "./dist/types/index.d.ts"
-      }
-  },
-  "devDependencies": {
-    "@drs/tsconfig": "workspace:*",
-    "@jarsec/eslint-config": "catalog:",
-    "@types/node": "catalog:",
-    "eslint": "catalog:",
-    "tsdown": "^0.20.3",
-    "typescript": "catalog:"
-  },
-  "dependencies": {
-    "envalid": "^8.1.1",
-    "zod": "catalog:"
-  }
+    "name": "@drs/shared",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "build": "tsdown",
+        "lint": "eslint",
+        "postinstall": "tsdown"
+    },
+    "exports": {
+        ".": {
+            "default": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
+        "./config": {
+            "default": "./dist/config/index.js",
+            "types": "./dist/config/index.d.ts"
+        },
+        "./contract": {
+            "default": "./dist/contract/index.js",
+            "types": "./dist/contract/index.t.ts"
+        }
+    },
+    "devDependencies": {
+        "@drs/tsconfig": "workspace:*",
+        "@jarsec/eslint-config": "catalog:",
+        "@types/node": "catalog:",
+        "eslint": "catalog:",
+        "tsdown": "^0.20.3",
+        "typescript": "catalog:"
+    },
+    "dependencies": {
+        "@orpc/contract": "^1.13.7",
+        "envalid": "^8.1.1",
+        "zod": "catalog:"
+    }
 }

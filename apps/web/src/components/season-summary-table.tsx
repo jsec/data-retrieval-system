@@ -1,4 +1,4 @@
-import { type SeasonSummary } from '@drs/shared/types';
+import type { Outputs } from '@drs/shared/contract';
 
 import {
     Table,
@@ -10,7 +10,7 @@ import {
 } from './ui/table';
 
 type Props = {
-    data: SeasonSummary[];
+    data: Outputs['seasons']['summary'];
 };
 
 export const SeasonSummaryTable = ({ data }: Readonly<Props>) => {

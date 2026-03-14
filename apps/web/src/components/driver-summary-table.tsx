@@ -1,4 +1,4 @@
-import type { DriverSummary } from '@drs/shared/types';
+import type { Outputs } from '@drs/shared/contract';
 
 import {
     Table,
@@ -10,10 +10,10 @@ import {
 } from './ui/table';
 
 type Props = {
-    data: DriverSummary[];
+    data: Outputs['drivers']['summary'];
 };
 
-export const DriverTable = ({ data }: Readonly<Props>) => {
+export const DriverSummaryTable = ({ data }: Readonly<Props>) => {
     return (
         <div className="grid h-full [&>div]:overflow-y-auto [&>div]:rounded-sm [&>div]:border">
             <Table>

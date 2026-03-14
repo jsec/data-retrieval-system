@@ -3,7 +3,7 @@ import { db } from '#db';
 export const getDrivers = () => {
     return db.selectFrom('drivers')
         .select(eb => [
-            'drivers.id',
+            'drivers.id as driverId',
             'drivers.firstName',
             'drivers.lastName',
             'drivers.nationality',
