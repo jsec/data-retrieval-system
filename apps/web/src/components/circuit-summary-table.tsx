@@ -2,7 +2,6 @@ import type { CircuitSummary } from '@drs/shared/contract';
 import type { ColumnDef } from '@tanstack/react-table';
 
 import { DataTable } from './data-table';
-import { Card } from './ui/card';
 
 type Props = {
     data: CircuitSummary[];
@@ -17,7 +16,9 @@ export const CircuitSummaryTable = ({ data }: Readonly<Props>) => {
                     {row.getValue('name')}
                 </span>
             ),
+            filterFn: 'includesString',
             header: 'Circuit Name',
+            size: 200,
         },
         {
             accessorKey: 'country',
@@ -27,6 +28,7 @@ export const CircuitSummaryTable = ({ data }: Readonly<Props>) => {
                 </span>
             ),
             header: 'Country',
+            size: 100,
         },
         {
             accessorKey: 'firstRace',
@@ -36,6 +38,7 @@ export const CircuitSummaryTable = ({ data }: Readonly<Props>) => {
                 </span>
             ),
             header: 'First Race',
+            size: 50,
         },
         {
             accessorKey: 'lastRace',
@@ -45,16 +48,14 @@ export const CircuitSummaryTable = ({ data }: Readonly<Props>) => {
                 </span>
             ),
             header: 'Last Race',
+            size: 50,
         },
     ];
 
     return (
-        <div className="py-8 sm:py-16 lg:py-24">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <Card className="mx-auto w-full max-w-275 py-0">
-                    <DataTable columns={columns} data={data} />
-                </Card>
-            </div>
-        </div>
+        <DataTable
+            columns={columns}
+            data={data}
+        />
     );
 };

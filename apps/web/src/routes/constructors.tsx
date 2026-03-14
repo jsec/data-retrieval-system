@@ -6,7 +6,6 @@ import { Badge, BrushIcon, CrownIcon, EllipsisVerticalIcon, EyeIcon, PencilLineI
 import { DataTable } from '@/components/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -461,13 +460,5 @@ export const Route = createFileRoute('/constructors')({
 });
 
 function RouteComponent() {
-    return (
-        <div className="py-8 sm:py-16 lg:py-24">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <Card className="mx-auto w-full max-w-275 py-0">
-                    <DataTable columns={columns} data={userData} />
-                </Card>
-            </div>
-        </div>
-    );
+    return <DataTable columns={columns} data={userData} />;
 }

@@ -68,6 +68,11 @@ export function DataTable<TData>({ columns, data, pageSize }: Readonly<TableProp
 
     return (
         <div className="w-full">
+            {filters && (
+                <div className="flex flex-wrap gap-4 border-b px-6 py-4">
+                    {filters(table)}
+                </div>
+            )}
             <div className="border-b">
                 <Table>
                     <TableHeader>

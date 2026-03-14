@@ -10,6 +10,7 @@ const link = new RPCLink({
     interceptors: [
         // TODO: better error handling
         onError((error) => {
+            if (error instanceof DOMException && error.name === 'AbortError') return;
             console.error(error);
         }),
     ],
