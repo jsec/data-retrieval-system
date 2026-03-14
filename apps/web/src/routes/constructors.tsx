@@ -3,7 +3,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { createFileRoute } from '@tanstack/react-router';
 import { Badge, BrushIcon, CrownIcon, EllipsisVerticalIcon, EyeIcon, PencilLineIcon, PencilRulerIcon, Trash2Icon, UserRoundIcon } from 'lucide-react';
 
-import DataTable from '@/components/data-table';
+import { DataTable } from '@/components/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';

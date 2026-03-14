@@ -101,31 +101,31 @@ function DataTable<TData>({ columns, data }: Readonly<TableProps<TData>>) {
                                             {header.isPlaceholder
                                                 ? null
                                                 : (header.column.getCanSort()
-                                                        ? (
-                                                                <div
-                                                                    className={cn(
-                                                                        header.column.getCanSort()
-                                                                        && 'flex h-full cursor-pointer items-center justify-between gap-2 select-none',
-                                                                    )}
-                                                                    onClick={header.column.getToggleSortingHandler()}
-                                                                    onKeyDown={(e) => {
-                                                                        if (header.column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
-                                                                            e.preventDefault();
-                                                                            header.column.getToggleSortingHandler()?.(e);
-                                                                        }
-                                                                    }}
-                                                                    tabIndex={header.column.getCanSort() ? 0 : undefined}
-                                                                >
-                                                                    {flexRender(header.column.columnDef.header, header.getContext())}
-                                                                    {{
-                                                                        asc: <ChevronUpIcon aria-hidden="true" className="shrink-0 opacity-60" size={16} />,
-                                                                        desc: <ChevronDownIcon aria-hidden="true" className="shrink-0 opacity-60" size={16} />,
-                                                                    }[header.column.getIsSorted() as string] ?? null}
-                                                                </div>
-                                                            )
-                                                        : (
-                                                                flexRender(header.column.columnDef.header, header.getContext())
-                                                            ))}
+                                                    ? (
+                                                        <div
+                                                            className={cn(
+                                                                header.column.getCanSort()
+                                                                && 'flex h-full cursor-pointer items-center justify-between gap-2 select-none',
+                                                            )}
+                                                            onClick={header.column.getToggleSortingHandler()}
+                                                            onKeyDown={(e) => {
+                                                                if (header.column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
+                                                                    e.preventDefault();
+                                                                    header.column.getToggleSortingHandler()?.(e);
+                                                                }
+                                                            }}
+                                                            tabIndex={header.column.getCanSort() ? 0 : undefined}
+                                                        >
+                                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                                            {{
+                                                                asc: <ChevronUpIcon aria-hidden="true" className="shrink-0 opacity-60" size={16} />,
+                                                                desc: <ChevronDownIcon aria-hidden="true" className="shrink-0 opacity-60" size={16} />,
+                                                            }[header.column.getIsSorted() as string] ?? null}
+                                                        </div>
+                                                    )
+                                                    : (
+                                                        flexRender(header.column.columnDef.header, header.getContext())
+                                                    ))}
                                         </TableHead>
                                     );
                                 })}
@@ -135,23 +135,23 @@ function DataTable<TData>({ columns, data }: Readonly<TableProps<TData>>) {
                     <TableBody>
                         {table.getRowModel().rows?.length
                             ? (
-                                    table.getRowModel().rows.map(row => (
-                                        <TableRow className="hover:bg-transparent" data-state={row.getIsSelected() && 'selected'} key={row.id}>
-                                            {row.getVisibleCells().map(cell => (
-                                                <TableCell className="h-14 first:w-12.5 first:pl-4 last:w-29 last:px-4" key={cell.id}>
-                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    ))
-                                )
-                            : (
-                                    <TableRow>
-                                        <TableCell className="h-24 text-center" colSpan={columns.length}>
-                                            No results.
-                                        </TableCell>
+                                table.getRowModel().rows.map(row => (
+                                    <TableRow className="hover:bg-transparent" data-state={row.getIsSelected() && 'selected'} key={row.id}>
+                                        {row.getVisibleCells().map(cell => (
+                                            <TableCell className="h-14 first:w-12.5 first:pl-4 last:w-29 last:px-4" key={cell.id}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </TableCell>
+                                        ))}
                                     </TableRow>
-                                )}
+                                ))
+                            )
+                            : (
+                                <TableRow>
+                                    <TableCell className="h-24 text-center" colSpan={columns.length}>
+                                        No results.
+                                    </TableCell>
+                                </TableRow>
+                            )}
                     </TableBody>
                 </Table>
             </div>
