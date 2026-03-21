@@ -20,4 +20,5 @@ export type Inputs = InferContractRouterInputs<typeof contract>;
 export type Outputs = InferContractRouterOutputs<typeof contract>;
 
 export { type CircuitSummary } from './circuits.contract.js';
+export { type DriverSummary } from './drivers.contract.js';
 export { type ContractRouterClient } from '@orpc/contract';

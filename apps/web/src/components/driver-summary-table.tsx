@@ -1,45 +1,71 @@
-import type { Outputs } from '@drs/shared/contract';
+import type { DriverSummary } from '@drs/shared/contract';
+import type { ColumnDef } from '@tanstack/react-table';
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from './ui/table';
+import { DataTable } from './data-table';
+import { Input } from './ui/input';
 
 type Props = {
-    data: Outputs['drivers']['summary'];
+    data: DriverSummary[];
 };
 
 export const DriverSummaryTable = ({ data }: Readonly<Props>) => {
+    const columns: ColumnDef<DriverSummary>[] = [
+        {
+            accessorFn: row => `${row.firstName} ${row.lastName}`,
+            accessorKey: 'name',
+            cell: ({ row }) => (
+                <span className="text-muted-foreground">
+                    {row.getValue('name')}
+                </span>
+            ),
+            filterFn: 'includesString',
+            header: 'Name',
+            size: 200,
+        },
+        {
+            accessorKey: 'nationality',
+            cell: ({ row }) => (
+                <span className="text-muted-foreground">
+                    {row.getValue('nationality')}
+                </span>
+            ),
+            header: 'Nationality',
+            size: 100,
+        },
+        {
+            accessorKey: 'firstGrandPrix',
+            cell: ({ row }) => (
+                <span className="text-muted-foreground">
+                    {row.getValue('firstGrandPrix')}
+                </span>
+            ),
+            header: 'First Grand Prix',
+            size: 50,
+        },
+        {
+            accessorKey: 'lastGrandPrix',
+            cell: ({ row }) => (
+                <span className="text-muted-foreground">
+                    {row.getValue('lastGrandPrix')}
+                </span>
+            ),
+            header: 'Last Grand Prix',
+            size: 50,
+        },
+    ];
+
     return (
-        <div className="grid h-full [&>div]:overflow-y-auto [&>div]:rounded-sm [&>div]:border">
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-25">Name</TableHead>
-                        <TableHead>Nationality</TableHead>
-                        <TableHead>First Race</TableHead>
-                        <TableHead>Last Race</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {data.map(data => (
-                        <TableRow key={data.driverId}>
-                            <TableCell className="font-medium">
-                                {data.firstName}
-                                {' '}
-                                {data.lastName}
-                            </TableCell>
-                            <TableCell>{data.nationality}</TableCell>
-                            <TableCell>{data.firstGrandPrix}</TableCell>
-                            <TableCell>{data.lastGrandPrix}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </div>
+        <DataTable
+            columns={columns}
+            data={data}
+            filters={table => (
+                <Input
+                    className="max-w-xs"
+                    onChange={e => table.getColumn('name')?.setFilterValue(e.target.value)}
+                    placeholder="Filter by circuit name..."
+                    value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                />
+            )}
+        />
     );
 };
