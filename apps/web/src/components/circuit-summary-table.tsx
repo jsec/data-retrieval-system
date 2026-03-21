@@ -1,6 +1,8 @@
 import type { CircuitSummary } from '@drs/shared/contract';
 import type { ColumnDef } from '@tanstack/react-table';
 
+import { Input } from '@/components/ui/input';
+
 import { DataTable } from './data-table';
 
 type Props = {
@@ -56,6 +58,14 @@ export const CircuitSummaryTable = ({ data }: Readonly<Props>) => {
         <DataTable
             columns={columns}
             data={data}
+            filters={table => (
+                <Input
+                    className="max-w-xs"
+                    onChange={e => table.getColumn('name')?.setFilterValue(e.target.value)}
+                    placeholder="Filter by circuit name..."
+                    value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+                />
+            )}
         />
     );
 };

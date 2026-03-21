@@ -1,6 +1,11 @@
 'use client';
 
-import type { ColumnDef, ColumnFiltersState, PaginationState } from '@tanstack/react-table';
+import type {
+    ColumnDef,
+    ColumnFiltersState,
+    PaginationState,
+    Table as TSTable,
+} from '@tanstack/react-table';
 
 import {
     flexRender,
@@ -19,21 +24,34 @@ import {
     ChevronRightIcon,
     ChevronUpIcon,
 } from 'lucide-react';
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from '@/components/ui/pagination';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+} from '@/components/ui/pagination';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import { usePagination } from '@/hooks/use-pagination';
 import { cn } from '@/lib/utils';
 
 type TableProps<TData> = {
     columns: ColumnDef<TData>[];
     data: TData[];
+    filters?: (table: TSTable<TData>) => ReactNode;
     pageSize?: number;
 };
 
-export function DataTable<TData>({ columns, data, pageSize }: Readonly<TableProps<TData>>) {
+export function DataTable<TData>({ columns, data, filters, pageSize }: Readonly<TableProps<TData>>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
     const [pagination, setPagination] = useState<PaginationState>({
