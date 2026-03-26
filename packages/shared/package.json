@@ -30,7 +30,7 @@
         "typescript": "catalog:"
     },
     "dependencies": {
-        "@orpc/contract": "^1.13.7",
+        "@orpc/contract": "^1.13.13",
         "envalid": "^8.1.1",
         "zod": "catalog:"
     }
