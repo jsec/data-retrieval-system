@@ -18,15 +18,15 @@
     "@orpc/server": "^1.13.7",
     "hono": "^4.12.7",
     "http-status-codes": "^2.3.0",
-    "kysely": "^0.28.11",
-    "pg": "^8.18.0",
+    "kysely": "^0.28.15",
+    "pg": "^8.20.0",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@drs/tsconfig": "workspace:*",
     "@jarsec/eslint-config": "catalog:",
     "@types/node": "catalog:",
-    "@types/pg": "^8.16.0",
+    "@types/pg": "^8.20.0",
     "eslint": "catalog:",
     "kysely-codegen": "^0.20.0",
     "tsx": "^4.21.0",
