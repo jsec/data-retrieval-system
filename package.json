@@ -20,7 +20,7 @@
   "devDependencies": {
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
-    "turbo": "^2.8.16",
+    "turbo": "^2.9.12",
     "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.33.0"
