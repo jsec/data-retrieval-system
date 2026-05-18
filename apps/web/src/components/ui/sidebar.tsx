@@ -333,7 +333,7 @@ function SidebarProvider({
             }
 
             // This sets the cookie to keep the sidebar state.
-            void cookieStore.set({ maxAge: SIDEBAR_COOKIE_MAX_AGE, name: SIDEBAR_COOKIE_NAME, path: '/', value: String(openState) });
+            void cookieStore.set({ expires: Date.now() + SIDEBAR_COOKIE_MAX_AGE * 1000, name: SIDEBAR_COOKIE_NAME, path: '/', value: String(openState) });
         },
         [setOpenProp, open],
     );
