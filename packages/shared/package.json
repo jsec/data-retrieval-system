@@ -26,7 +26,7 @@
         "@jarsec/eslint-config": "catalog:",
         "@types/node": "catalog:",
         "eslint": "catalog:",
-        "tsdown": "^0.22.0",
+        "tsdown": "^0.22.3",
         "typescript": "catalog:"
     },
     "dependencies": {
