@@ -46,16 +46,16 @@ importers:
         version: link:../../packages/shared
       '@hono/node-server':
         specifier: ^1.19.14
-        version: 1.19.14(hono@4.12.19)
+        version: 1.19.14(hono@4.12.26)
       '@hono/zod-validator':
         specifier: ^0.7.6
-        version: 0.7.6(hono@4.12.19)(zod@4.3.6)
+        version: 0.7.6(hono@4.12.26)(zod@4.3.6)
       '@orpc/server':
         specifier: ^1.13.13
         version: 1.13.13(ws@8.18.3)
       hono:
-        specifier: ^4.12.19
-        version: 4.12.19
+        specifier: ^4.12.26
+        version: 4.12.26
       http-status-codes:
         specifier: ^2.3.0
         version: 2.3.0
@@ -3294,8 +3294,8 @@ packages:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
     engines: {node: '>=0.10.0'}
 
-  hono@4.12.19:
-    resolution: {integrity: sha512-xa3eYXYXx68XTT4hZ7dRzsXBhaq85ToSrlUJNoR0gwz/1Ap/CNwX47wfvV7pc/xWhjKVVkLT7zBJy8chhNguqQ==}
+  hono@4.12.26:
+    resolution: {integrity: sha512-uyZtpnYxM9CmQ7QsQknM4zN8EftNqhON1qYeIKM0Se67CCEe2c44xyGURwB0axX2fBDu1dqHrHAc1hmNT8ITkw==}
     engines: {node: '>=16.9.0'}
 
   hookable@6.1.1:
@@ -5080,13 +5080,13 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@hono/node-server@1.19.14(hono@4.12.19)':
+  '@hono/node-server@1.19.14(hono@4.12.26)':
     dependencies:
-      hono: 4.12.19
+      hono: 4.12.26
 
-  '@hono/zod-validator@0.7.6(hono@4.12.19)(zod@4.3.6)':
+  '@hono/zod-validator@0.7.6(hono@4.12.26)(zod@4.3.6)':
     dependencies:
-      hono: 4.12.19
+      hono: 4.12.26
       zod: 4.3.6
 
   '@humanfs/core@0.19.1': {}
@@ -7749,7 +7749,7 @@ snapshots:
     dependencies:
       parse-passwd: 1.0.0
 
-  hono@4.12.19: {}
+  hono@4.12.26: {}
 
   hookable@6.1.1: {}
 
