@@ -5,7 +5,7 @@ packages:
 catalog:
   typescript: 6.0.3
   zod: ^4.3.6
-  "@types/node": "^24.12.3"
+  "@types/node": "^24.13.2"
   "eslint": "^10.3.0"
   "@jarsec/eslint-config": "7.2.1"
 
