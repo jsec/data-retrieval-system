@@ -6,7 +6,7 @@ allowBuilds:
   unrs-resolver: true
 
 catalog:
-  "@jarsec/eslint-config": "7.2.1"
+  "@jarsec/eslint-config": "7.2.3"
   "@types/node": "^26"
   "eslint": "^10.3.0"
   typescript: 6.0.3
