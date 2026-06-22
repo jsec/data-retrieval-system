@@ -1,0 +1,8 @@
+prepare-commit-msg:
+  commands:
+    commitizen:
+      interactive: true
+      run: pnpm cz --hook
+      env:
+        LEFTHOOK: 0
+
