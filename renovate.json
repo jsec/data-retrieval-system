@@ -1,0 +1,78 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "timezone": "America/Detroit",
+  "packageRules": [
+    {
+      "description": "Run dependency updates on the first and third Saturday every month.",
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "bump",
+        "replacement"
+      ],
+      "schedule": ["* 3 1-7,15-21 * 6"]
+    },
+    {
+      "description": "Wait 7 days before patch and minor updates.",
+      "matchUpdateTypes": ["patch", "minor"],
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Wait 30 days before major updates.",
+      "matchUpdateTypes": ["major"],
+      "minimumReleaseAge": "30 days"
+    },
+    {
+      "description": "Pin non-catalog app dependency ranges.",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["apps/api/package.json", "apps/web/package.json"],
+      "matchCurrentValue": "!/^catalog:/",
+      "rangeStrategy": "pin"
+    },
+    {
+      "description": "Group non-major pnpm catalog updates.",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["pnpm-workspace.yaml"],
+      "matchDepTypes": ["/^pnpm\\.catalog(\\.|$)/"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "catalog dependencies",
+      "groupSlug": "catalog-dependencies",
+      "groupSingleUpdates": true
+    },
+    {
+      "description": "Group non-catalog API dependency updates.",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["apps/api/package.json"],
+      "matchCurrentValue": "!/^catalog:/",
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "api dependencies",
+      "groupSlug": "api-dependencies",
+      "groupSingleUpdates": true
+    },
+    {
+      "description": "Group non-catalog web dependency updates.",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["apps/web/package.json"],
+      "matchCurrentValue": "!/^catalog:/",
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "web dependencies",
+      "groupSlug": "web-dependencies",
+      "groupSingleUpdates": true
+    },
+    {
+      "description": "Group common workspace dependency updates.",
+      "matchManagers": ["npm"],
+      "matchFileNames": ["package.json", "packages/*/package.json"],
+      "matchCurrentValue": "!/^catalog:/",
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "common dependencies",
+      "groupSlug": "common-dependencies",
+      "groupSingleUpdates": true
+    }
+  ]
+}
