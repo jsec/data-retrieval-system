@@ -3,6 +3,7 @@ packages:
   - "packages/*"
 allowBuilds:
   esbuild: true
+  unrs-resolver: true
 
 catalog:
   "@jarsec/eslint-config": "7.2.1"
