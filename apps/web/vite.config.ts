@@ -1,13 +1,13 @@
 import babel from '@rolldown/plugin-babel';
 import { devtools } from '@tanstack/devtools-vite';
-import { tanstackStart } from '@tanstack/react-start/plugin/vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 const config = defineConfig({
     plugins: [
         devtools(),
-        tanstackStart(),
+        tanstackRouter(),
         viteReact(),
         babel({ presets: [reactCompilerPreset()] }),
     ],
