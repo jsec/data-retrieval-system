@@ -1,5 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query';
 
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import {
     createRootRouteWithContext,
@@ -32,7 +33,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
                 name: 'viewport',
             },
             {
-                title: 'TanStack Start Starter',
+                title: 'Data Retrieval System',
             },
         ],
     }),
@@ -43,23 +44,26 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
             <head>
+                <ColorSchemeScript defaultColorScheme="light" />
                 <HeadContent />
             </head>
             <body>
-                {children}
-                <TanStackDevtools
-                    config={{
-                        position: 'bottom-right',
-                    }}
-                    plugins={[
-                        {
-                            name: 'Tanstack Router',
-                            render: <TanStackRouterDevtoolsPanel />,
-                        },
-                        TanStackQueryDevtools,
-                    ]}
-                />
-                <Scripts />
+                <MantineProvider defaultColorScheme="light">
+                    {children}
+                    <TanStackDevtools
+                        config={{
+                            position: 'bottom-right',
+                        }}
+                        plugins={[
+                            {
+                                name: 'Tanstack Router',
+                                render: <TanStackRouterDevtoolsPanel />,
+                            },
+                            TanStackQueryDevtools,
+                        ]}
+                    />
+                    <Scripts />
+                </MantineProvider>
             </body>
         </html>
     );
