@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: f1db
+    schema: "{{ var('f1db_schema', 'f1db') }}"
+    description: F1DB source tables restored from the canonical PostgreSQL dump.
+    tables:
+      - name: circuits
+      - name: constructors
+      - name: drivers
+      - name: seasons
+      - name: races
+      - name: results
+      - name: sprint_results
+      - name: qualifying
+      - name: lap_times
+      - name: pit_stops
+      - name: driver_standings
+      - name: constructor_standings
+      - name: status
+

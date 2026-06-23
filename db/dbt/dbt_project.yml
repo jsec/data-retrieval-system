@@ -1,0 +1,35 @@
+name: drs
+version: "1.0.0"
+config-version: 2
+
+profile: drs
+
+model-paths:
+  - models
+analysis-paths:
+  - analyses
+test-paths:
+  - tests
+seed-paths:
+  - seeds
+macro-paths:
+  - macros
+snapshot-paths:
+  - snapshots
+
+clean-targets:
+  - target
+  - dbt_packages
+
+models:
+  drs:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: ephemeral
+    marts:
+      effone:
+        +materialized: table
+        +schema: effone
+

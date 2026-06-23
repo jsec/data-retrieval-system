@@ -5,6 +5,9 @@
   "scripts": {
     "db:migrate": "goose -table app_goose_db_version -dir ./migrations postgres \"$DATABASE_URL\" up",
     "db:migrate:down": "goose -table app_goose_db_version -dir ./migrations postgres \"$DATABASE_URL\" down",
-    "db:migrate:status": "goose -table app_goose_db_version -dir ./migrations postgres \"$DATABASE_URL\" status"
+    "db:migrate:status": "goose -table app_goose_db_version -dir ./migrations postgres \"$DATABASE_URL\" status",
+    "dbt:debug": "dbt debug --project-dir ./dbt",
+    "dbt:run": "dbt run --project-dir ./dbt",
+    "dbt:test": "dbt test --project-dir ./dbt"
   }
 }
