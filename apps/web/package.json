@@ -19,6 +19,7 @@
     "@faker-js/faker": "^10.3.0",
     "@mantine/core": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
+    "@phosphor-icons/react": "^2.1.10",
     "@tanstack/match-sorter-utils": "latest",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-query": "latest",
@@ -29,7 +30,6 @@
     "@tanstack/react-start": "latest",
     "@tanstack/react-table": "latest",
     "@tanstack/router-plugin": "^1.132.0",
-    "lucide-react": "^0.545.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

@@ -1,12 +1,10 @@
 import {
     ActionIcon,
     AppShell,
-    Badge,
     Card,
     Grid,
     Group,
     NavLink,
-    Progress,
     Stack,
     Text,
     ThemeIcon,
@@ -14,29 +12,29 @@ import {
     useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { createFileRoute } from '@tanstack/react-router';
 import {
-    CalendarClock,
-    Database,
-    Flag,
-    Gauge,
-    MapPinned,
-    Menu,
-    Moon,
-    Settings,
-    Sun,
-    Trophy,
-} from 'lucide-react';
+    CalendarBlankIcon,
+    DatabaseIcon,
+    FlagCheckeredIcon,
+    GaugeIcon,
+    GearSixIcon,
+    ListIcon,
+    MapPinIcon,
+    MoonIcon,
+    SunIcon,
+    TrophyIcon,
+} from '@phosphor-icons/react';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({ component: Home });
 
 const navItems = [
-    { icon: Gauge, label: 'Overview' },
-    { icon: CalendarClock, label: 'Seasons' },
-    { icon: MapPinned, label: 'Circuits' },
-    { icon: Trophy, label: 'Drivers' },
-    { icon: Flag, label: 'Results' },
-    { icon: Settings, label: 'Settings' },
+    { icon: GaugeIcon, label: 'Overview' },
+    { icon: CalendarBlankIcon, label: 'Seasons' },
+    { icon: MapPinIcon, label: 'Circuits' },
+    { icon: TrophyIcon, label: 'Drivers' },
+    { icon: FlagCheckeredIcon, label: 'Results' },
+    { icon: GearSixIcon, label: 'Settings' },
 ];
 
 const summaryCards = [
@@ -81,10 +79,10 @@ function Home() {
                             onClick={toggle}
                             variant="subtle"
                         >
-                            <Menu size={18} />
+                            <ListIcon size={18} />
                         </ActionIcon>
                         <ThemeIcon radius="md" size="lg" variant="filled">
-                            <Database size={20} />
+                            <DatabaseIcon size={20} />
                         </ThemeIcon>
                         <div>
                             <Title order={3}>DRS</Title>
@@ -101,7 +99,7 @@ function Home() {
                         size="lg"
                         variant="subtle"
                     >
-                        {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                        {isDark ? <SunIcon size={18} /> : <MoonIcon size={18} />}
                     </ActionIcon>
                 </Group>
             </AppShell.Header>
