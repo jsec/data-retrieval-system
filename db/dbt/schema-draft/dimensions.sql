@@ -1,14 +1,17 @@
--- +goose Up
 create table effone.circuits (
-    circuit_id integer primary key,
-    circuit_ref text not null unique,
+    circuit_id text primary key,
     circuit_name text not null,
-    location text,
-    country text,
-    lat numeric,
-    lng numeric,
-    alt integer,
-    url text not null,
+    circuit_full_name text not null,
+    previous_names text,
+    circuit_type text not null check (circuit_type in ('RACE', 'ROAD', 'STREET')),
+    direction text not null,
+    location text not null,
+    country_id text not null,
+    country text not null,
+    latitude numeric(10, 6) not null,
+    longitude numeric(10, 6) not null,
+    length_km numeric(6, 3) not null,
+    turns integer not null,
     race_count integer not null default 0,
     first_race_id integer,
     first_race_name text,
@@ -20,11 +23,11 @@ create table effone.circuits (
 );
 
 create table effone.constructors (
-    constructor_id integer primary key,
-    constructor_ref text not null unique,
+    constructor_id text primary key,
     constructor_name text not null,
-    nationality text,
-    url text not null,
+    constructor_full_name text not null,
+    country_id text not null,
+    nationality text not null,
     entry_count integer not null default 0,
     start_count integer not null default 0,
     race_entry_count integer not null default 0,
@@ -36,7 +39,6 @@ create table effone.constructors (
     fastest_lap_count integer not null default 0,
     qualifying_entry_count integer not null default 0,
     qualifying_p1_count integer not null default 0,
-    q3_appearance_count integer not null default 0,
     championship_count integer not null default 0,
     total_points numeric(8, 2) not null default 0,
     total_points_x100 integer not null default 0,
@@ -50,16 +52,21 @@ create table effone.constructors (
 );
 
 create table effone.drivers (
-    driver_id integer primary key,
-    driver_ref text not null unique,
+    driver_id text primary key,
+    driver_code text not null,
     driver_number integer,
-    driver_code text,
     first_name text not null,
     last_name text not null,
     driver_name text not null,
-    date_of_birth date,
-    nationality text,
-    url text not null,
+    driver_full_name text not null,
+    gender text not null check (gender in ('MALE', 'FEMALE')),
+    date_of_birth date not null,
+    date_of_death date,
+    place_of_birth text not null,
+    country_of_birth_id text not null,
+    nationality_country_id text not null,
+    nationality text not null,
+    second_nationality_country_id text,
     entry_count integer not null default 0,
     start_count integer not null default 0,
     race_entry_count integer not null default 0,
@@ -71,7 +78,6 @@ create table effone.drivers (
     fastest_lap_count integer not null default 0,
     qualifying_entry_count integer not null default 0,
     qualifying_p1_count integer not null default 0,
-    q3_appearance_count integer not null default 0,
     championship_count integer not null default 0,
     total_points numeric(8, 2) not null default 0,
     total_points_x100 integer not null default 0,
@@ -86,16 +92,15 @@ create table effone.drivers (
 
 create table effone.seasons (
     season integer primary key,
-    url text not null,
     race_count integer not null default 0,
     sprint_count integer not null default 0,
     driver_count integer not null default 0,
     constructor_count integer not null default 0,
     first_race_date date,
     last_race_date date,
-    wdc_driver_id integer,
+    wdc_driver_id text references effone.drivers(driver_id),
     wdc_driver_name text,
-    wcc_constructor_id integer,
+    wcc_constructor_id text references effone.constructors(constructor_id),
     wcc_constructor_name text,
     refresh_id bigint not null references effone.refresh_runs(refresh_id)
 );
@@ -105,10 +110,23 @@ create table effone.races (
     season integer not null references effone.seasons(season),
     race_round integer not null,
     race_name text not null,
+    race_official_name text not null,
     race_date date not null,
     race_time time,
-    race_url text,
-    circuit_id integer not null references effone.circuits(circuit_id),
+    grand_prix_id text not null,
+    grand_prix_name text not null,
+    circuit_id text not null references effone.circuits(circuit_id),
+    circuit_layout_id text not null,
+    circuit_type text not null,
+    direction text not null,
+    course_length_km numeric(6, 3) not null,
+    turns integer not null,
+    scheduled_laps integer,
+    scheduled_distance_km numeric(6, 3),
+    race_laps integer not null,
+    race_distance_km numeric(6, 3) not null,
+    qualifying_format text not null,
+    sprint_qualifying_format text,
     fp1_date date,
     fp1_time time,
     fp2_date date,
@@ -117,48 +135,20 @@ create table effone.races (
     fp3_time time,
     qualifying_date date,
     qualifying_time time,
+    sprint_qualifying_date date,
+    sprint_qualifying_time time,
     sprint_date date,
     sprint_time time,
-    winner_driver_id integer,
+    winner_driver_id text references effone.drivers(driver_id),
     winner_driver_name text,
-    winner_constructor_id integer,
+    winner_constructor_id text references effone.constructors(constructor_id),
     winner_constructor_name text,
-    pole_driver_id integer,
+    pole_driver_id text references effone.drivers(driver_id),
     pole_driver_name text,
-    sprint_winner_driver_id integer,
+    sprint_winner_driver_id text references effone.drivers(driver_id),
     sprint_winner_driver_name text,
-    sprint_winner_constructor_id integer,
+    sprint_winner_constructor_id text references effone.constructors(constructor_id),
     sprint_winner_constructor_name text,
     refresh_id bigint not null references effone.refresh_runs(refresh_id),
     unique (season, race_round)
 );
-
-alter table effone.circuits
-    add constraint circuits_first_race_id_fkey foreign key (first_race_id) references effone.races(race_id),
-    add constraint circuits_last_race_id_fkey foreign key (last_race_id) references effone.races(race_id);
-
-alter table effone.constructors
-    add constraint constructors_first_race_id_fkey foreign key (first_race_id) references effone.races(race_id),
-    add constraint constructors_last_race_id_fkey foreign key (last_race_id) references effone.races(race_id);
-
-alter table effone.drivers
-    add constraint drivers_first_race_id_fkey foreign key (first_race_id) references effone.races(race_id),
-    add constraint drivers_last_race_id_fkey foreign key (last_race_id) references effone.races(race_id);
-
-alter table effone.seasons
-    add constraint seasons_wdc_driver_id_fkey foreign key (wdc_driver_id) references effone.drivers(driver_id),
-    add constraint seasons_wcc_constructor_id_fkey foreign key (wcc_constructor_id) references effone.constructors(constructor_id);
-
-alter table effone.races
-    add constraint races_winner_driver_id_fkey foreign key (winner_driver_id) references effone.drivers(driver_id),
-    add constraint races_winner_constructor_id_fkey foreign key (winner_constructor_id) references effone.constructors(constructor_id),
-    add constraint races_pole_driver_id_fkey foreign key (pole_driver_id) references effone.drivers(driver_id),
-    add constraint races_sprint_winner_driver_id_fkey foreign key (sprint_winner_driver_id) references effone.drivers(driver_id),
-    add constraint races_sprint_winner_constructor_id_fkey foreign key (sprint_winner_constructor_id) references effone.constructors(constructor_id);
-
--- +goose Down
-drop table if exists effone.races cascade;
-drop table if exists effone.seasons cascade;
-drop table if exists effone.drivers cascade;
-drop table if exists effone.constructors cascade;
-drop table if exists effone.circuits cascade;
