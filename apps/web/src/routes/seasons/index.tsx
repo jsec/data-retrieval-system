@@ -1,0 +1,119 @@
+import { Box, Card, Group, Stack, Text, Title } from '@mantine/core';
+import { TrophyIcon } from '@phosphor-icons/react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { createFileRoute, Link } from '@tanstack/react-router';
+
+import { TeamBar } from '#/components/ui';
+import { seasonsQuery } from '#/data/queries';
+
+export const Route = createFileRoute('/seasons/')({
+    component: Seasons,
+    loader: async ({ context }) => {
+        await context.queryClient.ensureQueryData(seasonsQuery());
+        return { crumbs: [{ label: 'Seasons' }] };
+    },
+});
+
+const COLS = '90px 80px 1fr 1fr 110px';
+
+function Seasons() {
+    const { data: seasons } = useSuspenseQuery(seasonsQuery());
+
+    return (
+        <Stack gap="md">
+            <Box>
+                <Title order={1} style={{ fontSize: 28 }}>
+                    Seasons
+                </Title>
+                <Text c="dimmed" mt={4} size="13px">
+                    Browse championship seasons and their outcomes
+                </Text>
+            </Box>
+
+            <Card padding={0} radius="md" withBorder>
+                <Box
+                    bg="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))"
+                    c="dimmed"
+                    style={{
+                        display: 'grid',
+                        fontSize: 10.5,
+                        fontWeight: 700,
+                        gridTemplateColumns: COLS,
+                        letterSpacing: '0.5px',
+                        padding: '13px 22px',
+                    }}
+                >
+                    <span>SEASON</span>
+                    <span style={{ textAlign: 'center' }}>RACES</span>
+                    <span>WORLD CHAMPION</span>
+                    <span>CONSTRUCTORS&apos; CHAMPION</span>
+                    <span style={{ textAlign: 'right' }}>STATUS</span>
+                </Box>
+                {seasons.map((s) => {
+                    const live = s.status === 'In progress';
+                    return (
+                        <Link
+                            className="f1-row"
+                            key={s.year}
+                            params={{ year: String(s.year) }}
+                            style={{
+                                alignItems: 'center',
+                                borderTop: '1px solid var(--mantine-color-default-border)',
+                                color: 'inherit',
+                                display: 'grid',
+                                gridTemplateColumns: COLS,
+                                padding: '14px 22px',
+                                textDecoration: 'none',
+                            }}
+                            to="/seasons/$year"
+                        >
+                            <Text className="f1-num" fw={800} style={{ fontSize: 20, letterSpacing: '-0.5px' }}>
+                                {s.year}
+                            </Text>
+                            <Text c="dimmed" className="f1-num" fw={700} ta="center">
+                                {s.races}
+                            </Text>
+                            <Group gap={10} wrap="nowrap">
+                                <TrophyIcon color="var(--mantine-color-yellow-6)" size={15} weight="fill" />
+                                <TeamBar color={s.wdc.color} height={22} />
+                                <Text fw={600} style={{ fontSize: 14 }}>
+                                    {s.wdc.short}
+                                </Text>
+                            </Group>
+                            <Group gap={10} wrap="nowrap">
+                                <Box style={{ background: s.wcc.color, borderRadius: 3, height: 14, width: 14 }} />
+                                <Text fw={600} style={{ fontSize: 14 }}>
+                                    {s.wcc.name}
+                                </Text>
+                            </Group>
+                            <Box ta="right">
+                                <Text
+                                    span
+                                    style={{
+                                        background: live
+                                            ? 'var(--mantine-color-green-0)'
+                                            : 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5))',
+                                        borderRadius: 20,
+                                        color: live
+                                            ? 'var(--mantine-color-green-7)'
+                                            : 'var(--mantine-color-gray-6)',
+                                        display: 'inline-block',
+                                        fontSize: 11,
+                                        fontWeight: 700,
+                                        padding: '3px 10px',
+                                    }}
+                                >
+                                    {s.status}
+                                </Text>
+                            </Box>
+                        </Link>
+                    );
+                })}
+            </Card>
+            <Text c="dimmed" size="xs">
+                Select the current season to open its full analytics dashboard. Archived seasons are
+                read-only summaries.
+            </Text>
+        </Stack>
+    );
+}

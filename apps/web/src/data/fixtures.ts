@@ -1,0 +1,704 @@
+import type {
+    AllTimeConstructor,
+    AllTimeDriver,
+    CalendarRound,
+    CareerSeason,
+    Circuit,
+    DriverCareer,
+    DriverRaceRow,
+    DriverSeasonDetail,
+    FinishBar,
+    RaceDetail,
+    SeasonConstructor,
+    SeasonDriver,
+    SeasonOverview,
+    SeasonRow,
+    Standings,
+    Team,
+    TeamKey,
+} from './types';
+
+export const TOTAL_ROUNDS = 24;
+export const COMPLETED = 10;
+export const CURRENT_YEAR = 2026;
+export const GRAY_FALLBACK = 'var(--mantine-color-gray-7)';
+
+export const TEAMS: Record<TeamKey, Team> = {
+    alp: { color: '#0093CC', dark: '#006a94', key: 'alp', name: 'Alpine' },
+    ast: { color: '#229971', dark: '#176b4f', key: 'ast', name: 'Aston Martin' },
+    fer: { color: '#E8002D', dark: '#a8001f', key: 'fer', name: 'Ferrari' },
+    haa: { color: '#8B8D90', dark: '#62646a', key: 'haa', name: 'Haas' },
+    mcl: { color: '#FF8000', dark: '#cc6600', key: 'mcl', name: 'McLaren' },
+    mer: { color: '#00B39B', dark: '#00806f', key: 'mer', name: 'Mercedes' },
+    rb: { color: '#6692FF', dark: '#476bcc', key: 'rb', name: 'Racing Bulls' },
+    rbr: { color: '#3671C6', dark: '#26528f', key: 'rbr', name: 'Red Bull' },
+    sau: { color: '#00A859', dark: '#007a41', key: 'sau', name: 'Audi' },
+    wil: { color: '#3B9BD8', dark: '#2a6f9c', key: 'wil', name: 'Williams' },
+};
+
+const GRID_2026: [
+    string,
+    string,
+    string,
+    TeamKey,
+    number,
+    number,
+    number,
+    number,
+    number,
+    string,
+][] = [
+    ['NOR', 'Lando Norris', 'L. Norris', 'mcl', 4, 241, 4, 8, 3, 'United Kingdom'],
+    ['PIA', 'Oscar Piastri', 'O. Piastri', 'mcl', 81, 224, 3, 7, 2, 'Australia'],
+    ['VER', 'Max Verstappen', 'M. Verstappen', 'rbr', 1, 201, 2, 6, 3, 'Netherlands'],
+    ['LEC', 'Charles Leclerc', 'C. Leclerc', 'fer', 16, 158, 1, 4, 1, 'Monaco'],
+    ['RUS', 'George Russell', 'G. Russell', 'mer', 63, 146, 0, 3, 1, 'United Kingdom'],
+    ['HAM', 'Lewis Hamilton', 'L. Hamilton', 'fer', 44, 121, 0, 2, 0, 'United Kingdom'],
+    ['ANT', 'Kimi Antonelli', 'K. Antonelli', 'mer', 12, 89, 0, 1, 0, 'Italy'],
+    ['ALB', 'Alex Albon', 'A. Albon', 'wil', 23, 54, 0, 0, 0, 'Thailand'],
+    ['ALO', 'Fernando Alonso', 'F. Alonso', 'ast', 14, 42, 0, 0, 0, 'Spain'],
+    ['GAS', 'Pierre Gasly', 'P. Gasly', 'alp', 10, 38, 0, 1, 0, 'France'],
+    ['SAI', 'Carlos Sainz', 'C. Sainz', 'wil', 55, 34, 0, 0, 0, 'Spain'],
+    ['HAD', 'Isack Hadjar', 'I. Hadjar', 'rb', 6, 31, 0, 0, 0, 'France'],
+    ['TSU', 'Yuki Tsunoda', 'Y. Tsunoda', 'rb', 22, 22, 0, 0, 0, 'Japan'],
+    ['HUL', 'Nico Hulkenberg', 'N. Hulkenberg', 'sau', 27, 19, 0, 1, 0, 'Germany'],
+    ['BOR', 'Gabriel Bortoleto', 'G. Bortoleto', 'sau', 5, 12, 0, 0, 0, 'Brazil'],
+    ['OCO', 'Esteban Ocon', 'E. Ocon', 'haa', 31, 10, 0, 0, 0, 'France'],
+    ['BEA', 'Oliver Bearman', 'O. Bearman', 'haa', 87, 8, 0, 0, 0, 'United Kingdom'],
+    ['STR', 'Lance Stroll', 'L. Stroll', 'ast', 18, 6, 0, 0, 0, 'Canada'],
+    ['LAW', 'Liam Lawson', 'L. Lawson', 'rbr', 30, 4, 0, 0, 0, 'New Zealand'],
+    ['COL', 'Franco Colapinto', 'F. Colapinto', 'alp', 43, 2, 0, 0, 0, 'Argentina'],
+];
+
+const CAREER_TOTALS: Record<string, [number, number, number, number, number, number]> = {
+    ALB: [111, 0, 0, 2, 0, 2019],
+    ALO: [416, 32, 22, 106, 2, 2001],
+    ANT: [28, 0, 0, 2, 0, 2025],
+    BEA: [33, 0, 0, 0, 0, 2024],
+    BOR: [28, 0, 0, 0, 0, 2025],
+    COL: [31, 0, 0, 0, 0, 2024],
+    GAS: [166, 1, 0, 5, 0, 2017],
+    HAD: [28, 0, 0, 0, 0, 2025],
+    HAM: [372, 105, 104, 202, 7, 2007],
+    HUL: [230, 0, 1, 1, 0, 2010],
+    LAW: [39, 0, 0, 0, 0, 2023],
+    LEC: [166, 8, 26, 48, 0, 2018],
+    NOR: [150, 9, 12, 40, 0, 2019],
+    OCO: [166, 1, 0, 4, 0, 2016],
+    PIA: [71, 5, 4, 22, 0, 2023],
+    RUS: [145, 3, 5, 20, 0, 2019],
+    SAI: [221, 4, 6, 27, 0, 2015],
+    STR: [185, 0, 1, 3, 0, 2017],
+    TSU: [105, 0, 0, 0, 0, 2021],
+    VER: [221, 65, 44, 116, 4, 2015],
+};
+
+const driverByCode: Record<string, SeasonDriver> = {};
+
+export const SEASON_DRIVERS: SeasonDriver[] = GRID_2026.map((d) => {
+    const team = TEAMS[d[3]];
+    const c = CAREER_TOTALS[d[0]] ?? [0, 0, 0, 0, 0, CURRENT_YEAR];
+    const driver: SeasonDriver = {
+        car: {
+            debut: c[5],
+            podiums: c[3],
+            poles: c[2],
+            races: c[0],
+            titles: c[4],
+            wins: c[1],
+        },
+        code: d[0],
+        color: team.color,
+        colorDark: team.dark,
+        country: d[9],
+        name: d[1],
+        number: d[4],
+        podiums: d[7],
+        points: d[5],
+        poles: d[8],
+        short: d[2],
+        team: d[3],
+        teamName: team.name,
+        wins: d[6],
+    };
+    driverByCode[driver.code] = driver;
+    return driver;
+});
+
+export function getSeasonDriver(code: string): SeasonDriver | undefined {
+    return driverByCode[code];
+}
+
+const CONSTRUCTOR_STATS: Record<TeamKey, [number, number, number]> = {
+    alp: [0, 1, 0],
+    ast: [0, 0, 0],
+    fer: [1, 6, 1],
+    haa: [0, 0, 0],
+    mcl: [7, 15, 5],
+    mer: [0, 4, 1],
+    rb: [0, 0, 0],
+    rbr: [2, 6, 3],
+    sau: [0, 1, 0],
+    wil: [0, 0, 0],
+};
+
+export const SEASON_CONSTRUCTORS: SeasonConstructor[] = (() => {
+    const points: Record<string, number> = {};
+    for (const d of SEASON_DRIVERS) {
+        points[d.team] = (points[d.team] ?? 0) + d.points;
+    }
+    return (Object.keys(TEAMS) as TeamKey[])
+        .map(k => ({
+            color: TEAMS[k].color,
+            key: k,
+            name: TEAMS[k].name,
+            podiums: CONSTRUCTOR_STATS[k][1],
+            points: points[k] ?? 0,
+            poles: CONSTRUCTOR_STATS[k][2],
+            pos: 0,
+            wins: CONSTRUCTOR_STATS[k][0],
+        }))
+        .sort((a, b) => b.points - a.points)
+        .map((c, i) => ({ ...c, pos: i + 1 }));
+})();
+
+export const PROGRESSION: Record<string, number[]> = {
+    HAM: [0, 8, 16, 26, 36, 48, 62, 78, 93, 107, 121],
+    LEC: [0, 12, 24, 39, 51, 66, 84, 100, 118, 138, 158],
+    NOR: [0, 25, 43, 61, 86, 104, 129, 154, 179, 216, 241],
+    PIA: [0, 18, 43, 61, 79, 104, 122, 140, 165, 190, 224],
+    RUS: [0, 10, 20, 33, 45, 60, 75, 90, 108, 127, 146],
+    VER: [0, 15, 40, 55, 73, 88, 106, 131, 149, 175, 201],
+};
+const PROGRESSION_ORDER = ['NOR', 'PIA', 'VER', 'LEC', 'RUS', 'HAM'];
+
+const CALENDAR_RAW: [number, string, string, string, string, null | string][] = [
+    [1, 'Australian GP', 'Albert Park', 'MEL', 'Mar 8', 'NOR'],
+    [2, 'Chinese GP', 'Shanghai Intl', 'SHA', 'Mar 22', 'VER'],
+    [3, 'Japanese GP', 'Suzuka', 'SUZ', 'Apr 5', 'PIA'],
+    [4, 'Bahrain GP', 'Sakhir', 'BHR', 'Apr 12', 'NOR'],
+    [5, 'Saudi Arabian GP', 'Jeddah Corniche', 'JED', 'Apr 26', 'LEC'],
+    [6, 'Miami GP', 'Miami Intl', 'MIA', 'May 10', 'PIA'],
+    [7, 'Emilia-Romagna GP', 'Imola', 'IMO', 'May 24', 'VER'],
+    [8, 'Monaco GP', 'Circuit de Monaco', 'MON', 'Jun 7', 'NOR'],
+    [9, 'Spanish GP', 'Barcelona-Catalunya', 'BCN', 'Jun 14', 'PIA'],
+    [10, 'Canadian GP', 'Gilles Villeneuve', 'MTL', 'Jun 21', 'NOR'],
+    [11, 'Austrian GP', 'Red Bull Ring', 'RBR', 'Jun 28', null],
+    [12, 'British GP', 'Silverstone', 'SIL', 'Jul 5', null],
+    [13, 'Hungarian GP', 'Hungaroring', 'HUN', 'Jul 19', null],
+    [14, 'Belgian GP', 'Spa-Francorchamps', 'SPA', 'Jul 26', null],
+    [15, 'Dutch GP', 'Zandvoort', 'ZAN', 'Aug 23', null],
+    [16, 'Italian GP', 'Monza', 'MNZ', 'Sep 6', null],
+    [17, 'Azerbaijan GP', 'Baku City', 'BAK', 'Sep 20', null],
+    [18, 'Singapore GP', 'Marina Bay', 'SIN', 'Oct 4', null],
+    [19, 'United States GP', 'COTA', 'COTA', 'Oct 18', null],
+    [20, 'Mexico City GP', 'Hermanos Rodriguez', 'MEX', 'Oct 25', null],
+    [21, 'Sao Paulo GP', 'Interlagos', 'INT', 'Nov 8', null],
+    [22, 'Las Vegas GP', 'Las Vegas Strip', 'LAS', 'Nov 21', null],
+    [23, 'Qatar GP', 'Lusail', 'LOS', 'Nov 29', null],
+    [24, 'Abu Dhabi GP', 'Yas Marina', 'YAS', 'Dec 6', null],
+];
+
+export const CALENDAR: CalendarRound[] = CALENDAR_RAW.map(c => ({
+    circuit: c[2],
+    code: c[3],
+    date: c[4],
+    name: c[1],
+    round: c[0],
+    winner: c[5],
+}));
+
+const RACE_ORDER = [
+    'NOR', 'PIA', 'VER', 'LEC', 'RUS', 'HAM', 'ANT', 'ALB', 'ALO', 'GAS',
+    'SAI', 'HAD', 'TSU', 'HUL', 'BOR', 'OCO', 'BEA', 'STR', 'LAW', 'COL',
+];
+const RACE_GRIDS = [1, 3, 2, 4, 6, 5, 8, 7, 11, 9, 10, 12, 14, 13, 16, 15, 18, 17, 19, 20];
+const RACE_GAPS = [
+    'WINNER', '+4.821', '+12.044', '+24.115', '+38.902', '+45.330', '+61.882',
+    '+72.450', '+1 LAP', '+1 LAP', '+1 LAP', '+1 LAP', '+1 LAP', '+1 LAP',
+    '+1 LAP', '+1 LAP', '+1 LAP', '+1 LAP', '+2 LAPS', 'DNF',
+];
+const RACE_PTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+const POSITION_LINES: Record<string, number[]> = {
+    LEC: [4, 4, 4, 4, 5, 5, 4, 4, 3, 4, 4, 4, 4, 4, 4],
+    NOR: [1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    PIA: [3, 3, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+    RUS: [6, 5, 5, 5, 4, 4, 5, 5, 5, 5, 5, 5, 6, 5, 5],
+    VER: [2, 2, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3],
+};
+
+const PACE_LINES: Record<string, number[]> = (() => {
+    const base: Record<string, number> = { LEC: 79, NOR: 78.2, PIA: 78.4, VER: 78.6 };
+    const out: Record<string, number[]> = {};
+    for (const [ki, k] of Object.keys(base).entries()) {
+        const arr: number[] = [];
+        for (let l = 0; l < 24; l++) {
+            const t
+                = base[k]
+                    + Math.sin(l * 0.6 + ki) * 0.22
+                    + (l < 2 ? 0.6 : 0)
+                    + (l > 21 ? 0.35 : 0);
+            arr.push(+t.toFixed(2));
+        }
+        out[k] = arr;
+    }
+    return out;
+})();
+
+const ALL_TIME_RAW: [string, string, string, number, number, number, number, number][] = [
+    ['Lewis Hamilton', 'GBR', '2007–', 356, 105, 104, 202, 7],
+    ['Michael Schumacher', 'GER', '1991–2012', 308, 91, 68, 155, 7],
+    ['Juan Manuel Fangio', 'ARG', '1950–1958', 51, 24, 29, 35, 5],
+    ['Sebastian Vettel', 'GER', '2007–2022', 300, 53, 57, 122, 4],
+    ['Alain Prost', 'FRA', '1980–1993', 199, 51, 33, 106, 4],
+    ['Max Verstappen', 'NED', '2015–', 221, 65, 44, 116, 4],
+    ['Niki Lauda', 'AUT', '1971–1985', 171, 25, 24, 54, 3],
+    ['Nelson Piquet', 'BRA', '1978–1991', 204, 23, 24, 60, 3],
+    ['Ayrton Senna', 'BRA', '1984–1994', 161, 41, 65, 80, 3],
+    ['Jackie Stewart', 'GBR', '1965–1973', 99, 27, 17, 43, 3],
+    ['Jack Brabham', 'AUS', '1955–1970', 126, 14, 13, 31, 3],
+    ['Alberto Ascari', 'ITA', '1950–1955', 32, 13, 14, 17, 2],
+    ['Jim Clark', 'GBR', '1960–1968', 72, 25, 33, 32, 2],
+    ['Graham Hill', 'GBR', '1958–1975', 176, 14, 13, 36, 2],
+    ['Emerson Fittipaldi', 'BRA', '1970–1980', 144, 14, 6, 35, 2],
+    ['Mika Häkkinen', 'FIN', '1991–2001', 161, 20, 26, 51, 2],
+    ['Fernando Alonso', 'ESP', '2001–', 416, 32, 22, 106, 2],
+    ['Giuseppe Farina', 'ITA', '1950–1955', 33, 5, 5, 20, 1],
+    ['Mike Hawthorn', 'GBR', '1952–1958', 45, 3, 4, 18, 1],
+    ['Phil Hill', 'USA', '1958–1966', 48, 3, 6, 16, 1],
+    ['John Surtees', 'GBR', '1960–1972', 111, 6, 8, 24, 1],
+    ['Denny Hulme', 'NZL', '1965–1974', 112, 8, 1, 33, 1],
+    ['Jochen Rindt', 'AUT', '1965–1970', 60, 6, 10, 13, 1],
+    ['Mario Andretti', 'USA', '1968–1982', 128, 12, 18, 19, 1],
+    ['Jody Scheckter', 'RSA', '1972–1980', 112, 10, 3, 33, 1],
+    ['Alan Jones', 'AUS', '1975–1986', 116, 12, 6, 24, 1],
+    ['Keke Rosberg', 'FIN', '1978–1986', 114, 5, 5, 17, 1],
+    ['Nigel Mansell', 'GBR', '1980–1995', 187, 31, 32, 59, 1],
+    ['Damon Hill', 'GBR', '1992–1999', 115, 22, 20, 42, 1],
+    ['Jacques Villeneuve', 'CAN', '1996–2006', 163, 11, 13, 23, 1],
+    ['Kimi Räikkönen', 'FIN', '2001–2021', 349, 21, 18, 103, 1],
+    ['Jenson Button', 'GBR', '2000–2017', 306, 15, 8, 50, 1],
+    ['Nico Rosberg', 'GER', '2006–2016', 206, 23, 30, 57, 1],
+    ['Stirling Moss', 'GBR', '1951–1961', 66, 16, 16, 24, 0],
+    ['Gilles Villeneuve', 'CAN', '1977–1982', 67, 6, 2, 13, 0],
+    ['Carlos Reutemann', 'ARG', '1972–1982', 146, 12, 6, 45, 0],
+    ['Ronnie Peterson', 'SWE', '1970–1978', 123, 10, 14, 26, 0],
+    ['Rubens Barrichello', 'BRA', '1993–2011', 322, 11, 14, 68, 0],
+    ['David Coulthard', 'GBR', '1994–2008', 246, 13, 12, 62, 0],
+    ['Felipe Massa', 'BRA', '2002–2017', 269, 11, 16, 41, 0],
+    ['Mark Webber', 'AUS', '2002–2013', 215, 9, 13, 42, 0],
+    ['Valtteri Bottas', 'FIN', '2013–', 243, 10, 20, 67, 0],
+    ['Sergio Pérez', 'MEX', '2011–2024', 281, 6, 3, 39, 0],
+    ['Daniel Ricciardo', 'AUS', '2011–2024', 257, 8, 3, 32, 0],
+    ['Juan Pablo Montoya', 'COL', '2001–2006', 94, 7, 13, 30, 0],
+    ['Ralf Schumacher', 'GER', '1997–2007', 180, 6, 6, 27, 0],
+    ['Gerhard Berger', 'AUT', '1984–1997', 210, 10, 12, 48, 0],
+    ['Riccardo Patrese', 'ITA', '1977–1993', 256, 6, 8, 37, 0],
+    ['Jean Alesi', 'FRA', '1989–2001', 201, 1, 2, 32, 0],
+    ['Heinz-Harald Frentzen', 'GER', '1994–2003', 156, 3, 2, 18, 0],
+    ['Eddie Irvine', 'GBR', '1993–2002', 146, 4, 0, 26, 0],
+    ['Clay Regazzoni', 'SUI', '1970–1980', 132, 5, 5, 28, 0],
+    ['Jacky Ickx', 'BEL', '1966–1979', 116, 8, 13, 25, 0],
+    ['Bruce McLaren', 'NZL', '1958–1970', 100, 4, 0, 27, 0],
+    ['Dan Gurney', 'USA', '1959–1970', 86, 4, 3, 19, 0],
+    ['Tony Brooks', 'GBR', '1956–1961', 38, 6, 3, 10, 0],
+    ['Carlos Pace', 'BRA', '1972–1977', 72, 1, 1, 6, 0],
+    ['Patrick Depailler', 'FRA', '1972–1980', 95, 2, 1, 19, 0],
+    ['Michele Alboreto', 'ITA', '1981–1994', 194, 5, 2, 23, 0],
+    ['Elio de Angelis', 'ITA', '1979–1986', 108, 2, 3, 9, 0],
+    ['Thierry Boutsen', 'BEL', '1983–1993', 163, 3, 1, 15, 0],
+    ['René Arnoux', 'FRA', '1978–1989', 149, 7, 18, 22, 0],
+    ['Jacques Laffite', 'FRA', '1974–1986', 176, 6, 7, 32, 0],
+    ['Didier Pironi', 'FRA', '1978–1982', 70, 3, 4, 13, 0],
+    ['John Watson', 'GBR', '1973–1985', 152, 5, 2, 20, 0],
+    ['Romain Grosjean', 'FRA', '2009–2020', 179, 0, 0, 10, 0],
+    ['Nico Hülkenberg', 'GER', '2010–', 230, 0, 1, 1, 0],
+    ['Charles Leclerc', 'MON', '2018–', 166, 8, 26, 48, 0],
+    ['Lando Norris', 'GBR', '2019–', 150, 9, 12, 40, 0],
+    ['Oscar Piastri', 'AUS', '2023–', 71, 5, 4, 22, 0],
+    ['George Russell', 'GBR', '2019–', 145, 4, 5, 21, 0],
+    ['Carlos Sainz', 'ESP', '2015–', 221, 4, 6, 27, 0],
+    ['Pierre Gasly', 'FRA', '2017–', 166, 1, 0, 5, 0],
+    ['Esteban Ocon', 'FRA', '2016–', 166, 1, 0, 4, 0],
+    ['Alex Albon', 'THA', '2019–', 111, 0, 0, 2, 0],
+    ['Lance Stroll', 'CAN', '2017–', 185, 0, 1, 3, 0],
+    ['Yuki Tsunoda', 'JPN', '2021–', 105, 0, 0, 0, 0],
+    ['Kimi Antonelli', 'ITA', '2025–', 28, 0, 0, 2, 0],
+    ['Isack Hadjar', 'FRA', '2025–', 28, 0, 0, 0, 0],
+    ['Gabriel Bortoleto', 'BRA', '2025–', 28, 0, 0, 0, 0],
+    ['Oliver Bearman', 'GBR', '2024–', 33, 0, 0, 0, 0],
+    ['Liam Lawson', 'NZL', '2023–', 39, 0, 0, 0, 0],
+    ['Franco Colapinto', 'ARG', '2024–', 31, 0, 0, 0, 0],
+];
+
+function initials(name: string): string {
+    const ascii = name.replaceAll(/[äöüéíáàë]/gi, (c) => {
+        const map: Record<string, string> = {
+            á: 'a', à: 'a', ä: 'a', é: 'e', ë: 'e', í: 'i', ö: 'o', ü: 'u',
+        };
+        return map[c.toLowerCase()] ?? c;
+    });
+    const last = ascii.split(' ').pop() ?? ascii;
+    return last.slice(0, 3).toUpperCase();
+}
+
+const activeByName: Record<string, { code: string; color: string }> = {};
+for (const d of SEASON_DRIVERS) {
+    activeByName[d.name] = { code: d.code, color: d.color };
+}
+
+export const ALL_TIME_DRIVERS: AllTimeDriver[] = ALL_TIME_RAW.map((a, i) => {
+    const active = activeByName[a[0]];
+    return {
+        active: !!active,
+        code: active ? active.code : initials(a[0]),
+        color: active ? active.color : (a[7] > 0 ? '#c79100' : GRAY_FALLBACK),
+        id: i,
+        name: a[0],
+        nat: a[1],
+        podiums: a[6],
+        poles: a[5],
+        starts: a[3],
+        titles: a[7],
+        wins: a[4],
+        years: a[2],
+    };
+});
+
+const ALL_TIME_CONSTRUCTORS_RAW: [
+    string, string, string, number, number, number, number, boolean,
+][] = [
+    ['Ferrari', '#E8002D', '1950–', 16, 248, 253, 812, true],
+    ['McLaren', '#FF8000', '1966–', 8, 200, 165, 524, true],
+    ['Williams', '#3B9BD8', '1977–', 9, 114, 128, 313, true],
+    ['Mercedes', '#00B39B', '1954–', 8, 125, 140, 293, true],
+    ['Red Bull', '#3671C6', '2005–', 6, 122, 103, 290, true],
+    ['Team Lotus', '#177E3E', '1958–1994', 7, 79, 107, 172, false],
+    ['Renault / Alpine', '#0093CC', '1977–', 2, 36, 51, 110, true],
+    ['Brabham', '#5C5F66', '1962–1992', 2, 35, 39, 124, false],
+    ['Benetton', '#00A859', '1986–2001', 1, 27, 15, 102, false],
+    ['Tyrrell', '#5C5F66', '1970–1998', 1, 23, 14, 77, false],
+    ['Cooper', '#5C5F66', '1950–1969', 2, 16, 11, 45, false],
+    ['BRM', '#5C5F66', '1951–1977', 1, 17, 11, 62, false],
+    ['Matra', '#5C5F66', '1967–1972', 1, 9, 4, 22, false],
+    ['Vanwall', '#5C5F66', '1954–1960', 1, 9, 7, 18, false],
+    ['Brawn GP', '#9FD300', '2009', 1, 8, 5, 15, false],
+    ['Aston Martin', '#229971', '2021–', 0, 0, 1, 9, true],
+    ['Racing Bulls', '#6692FF', '2006–', 0, 2, 1, 5, true],
+    ['Sauber / Audi', '#52E252', '1993–', 0, 1, 1, 27, true],
+    ['Haas', '#8B8D90', '2016–', 0, 0, 1, 2, true],
+    ['Jordan', '#5C5F66', '1991–2005', 0, 4, 2, 19, false],
+];
+
+export const ALL_TIME_CONSTRUCTORS: AllTimeConstructor[] = ALL_TIME_CONSTRUCTORS_RAW.map(
+    c => ({
+        active: c[7],
+        color: c[1],
+        name: c[0],
+        podiums: c[6],
+        poles: c[5],
+        titles: c[3],
+        wins: c[4],
+        years: c[2],
+    }),
+);
+
+const SEASONS_RAW: [number, number, string, TeamKey, string][] = [
+    [2026, 24, 'NOR', 'mcl', 'In progress'],
+    [2025, 24, 'NOR', 'mcl', 'Final'],
+    [2024, 24, 'VER', 'mcl', 'Final'],
+    [2023, 22, 'VER', 'rbr', 'Final'],
+    [2022, 22, 'VER', 'rbr', 'Final'],
+    [2021, 22, 'VER', 'mer', 'Final'],
+];
+
+export const SEASONS: SeasonRow[] = SEASONS_RAW.map(s => ({
+    races: s[1],
+    status: s[4],
+    wcc: TEAMS[s[3]],
+    wdc: driverByCode[s[2]],
+    year: s[0],
+}));
+
+export function getAllTimeDrivers(): AllTimeDriver[] {
+    return ALL_TIME_DRIVERS;
+}
+
+export function getDriverCareer(id: number): DriverCareer | undefined {
+    const driver = ALL_TIME_DRIVERS[id];
+    if (!driver) return undefined;
+    return { driver, seasons: buildCareer(driver) };
+}
+
+export function getRaceDetail(round: number): RaceDetail | undefined {
+    const cal = CALENDAR[round - 1];
+    if (!cal) return undefined;
+    return {
+        circuit: cal.circuit,
+        date: cal.date,
+        fastestLap: driverByCode.VER,
+        laps: 70,
+        name: cal.name,
+        paceLines: Object.keys(PACE_LINES).map(code => ({
+            code,
+            color: driverByCode[code].color,
+            values: PACE_LINES[code],
+        })),
+        pole: driverByCode.NOR,
+        positionLines: Object.keys(POSITION_LINES).map(code => ({
+            code,
+            color: driverByCode[code].color,
+            values: POSITION_LINES[code],
+        })),
+        results: RACE_ORDER.map((code, i) => ({
+            code,
+            driver: driverByCode[code],
+            gap: RACE_GAPS[i],
+            grid: RACE_GRIDS[i],
+            pos: i + 1,
+            pts: RACE_PTS[i],
+        })),
+        round: cal.round,
+        winner: driverByCode.NOR,
+        year: CURRENT_YEAR,
+    };
+}
+
+export function getSeasonOverview(): SeasonOverview {
+    return {
+        calendar: CALENDAR,
+        completed: COMPLETED,
+        constructors: SEASON_CONSTRUCTORS,
+        drivers: SEASON_DRIVERS,
+        lastRaceName: CALENDAR[COMPLETED - 1].name,
+        leader: SEASON_DRIVERS[0],
+        nextRace: CALENDAR[COMPLETED],
+        progression: PROGRESSION_ORDER.map(code => ({
+            code,
+            color: driverByCode[code].color,
+            values: PROGRESSION[code],
+        })),
+        runnerUp: SEASON_DRIVERS[1],
+        totalRounds: TOTAL_ROUNDS,
+        year: CURRENT_YEAR,
+    };
+}
+
+function buildCareer(d: AllTimeDriver): CareerSeason[] {
+    const m = /(\d{4})\D*(\d{4})?/.exec(d.years);
+    const start = m ? +m[1] : 2020;
+    let end = m && m[2] ? +m[2] : CURRENT_YEAR;
+    if (end < start) end = start;
+    let nS = end - start + 1;
+    if (nS > 30) nS = 30;
+
+    const w: number[] = [];
+    for (let i = 0; i < nS; i++) {
+        w.push(Math.pow(Math.sin((Math.PI * (i + 0.5)) / nS), 1.2) + 0.18);
+    }
+    const sum = w.reduce((a, b) => a + b, 0);
+    const dist = (total: number): number[] => {
+        if (total <= 0) return w.map(() => 0);
+        const raw = w.map(x => (x / sum) * total);
+        const f = raw.map(Math.floor);
+        const rem = total - f.reduce((a, b) => a + b, 0);
+        const ord = raw
+            .map((x, i): [number, number] => [i, x - Math.floor(x)])
+            .sort((a, b) => b[1] - a[1]);
+        for (let k = 0; k < rem; k++) f[ord[k % nS][0]]++;
+        return f;
+    };
+
+    const wins = dist(d.wins);
+    const poles = dist(d.poles);
+    const pods = dist(d.podiums);
+    for (let i = 0; i < nS; i++) if (pods[i] < wins[i]) pods[i] = wins[i];
+    const starts = dist(d.starts).map(x => Math.max(1, x));
+
+    const titleIdx = new Set<number>();
+    if (d.titles > 0) {
+        for (const a of wins
+            .map((x, i): [number, number] => [i, x])
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, d.titles)) titleIdx.add(a[0]);
+    }
+
+    const out: CareerSeason[] = [];
+    for (let i = 0; i < nS; i++) {
+        const yr = start + i;
+        const wi = wins[i];
+        const pi = pods[i];
+        const si = starts[i];
+        let pos: number;
+        let label = '';
+        if (titleIdx.has(i)) {
+            pos = 1;
+            label = 'Champion';
+        } else {
+            if (wi >= 7) pos = 2;
+            else if (wi >= 4) pos = 3 + (i % 2);
+            else if (wi >= 2) pos = 4 + (i % 3);
+            else if (wi >= 1) pos = 6 + (i % 3);
+            else if (pi >= 2) pos = 7 + (i % 4);
+            else if (pi >= 1) pos = 10 + (i % 4);
+            else pos = 12 + ((yr * 7 + i) % 7);
+            if (pos === 2) label = 'Runner-up';
+            else if (pos === 3) label = '3rd';
+        }
+        const pts = Math.round(wi * 25 + (pi - wi) * 12 + Math.max(0, si - pi) * (wi > 0 ? 3 : 1.2));
+        out.push({
+            champ: titleIdx.has(i),
+            label,
+            podiums: pi,
+            points: pts,
+            poles: poles[i],
+            pos,
+            posLabel: 'P' + pos,
+            starts: si,
+            wins: wi,
+            year: yr,
+        });
+    }
+    return out.reverse();
+}
+
+const CIRCUITS: Circuit[] = [
+    {
+        code: 'MON',
+        corners: 19,
+        country: 'Monaco',
+        laps: 78,
+        length: '3.337 km',
+        name: 'Circuit de Monaco',
+        path: 'M20,80 C20,40 50,30 80,35 C110,40 100,70 130,70 C160,70 170,50 180,60 C190,70 160,90 120,88 C70,86 60,95 40,92 C25,90 20,90 20,80 Z',
+        round: 8,
+    },
+    {
+        code: 'SPA',
+        corners: 19,
+        country: 'Belgium',
+        laps: 44,
+        length: '7.004 km',
+        name: 'Spa-Francorchamps',
+        path: 'M25,90 C25,60 40,40 70,42 C95,44 90,20 115,25 C145,31 130,55 160,55 C185,55 185,80 160,82 C120,85 110,75 85,80 C55,86 60,95 40,93 C28,92 25,95 25,90 Z',
+        round: 14,
+    },
+    {
+        code: 'MNZ',
+        corners: 11,
+        country: 'Italy',
+        laps: 53,
+        length: '5.793 km',
+        name: 'Autodromo di Monza',
+        path: 'M30,30 L160,30 C180,30 185,45 170,52 L60,80 C40,86 35,75 55,68 L120,45 C100,52 50,55 40,55 C25,55 25,30 30,30 Z',
+        round: 16,
+    },
+    {
+        code: 'SUZ',
+        corners: 18,
+        country: 'Japan',
+        laps: 53,
+        length: '5.807 km',
+        name: 'Suzuka Circuit',
+        path: 'M30,40 C30,25 55,28 70,38 C90,52 75,60 95,62 C120,64 115,40 140,45 C170,51 175,75 150,82 C110,92 100,78 70,82 C45,85 30,80 35,65 C38,55 50,55 45,48 C40,42 30,50 30,40 Z',
+        round: 3,
+    },
+    {
+        code: 'BCN',
+        corners: 16,
+        country: 'Spain',
+        laps: 66,
+        length: '4.657 km',
+        name: 'Barcelona-Catalunya',
+        path: 'M28,45 C28,30 55,30 75,38 C100,48 130,30 155,42 C180,54 180,78 150,80 C100,83 90,72 65,78 C42,84 28,80 30,68 C32,58 45,58 40,52 C36,47 28,52 28,45 Z',
+        round: 9,
+    },
+    {
+        code: 'COTA',
+        corners: 20,
+        country: 'United States',
+        laps: 56,
+        length: '5.513 km',
+        name: 'Circuit of the Americas',
+        path: 'M30,85 C30,40 45,25 60,35 C72,43 65,55 80,55 C100,55 95,28 120,32 C150,37 145,60 165,62 C188,64 185,88 160,86 C120,83 110,78 85,82 C55,87 45,90 30,85 Z',
+        round: 19,
+    },
+];
+
+export function getAllTimeConstructors(): AllTimeConstructor[] {
+    return ALL_TIME_CONSTRUCTORS;
+}
+
+export function getCalendar(): { calendar: CalendarRound[]; completed: number } {
+    return { calendar: CALENDAR, completed: COMPLETED };
+}
+
+export function getCircuits(): Circuit[] {
+    return CIRCUITS;
+}
+
+export function getDriverSeason(code: string): DriverSeasonDetail | undefined {
+    const driver = driverByCode[code];
+    if (!driver) return undefined;
+    const pos = SEASON_DRIVERS.findIndex(d => d.code === code) + 1;
+
+    let progression = PROGRESSION[code];
+    if (!progression) {
+        progression = [0];
+        for (let i = 1; i <= COMPLETED; i++) {
+            progression.push(Math.round((driver.points * i) / COMPLETED));
+        }
+    }
+    const pointsMax = Math.max(50, Math.ceil(driver.points / 50) * 50);
+
+    const baseP = Math.min(pos, 15);
+    const ptsTable = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
+
+    const finishes: FinishBar[] = [];
+    for (let i = 0; i < COMPLETED; i++) {
+        const p = Math.max(1, Math.round(baseP + Math.sin(i * 1.3) * 2));
+        finishes.push({
+            color: p <= 3 ? '#f59f00' : (p <= 10 ? driver.color : 'var(--mantine-color-gray-4)'),
+            pos: p,
+            round: 'R' + (i + 1),
+        });
+    }
+
+    const races: DriverRaceRow[] = CALENDAR.slice(0, COMPLETED).map((rc, i) => {
+        const fin = Math.max(1, Math.round(baseP + Math.sin(i * 1.3) * 2));
+        const dnf = code === 'COL' && i === 4;
+        const pp = fin <= 10 && !dnf ? ptsTable[fin - 1] : 0;
+        return {
+            finish: dnf ? 'DNF' : fin,
+            gp: rc.name,
+            grid: Math.max(1, fin + ((i % 3) - 1)),
+            pts: pp,
+            round: rc.round,
+            status: dnf ? 'DNF' : fin <= 3 ? 'PODIUM' : fin <= 10 ? 'POINTS' : '—',
+            statusColor: dnf
+                ? 'var(--mantine-color-red-6)'
+                : fin <= 3
+                    ? 'var(--mantine-color-yellow-7)'
+                    : fin <= 10
+                        ? 'var(--mantine-color-green-7)'
+                        : 'var(--mantine-color-gray-5)',
+        };
+    });
+
+    return { driver, finishes, pointsMax, pos, progression, races };
+}
+
+export function getSeasons(): SeasonRow[] {
+    return SEASONS;
+}
+
+export function getStandings(): Standings {
+    return {
+        completed: COMPLETED,
+        constructors: SEASON_CONSTRUCTORS,
+        drivers: SEASON_DRIVERS,
+        leaderPoints: SEASON_DRIVERS[0].points,
+        maxConstructor: SEASON_CONSTRUCTORS[0]?.points || 1,
+    };
+}

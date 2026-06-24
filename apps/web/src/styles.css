@@ -13,3 +13,43 @@ body,
 body {
   margin: 0;
 }
+
+.f1-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.f1-row {
+  transition: background-color 120ms ease;
+}
+.f1-row:hover {
+  background-color: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-6)
+  );
+}
+
+.f1-lift {
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+.f1-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.f1-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.f1-scroll::-webkit-scrollbar-thumb {
+  background: var(--mantine-color-gray-4);
+  border-radius: 8px;
+  border: 2px solid
+    light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
+}
+
+.f1-sidebar {
+  background: #16181c;
+  color: #c9ccd1;
+}

@@ -12,22 +12,32 @@ import TanStackQueryDevtools from './integrations/tanstack-query/devtools';
 import { getRouter } from './router';
 import './styles.css';
 
-const palette: MantineColorsTuple = [
-    '#ffeae6',
-    '#ffd4ce',
-    '#ffa79b',
-    '#ff7764',
-    '#fe4e36',
-    '#fe3519',
-    '#ff1e00',
-    '#e41800',
-    '#cb1000',
-    '#b20100',
+// F1 red brand ramp; index 6 is the exact accent (#e8002d) used across the design.
+const f1red: MantineColorsTuple = [
+    '#ffe8ec',
+    '#ffd1d7',
+    '#f6a1ab',
+    '#f06d7d',
+    '#eb4357',
+    '#e8293f',
+    '#e8002d',
+    '#cf0028',
+    '#b80022',
+    '#a0001d',
 ];
 
 const theme = createTheme({
-    colors: { palette },
-    primaryColor: 'palette',
+    colors: { f1red },
+    fontFamily:
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    headings: {
+        fontWeight: '800',
+        sizes: {
+            h1: { fontSize: '30px', lineHeight: '1.1' },
+            h3: { fontSize: '15px', fontWeight: '700', lineHeight: '1.2' },
+        },
+    },
+    primaryColor: 'f1red',
 });
 
 const rootElement = document.querySelector('#app');
