@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: drivers
+    columns:
+      - name: driver_id
+        tests:
+          - not_null
+          - unique
+      - name: driver_code
+        tests:
+          - not_null
+      - name: driver_name
+        tests:
+          - not_null
+      - name: driver_full_name
+        tests:
+          - not_null
+      - name: nationality_country_id
+        tests:
+          - not_null
+      - name: nationality
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
