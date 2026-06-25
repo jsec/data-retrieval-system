@@ -1,7 +1,7 @@
 [project]
 name = "drs-db"
 version = "0.1.0"
-requires-python = ">=3.14"
+requires-python = ">=3.13,<3.14"
 dependencies = [
     "dbt-core>=1.10,<2",
     "dbt-postgres>=1.9,<2",
@@ -14,7 +14,7 @@ package = false
 
 [tool.ruff]
 line-length = 120
-target-version = "py314"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = [
