@@ -1,0 +1,22 @@
+set dotenv-load
+
+dbt-deps:
+    uv run dbt deps --project-dir ./dbt --profiles-dir ./dbt
+
+dbt-debug:
+    uv run dbt debug --project-dir ./dbt --profiles-dir ./dbt
+
+dbt-parse:
+    uv run dbt parse --project-dir ./dbt --profiles-dir ./dbt
+
+dbt-build refresh_id="1" f1db_schema="f1db":
+    uv run dbt build --project-dir ./dbt --profiles-dir ./dbt --vars '{"refresh_id": {{refresh_id}}, "f1db_schema": "{{f1db_schema}}"}'
+
+migrate:
+    goose -table app_goose_db_version -dir ./migrations postgres "$DATABASE_URL" up
+
+migrate-down:
+    goose -table app_goose_db_version -dir ./migrations postgres "$DATABASE_URL" down
+
+migrate-status:
+    goose -table app_goose_db_version -dir ./migrations postgres "$DATABASE_URL" status
