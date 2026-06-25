@@ -57,6 +57,7 @@ qualifying_aggregates as (
 
 select
     season_constructors.season,
+    season_constructors.position_display_order as final_order,
     season_constructors.constructor_id,
     constructors.constructor_name,
     season_constructors.engine_manufacturer_id,
@@ -99,4 +100,3 @@ left join sprint_aggregates
 left join qualifying_aggregates
     on season_constructors.season = qualifying_aggregates.season
     and season_constructors.constructor_id = qualifying_aggregates.constructor_id
-

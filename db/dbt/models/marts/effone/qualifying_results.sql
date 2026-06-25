@@ -17,6 +17,7 @@ select
     engine_manufacturer_id,
     tyre_manufacturer_id,
     driver_number as car_number,
+    position_display_order as qualifying_order,
     position_number as qualifying_position,
     position_text,
     q1,
@@ -38,4 +39,3 @@ select
     q3 is not null as advanced_to_q3,
     {{ var('refresh_id') }}::bigint as refresh_id
 from results
-

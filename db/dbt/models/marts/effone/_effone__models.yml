@@ -75,7 +75,7 @@ models:
           arguments:
             combination_of_columns:
               - race_id
-              - driver_id
+              - finish_order
     columns:
       - name: race_id
         tests:
@@ -117,12 +117,15 @@ models:
           arguments:
             combination_of_columns:
               - race_id
-              - driver_id
+              - qualifying_order
     columns:
       - name: race_id
         tests:
           - not_null
       - name: driver_id
+        tests:
+          - not_null
+      - name: qualifying_order
         tests:
           - not_null
       - name: constructor_id
@@ -156,8 +159,7 @@ models:
           arguments:
             combination_of_columns:
               - race_id
-              - driver_id
-              - stop_number
+              - stop_order
     columns:
       - name: race_id
         tests:
@@ -236,9 +238,12 @@ models:
           arguments:
             combination_of_columns:
               - season
-              - constructor_id
+              - final_order
     columns:
       - name: season
+        tests:
+          - not_null
+      - name: final_order
         tests:
           - not_null
       - name: constructor_id
