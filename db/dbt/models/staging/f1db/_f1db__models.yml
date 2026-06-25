@@ -10,11 +10,35 @@ models:
       - name: driver_code
         tests:
           - not_null
+      - name: country_of_birth_country_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__country')
+                field: country_id
+      - name: nationality_country_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__country')
+                field: country_id
+      - name: second_nationality_country_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__country')
+                field: country_id
   - name: stg_f1db__country
     columns:
       - name: country_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__country')
+                field: country_id
           - unique
       - name: country_name
         tests:
@@ -45,11 +69,19 @@ models:
       - name: country_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__country')
+                field: country_id
   - name: stg_f1db__circuit
     columns:
       - name: circuit_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__circuit')
+                field: circuit_id
           - unique
       - name: circuit_name
         tests:
@@ -65,6 +97,10 @@ models:
       - name: race_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__race')
+                field: race_id
           - unique
       - name: season
         tests:
@@ -98,9 +134,17 @@ models:
       - name: driver_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__driver')
+                field: driver_id
       - name: constructor_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__constructor')
+                field: constructor_id
   - name: stg_f1db__sprint_race_result
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -112,15 +156,27 @@ models:
       - name: race_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__race')
+                field: race_id
       - name: position_display_order
         tests:
           - not_null
       - name: driver_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__driver')
+                field: driver_id
       - name: constructor_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__constructor')
+                field: constructor_id
   - name: stg_f1db__qualifying_result
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -132,15 +188,27 @@ models:
       - name: race_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__race')
+                field: race_id
       - name: position_display_order
         tests:
           - not_null
       - name: driver_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__driver')
+                field: driver_id
       - name: constructor_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__constructor')
+                field: constructor_id
   - name: stg_f1db__fastest_lap
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -152,12 +220,20 @@ models:
       - name: race_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__race')
+                field: race_id
       - name: position_display_order
         tests:
           - not_null
       - name: driver_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__driver')
+                field: driver_id
   - name: stg_f1db__pit_stop
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -169,12 +245,20 @@ models:
       - name: race_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__race')
+                field: race_id
       - name: position_display_order
         tests:
           - not_null
       - name: driver_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__driver')
+                field: driver_id
       - name: stop_number
         tests:
           - not_null
@@ -189,12 +273,20 @@ models:
       - name: race_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__race')
+                field: race_id
       - name: position_display_order
         tests:
           - not_null
       - name: driver_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__driver')
+                field: driver_id
   - name: stg_f1db__race_constructor_standing
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -206,12 +298,20 @@ models:
       - name: race_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__race')
+                field: race_id
       - name: position_display_order
         tests:
           - not_null
       - name: constructor_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__constructor')
+                field: constructor_id
       - name: engine_manufacturer_id
         tests:
           - not_null
@@ -232,6 +332,10 @@ models:
       - name: driver_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__driver')
+                field: driver_id
   - name: stg_f1db__season_constructor_standing
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -249,6 +353,10 @@ models:
       - name: constructor_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__constructor')
+                field: constructor_id
       - name: engine_manufacturer_id
         tests:
           - not_null
