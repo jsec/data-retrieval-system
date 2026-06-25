@@ -1,0 +1,41 @@
+with results as (
+    select * from {{ ref('int_f1db__qualifying_results_with_entities') }}
+)
+
+select
+    season,
+    race_round,
+    race_id,
+    race_official_name as race_name,
+    race_date,
+    circuit_id,
+    driver_id,
+    driver_name,
+    driver_code,
+    constructor_id,
+    constructor_name,
+    engine_manufacturer_id,
+    tyre_manufacturer_id,
+    driver_number as car_number,
+    position_number as qualifying_position,
+    position_text,
+    q1,
+    q1_millis as q1_ms,
+    q2,
+    q2_millis as q2_ms,
+    q3,
+    q3_millis as q3_ms,
+    qualifying_time as best_qualifying_time,
+    qualifying_time_millis as best_qualifying_ms,
+    gap,
+    gap_millis as gap_ms,
+    "interval",
+    interval_millis as interval_ms,
+    laps,
+    true as is_entry,
+    position_display_order = 1 as is_qualifying_p1,
+    q2 is not null as advanced_to_q2,
+    q3 is not null as advanced_to_q3,
+    {{ var('refresh_id') }}::bigint as refresh_id
+from results
+

@@ -1,6 +1,26 @@
 version: 2
 
 models:
+  - name: circuits
+    columns:
+      - name: circuit_id
+        tests:
+          - not_null
+          - unique
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: constructors
+    columns:
+      - name: constructor_id
+        tests:
+          - not_null
+          - unique
+      - name: refresh_id
+        tests:
+          - not_null
+
   - name: drivers
     columns:
       - name: driver_id
@@ -26,3 +46,204 @@ models:
         tests:
           - not_null
 
+  - name: seasons
+    columns:
+      - name: season
+        tests:
+          - not_null
+          - unique
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: races
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+          - unique
+      - name: season
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: race_results
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - race_id
+              - driver_id
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: sprint_results
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - race_id
+              - driver_id
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: qualifying_results
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - race_id
+              - driver_id
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: fastest_laps
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - race_id
+              - driver_id
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: pit_stops
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - race_id
+              - driver_id
+              - stop_number
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: stop_number
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: driver_standings_snapshots
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - race_id
+              - driver_id
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: constructor_standings_snapshots
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - race_id
+              - constructor_id
+              - engine_manufacturer_id
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+      - name: engine_manufacturer_id
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: driver_season_summaries
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - season
+              - driver_id
+    columns:
+      - name: season
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null
+
+  - name: constructor_season_summaries
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - season
+              - constructor_id
+    columns:
+      - name: season
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+      - name: refresh_id
+        tests:
+          - not_null

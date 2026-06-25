@@ -117,6 +117,25 @@ models:
       - name: grand_prix_id
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__grand_prix')
+                field: grand_prix_id
+  - name: stg_f1db__grand_prix
+    columns:
+      - name: grand_prix_id
+        tests:
+          - not_null
+          - unique
+      - name: grand_prix_name
+        tests:
+          - not_null
+  - name: stg_f1db__season
+    columns:
+      - name: season
+        tests:
+          - not_null
+          - unique
   - name: stg_f1db__race_result
     tests:
       - dbt_utils.unique_combination_of_columns:
