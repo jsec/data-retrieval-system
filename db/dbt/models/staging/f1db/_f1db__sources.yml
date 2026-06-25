@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: f1db
     schema: "{{ var('f1db_schema', 'public') }}"
-    description: F1DB source tables and views restored from the canonical PostgreSQL dump.
+    description: Source tables and views restored from the F1DB PostgreSQL dump.
     tables:
       - name: continent
       - name: country

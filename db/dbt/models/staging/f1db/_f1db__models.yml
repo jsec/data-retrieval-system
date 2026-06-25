@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: stg_f1db__driver
+    columns:
+      - name: driver_id
+        tests:
+          - not_null
+          - unique
+      - name: driver_code
+        tests:
+          - not_null
