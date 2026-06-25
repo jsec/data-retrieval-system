@@ -2,74 +2,103 @@ version: 2
 
 models:
   - name: circuits
+    description: One row per circuit with location, layout, and race history fields.
     columns:
       - name: circuit_id
+        description: F1DB circuit identifier.
         tests:
           - not_null
           - unique
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: constructors
+    description: One row per constructor with all-time summary metrics.
     columns:
       - name: constructor_id
+        description: F1DB constructor identifier.
         tests:
           - not_null
           - unique
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: drivers
+    description: One row per driver with biographical fields and all-time summary metrics.
     columns:
       - name: driver_id
+        description: F1DB driver identifier.
         tests:
           - not_null
           - unique
       - name: driver_code
+        description: Short driver code used in race timing and result displays.
         tests:
           - not_null
       - name: driver_name
+        description: Display name for UI contexts.
         tests:
           - not_null
       - name: driver_full_name
+        description: Full display name.
         tests:
           - not_null
       - name: nationality_country_id
+        description: F1DB identifier for the driver's primary nationality.
         tests:
           - not_null
       - name: nationality
+        description: Driver nationality display label.
         tests:
           - not_null
+      - name: total_points_x100
+        description: Driver career points multiplied by 100 for integer comparisons.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: seasons
+    description: One row per Formula 1 season with event counts and final champion references.
     columns:
       - name: season
+        description: Championship year.
         tests:
           - not_null
           - unique
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: races
+    description: One row per race with schedule, circuit, format, and winner summary fields.
     columns:
       - name: race_id
+        description: F1DB race identifier.
         tests:
           - not_null
           - unique
       - name: season
+        description: Championship year for the race.
         tests:
           - not_null
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: race_results
+    description: One row per official race result entry. The grain is race plus finish order because historical races can contain multiple entries for one driver.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -78,19 +107,65 @@ models:
               - finish_order
     columns:
       - name: race_id
+        description: Race associated with the result row.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
       - name: driver_id
+        description: Driver associated with this official result entry.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
       - name: constructor_id
+        description: Constructor associated with this official result entry.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('constructors')
+                field: constructor_id
+      - name: finish_order
+        description: Source display order for official result rows. Use this for official wins, podiums, and race result ordering.
+        tests:
+          - not_null
+      - name: points_x100
+        description: Race points multiplied by 100 for exact integer comparisons.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: status_category
+        description: Retirement/result category derived from F1DB result status.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - finished
+                  - accident
+                  - collision
+                  - disqualified
+                  - not_qualified
+                  - not_classified
+                  - withdrawn
+                  - mechanical
+                  - driver_error
+                  - other_retirement
+      - name: is_dnf
+        description: True when the entry started but did not finish, based on F1DB retirement/status text.
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: sprint_results
+    description: One row per official sprint result entry. Race and sprint points remain separate.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -99,19 +174,65 @@ models:
               - driver_id
     columns:
       - name: race_id
+        description: Race weekend associated with the sprint result row.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
       - name: driver_id
+        description: Driver associated with this sprint result entry.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
       - name: constructor_id
+        description: Constructor associated with this sprint result entry.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('constructors')
+                field: constructor_id
+      - name: finish_order
+        description: Source display order for official sprint result rows.
+        tests:
+          - not_null
+      - name: points_x100
+        description: Sprint points multiplied by 100 for integer comparisons.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: status_category
+        description: Sprint result category derived from F1DB result status text.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - finished
+                  - accident
+                  - collision
+                  - disqualified
+                  - not_qualified
+                  - not_classified
+                  - withdrawn
+                  - mechanical
+                  - driver_error
+                  - other_retirement
+      - name: is_dnf
+        description: True when the sprint entry started but did not finish, based on F1DB retirement/status text.
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: qualifying_results
+    description: One row per qualifying result entry. The grain is race plus source qualifying order.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -120,22 +241,40 @@ models:
               - qualifying_order
     columns:
       - name: race_id
+        description: Race weekend associated with the qualifying result row.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
       - name: driver_id
+        description: Driver associated with this qualifying entry.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
       - name: qualifying_order
+        description: Source display order for qualifying result rows.
         tests:
           - not_null
       - name: constructor_id
+        description: Constructor associated with this qualifying entry.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('constructors')
+                field: constructor_id
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: fastest_laps
+    description: One row per fastest lap ranking entry from F1DB.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -144,16 +283,28 @@ models:
               - driver_id
     columns:
       - name: race_id
+        description: Race associated with the fastest lap row.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
       - name: driver_id
+        description: Driver associated with the fastest lap row.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: pit_stops
+    description: One row per pit stop event from F1DB. The grain is race plus source stop order.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -162,19 +313,36 @@ models:
               - stop_order
     columns:
       - name: race_id
+        description: Race associated with the pit stop row.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
       - name: driver_id
+        description: Driver associated with the pit stop row.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
       - name: stop_number
+        description: Driver-specific stop number within the race.
+        tests:
+          - not_null
+      - name: stop_order
+        description: Source display order for pit stop rows within a race.
         tests:
           - not_null
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: driver_standings_snapshots
+    description: One row per driver standing snapshot after each race.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -183,16 +351,35 @@ models:
               - driver_id
     columns:
       - name: race_id
+        description: Race after which the standing snapshot applies.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
       - name: driver_id
+        description: Driver in the standing snapshot.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
+      - name: points_x100
+        description: Official standing points multiplied by 100 for integer comparisons.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: constructor_standings_snapshots
+    description: One row per constructor standing snapshot after each race. Engine manufacturer is part of the grain for historical seasons.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -202,19 +389,39 @@ models:
               - engine_manufacturer_id
     columns:
       - name: race_id
+        description: Race after which the standing snapshot applies.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
       - name: constructor_id
+        description: Constructor in the standing snapshot.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('constructors')
+                field: constructor_id
       - name: engine_manufacturer_id
+        description: Engine manufacturer for this constructor standing row.
         tests:
           - not_null
+      - name: points_x100
+        description: Official standing points multiplied by 100 for integer comparisons.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: driver_season_summaries
+    description: One row per driver season with computed race/sprint totals and official final standing fields.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -223,16 +430,40 @@ models:
               - driver_id
     columns:
       - name: season
+        description: Championship year.
         tests:
           - not_null
       - name: driver_id
+        description: Driver summarized for the season.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
+      - name: total_points_x100
+        description: Computed race plus sprint points multiplied by 100.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: final_points_x100
+        description: Official final standing points multiplied by 100.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: points_delta_x100
+        description: Difference between computed total points and official final standing points, multiplied by 100.
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
 
   - name: constructor_season_summaries
+    description: One row per official constructor season standing row with computed race/sprint totals and final standing fields.
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -241,14 +472,38 @@ models:
               - final_order
     columns:
       - name: season
+        description: Championship year.
         tests:
           - not_null
       - name: final_order
+        description: Source display order for official final constructor standings rows.
         tests:
           - not_null
       - name: constructor_id
+        description: Constructor summarized for the season.
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('constructors')
+                field: constructor_id
+      - name: total_points_x100
+        description: Computed race plus sprint points multiplied by 100.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: final_points_x100
+        description: Official final standing points multiplied by 100.
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: points_delta_x100
+        description: Difference between computed total points and official final standing points, multiplied by 100.
       - name: refresh_id
+        description: Identifier for the refresh run that produced this row.
         tests:
           - not_null
