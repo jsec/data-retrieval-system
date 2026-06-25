@@ -73,6 +73,15 @@
       "groupName": "common dependencies",
       "groupSlug": "common-dependencies",
       "groupSingleUpdates": true
-    }
+    },
+    {
+      "description": "Group non-major Python dependency updates",
+      "matchManagers": ["pep651"],
+      "matchFileNames": ["pyproject.toml"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "python dependencies",
+      "groupSlug": "python-dependencies",
+      "groupSingleUpdates": true
+    },
   ]
 }
