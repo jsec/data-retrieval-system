@@ -10,3 +10,245 @@ models:
       - name: driver_code
         tests:
           - not_null
+  - name: stg_f1db__country
+    columns:
+      - name: country_id
+        tests:
+          - not_null
+          - unique
+      - name: country_name
+        tests:
+          - not_null
+      - name: alpha2_code
+        tests:
+          - not_null
+          - unique
+      - name: alpha3_code
+        tests:
+          - not_null
+          - unique
+      - name: continent_id
+        tests:
+          - not_null
+  - name: stg_f1db__constructor
+    columns:
+      - name: constructor_id
+        tests:
+          - not_null
+          - unique
+      - name: constructor_name
+        tests:
+          - not_null
+      - name: constructor_full_name
+        tests:
+          - not_null
+      - name: country_id
+        tests:
+          - not_null
+  - name: stg_f1db__circuit
+    columns:
+      - name: circuit_id
+        tests:
+          - not_null
+          - unique
+      - name: circuit_name
+        tests:
+          - not_null
+      - name: circuit_full_name
+        tests:
+          - not_null
+      - name: country_id
+        tests:
+          - not_null
+  - name: stg_f1db__race
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+          - unique
+      - name: season
+        tests:
+          - not_null
+      - name: race_round
+        tests:
+          - not_null
+      - name: race_date
+        tests:
+          - not_null
+      - name: circuit_id
+        tests:
+          - not_null
+      - name: grand_prix_id
+        tests:
+          - not_null
+  - name: stg_f1db__race_result
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - race_id
+            - position_display_order
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+  - name: stg_f1db__sprint_race_result
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - race_id
+            - position_display_order
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+  - name: stg_f1db__qualifying_result
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - race_id
+            - position_display_order
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+  - name: stg_f1db__fastest_lap
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - race_id
+            - position_display_order
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+  - name: stg_f1db__pit_stop
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - race_id
+            - position_display_order
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+      - name: stop_number
+        tests:
+          - not_null
+  - name: stg_f1db__race_driver_standing
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - race_id
+            - position_display_order
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+  - name: stg_f1db__race_constructor_standing
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - race_id
+            - position_display_order
+    columns:
+      - name: race_id
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+      - name: engine_manufacturer_id
+        tests:
+          - not_null
+  - name: stg_f1db__season_driver_standing
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - season
+            - position_display_order
+    columns:
+      - name: season
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: driver_id
+        tests:
+          - not_null
+  - name: stg_f1db__season_constructor_standing
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+            - season
+            - position_display_order
+    columns:
+      - name: season
+        tests:
+          - not_null
+      - name: position_display_order
+        tests:
+          - not_null
+      - name: constructor_id
+        tests:
+          - not_null
+      - name: engine_manufacturer_id
+        tests:
+          - not_null

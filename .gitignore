@@ -19,6 +19,13 @@ coverage
 # Turbo
 .turbo
 
+# Python/dbt
+db/.venv/
+db/dbt/.user.yml
+db/dbt/dbt_packages/
+db/dbt/logs/
+db/dbt/target/
+
 # Build Outputs
 out/
 build

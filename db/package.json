@@ -6,8 +6,10 @@
     "db:migrate": "goose -table app_goose_db_version -dir ./migrations postgres \"$DATABASE_URL\" up",
     "db:migrate:down": "goose -table app_goose_db_version -dir ./migrations postgres \"$DATABASE_URL\" down",
     "db:migrate:status": "goose -table app_goose_db_version -dir ./migrations postgres \"$DATABASE_URL\" status",
-    "dbt:debug": "dbt debug --project-dir ./dbt",
-    "dbt:run": "dbt run --project-dir ./dbt",
-    "dbt:test": "dbt test --project-dir ./dbt"
+    "dbt:deps": "uv run dbt deps --project-dir ./dbt --profiles-dir ./dbt",
+    "dbt:debug": "uv run dbt debug --project-dir ./dbt --profiles-dir ./dbt",
+    "dbt:parse": "uv run dbt parse --project-dir ./dbt --profiles-dir ./dbt",
+    "dbt:run": "uv run dbt run --project-dir ./dbt --profiles-dir ./dbt",
+    "dbt:test": "uv run dbt test --project-dir ./dbt --profiles-dir ./dbt"
   }
 }
