@@ -1,12 +1,45 @@
 [project]
 name = "drs-db"
 version = "0.1.0"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.14"
 dependencies = [
     "dbt-core>=1.10,<2",
     "dbt-postgres>=1.9,<2",
+    "psycopg[binary]>=3.3.4",
+    "rich>=15.0.0",
 ]
 
 [tool.uv]
 package = false
 
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+    "B",
+    "C4",
+    "E",
+    "F",
+    "I",
+    "PLC",
+    "PLE",
+    "PLW",
+    "SIM",
+    "UP",
+    "W",
+]
+ignore = [
+    "E501",
+]
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.19",
+    "ty>=0.0.53",
+]

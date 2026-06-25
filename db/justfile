@@ -1,5 +1,10 @@
 set dotenv-load
 
+build:
+    uv run python scripts/build.py
+
+check: lint format-check typecheck
+
 dbt-deps:
     uv run dbt deps --project-dir ./dbt --profiles-dir ./dbt
 
@@ -9,8 +14,14 @@ dbt-debug:
 dbt-parse:
     uv run dbt parse --project-dir ./dbt --profiles-dir ./dbt
 
-dbt-build refresh_id="1" f1db_schema="f1db":
-    uv run dbt build --project-dir ./dbt --profiles-dir ./dbt --vars '{"refresh_id": {{refresh_id}}, "f1db_schema": "{{f1db_schema}}"}'
+format:
+    uv run ruff format .
+
+format-check:
+    uv run ruff format --check .
+
+lint:
+    uv run ruff check .
 
 migrate:
     goose -table app_goose_db_version -dir ./migrations postgres "$DATABASE_URL" up
@@ -20,3 +31,7 @@ migrate-down:
 
 migrate-status:
     goose -table app_goose_db_version -dir ./migrations postgres "$DATABASE_URL" status
+
+typecheck:
+    uv run ty check .
+
