@@ -21,6 +21,9 @@ body {
 .f1-row {
   transition: background-color 120ms ease;
 }
+.f1-row--clickable {
+  cursor: pointer;
+}
 .f1-row:hover {
   background-color: light-dark(
     var(--mantine-color-gray-0),

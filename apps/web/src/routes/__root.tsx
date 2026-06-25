@@ -18,11 +18,11 @@ import {
     FlagCheckeredIcon,
     ListIcon,
     ListNumbersIcon,
-    MagnifyingGlassIcon,
     MapTrifoldIcon,
     MoonIcon,
     SunIcon,
-    UserListIcon, WrenchIcon,
+    UserListIcon,
+    WrenchIcon,
 } from '@phosphor-icons/react';
 import {
     createRootRouteWithContext,
@@ -133,7 +133,7 @@ function RootLayout() {
                     </Box>
                     <Box style={{ lineHeight: 1 }}>
                         <Text c="#fff" style={{ fontSize: 16, fontWeight: 800, letterSpacing: '-0.4px' }}>
-                            PITLINE
+                            DRS
                         </Text>
                         <Text mt={2} style={{ color: '#6b7280', fontSize: 10, fontWeight: 600, letterSpacing: '1.5px' }}>
                             F1 ANALYTICS
@@ -207,21 +207,6 @@ function RootLayout() {
                     </ActionIcon>
                     <Breadcrumbs />
                     <Box style={{ flex: 1 }} />
-                    <Group
-                        c="dimmed"
-                        gap={9}
-                        style={{
-                            border: '1px solid var(--mantine-color-default-border)',
-                            borderRadius: 8,
-                            padding: '7px 13px',
-                            width: 240,
-                        }}
-                        visibleFrom="xs"
-                        wrap="nowrap"
-                    >
-                        <MagnifyingGlassIcon size={15} />
-                        <Text size="13px">Search drivers, races…</Text>
-                    </Group>
                     <ActionIcon
                         aria-label="Toggle color scheme"
                         onClick={toggleColorScheme}

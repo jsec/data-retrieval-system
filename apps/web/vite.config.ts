@@ -1,17 +1,14 @@
-import babel from '@rolldown/plugin-babel';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
-import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
+import viteReact from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 const config = defineConfig({
-    plugins: [
-        devtools(),
-        tanstackRouter(),
-        viteReact(),
-        babel({ presets: [reactCompilerPreset()] }),
-    ],
-    resolve: { tsconfigPaths: true },
+    plugins: [devtools(), tanstackRouter(), viteReact()],
+    resolve: {
+        dedupe: ['react', 'react-dom'],
+        tsconfigPaths: true,
+    },
 });
 
 export default config;
