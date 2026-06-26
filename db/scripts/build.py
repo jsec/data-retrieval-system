@@ -1,11 +1,10 @@
 import json
 import os
-import subprocess
 from argparse import ArgumentParser, Namespace
 from collections.abc import Callable
-from pathlib import Path
 from typing import Any, TypeVar
 
+from dbt.cli.main import dbtRunner
 from psycopg import Connection, sql
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
@@ -106,24 +105,27 @@ def create_refresh_record(conn: Connection[DatabaseRow]) -> int:
 
 
 def build(refresh_id: int, schema: str, target: str) -> None:
-    subprocess.run(
-        [
-            "uv",
-            "run",
-            "dbt",
-            "build",
-            "--project-dir",
-            "./dbt",
-            "--profiles-dir",
-            "./dbt",
-            "--target",
-            target,
-            "--vars",
-            json.dumps({"refresh_id": refresh_id, "f1db_schema": schema}),
-        ],
-        check=True,
-        cwd=Path(__file__).resolve().parents[1],
-    )
+    dbt = dbtRunner()
+
+    args = [
+        "build",
+        "--project-dir",
+        "./dbt",
+        "--profiles-dir",
+        "./dbt",
+        "--target",
+        target,
+        "--vars",
+        json.dumps({"refresh_id": refresh_id, "f1db_schema": schema}),
+    ]
+
+    result = dbt.invoke(args)
+
+    if result.exception is not None:
+        raise result.exception
+
+    if not result.success:
+        raise RuntimeError("dbt build failed")
 
 
 def get_row_counts(conn: Connection[DatabaseRow]) -> dict[str, int]:
