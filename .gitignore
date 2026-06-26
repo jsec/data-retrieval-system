@@ -25,6 +25,7 @@ db/dbt/.user.yml
 db/dbt/dbt_packages/
 db/dbt/logs/
 db/dbt/target/
+__pycache__
 
 # Build Outputs
 out/

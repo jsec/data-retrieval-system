@@ -1,7 +1,6 @@
 import json
 import os
 from argparse import ArgumentParser, Namespace
-from collections.abc import Callable
 from typing import Any, TypeVar
 
 from dbt.cli.main import dbtRunner
@@ -9,6 +8,7 @@ from psycopg import Connection, sql
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 from rich.console import Console
+from task import run_task
 
 DatabaseRow = dict[str, Any]
 T = TypeVar("T")
@@ -70,14 +70,6 @@ def parse_args() -> Args:
     parser.add_argument("--target", type=str, default="dev")
 
     return parser.parse_args(namespace=Args())
-
-
-def run_task[T](name: str, fn: Callable[[], T]) -> T:
-    with console.status(name):
-        result = fn()
-
-    console.print(f"[green]Done[/green] {name}")
-    return result
 
 
 def get_db_connection() -> Connection[DatabaseRow]:

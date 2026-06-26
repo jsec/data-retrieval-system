@@ -5,7 +5,9 @@ requires-python = ">=3.13,<3.14"
 dependencies = [
     "dbt-core>=1.10,<2",
     "dbt-postgres>=1.9,<2",
+    "httpx2>=2.5.0",
     "psycopg[binary]>=3.3.4",
+    "pygithub>=2.9.1",
     "rich>=15.0.0",
 ]
 

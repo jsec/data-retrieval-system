@@ -23,6 +23,9 @@ format-check:
 lint:
     uv run ruff check .
 
+load:
+    uv run python scripts/load.py
+
 migrate:
     goose -table app_goose_db_version -dir ./migrations postgres "$DATABASE_URL" up
 
@@ -31,6 +34,8 @@ migrate-down:
 
 migrate-status:
     goose -table app_goose_db_version -dir ./migrations postgres "$DATABASE_URL" status
+
+refresh: load build
 
 typecheck:
     uv run ty check .
