@@ -38,5 +38,4 @@ migrate-status:
 refresh: load build
 
 typecheck:
-    uv run ty check .
-
+    uv run pyrefly check .

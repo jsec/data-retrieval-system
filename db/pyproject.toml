@@ -42,6 +42,6 @@ quote-style = "double"
 
 [dependency-groups]
 dev = [
+    "pyrefly>=1.1.1",
     "ruff>=0.15.19",
-    "ty>=0.0.53",
 ]

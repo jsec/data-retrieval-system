@@ -8,7 +8,8 @@ from psycopg import Connection, sql
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 from rich.console import Console
-from task import run_task
+
+from scripts.task import run_task
 
 DatabaseRow = dict[str, Any]
 T = TypeVar("T")

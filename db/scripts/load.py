@@ -5,7 +5,8 @@ from zipfile import ZipFile
 
 import httpx2
 from github import Auth, Github
-from task import run_task
+
+from scripts.task import run_task
 
 RELEASE_ASSET_NAME = "f1db-sql-postgresql.zip"
 DUMP_FILE_NAME = "f1db-sql-postgresql.sql"

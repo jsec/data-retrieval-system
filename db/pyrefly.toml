@@ -1,0 +1,8 @@
+project-includes = [
+    "scripts/**/*.py",
+]
+
+project-excludes = [
+    ".venv/**",
+    "dbt/**",
+]
