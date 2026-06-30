@@ -9,7 +9,6 @@ import {
     getDriverSeason,
     getRaceDetail,
     getSeasonOverview,
-    getSeasons,
     getStandings,
 } from './fixtures';
 
@@ -43,12 +42,6 @@ export const raceDetailQuery = (year: number, round: number) =>
             return race;
         },
         queryKey: ['race-detail', year, round],
-    });
-
-export const seasonsQuery = () =>
-    queryOptions({
-        queryFn: () => getSeasons(),
-        queryKey: ['seasons'],
     });
 
 export const constructorsIndexQuery = () =>

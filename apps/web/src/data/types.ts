@@ -166,14 +166,6 @@ export type SeasonOverview = {
     year: number;
 };
 
-export type SeasonRow = {
-    races: number;
-    status: string;
-    wcc: Team;
-    wdc: SeasonDriver;
-    year: number;
-};
-
 export type Standings = {
     completed: number;
     constructors: SeasonConstructor[];

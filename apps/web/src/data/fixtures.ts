@@ -12,7 +12,6 @@ import type {
     SeasonConstructor,
     SeasonDriver,
     SeasonOverview,
-    SeasonRow,
     Standings,
     Team,
     TeamKey,
@@ -404,23 +403,6 @@ export const ALL_TIME_CONSTRUCTORS: AllTimeConstructor[] = ALL_TIME_CONSTRUCTORS
     }),
 );
 
-const SEASONS_RAW: [number, number, string, TeamKey, string][] = [
-    [2026, 24, 'NOR', 'mcl', 'In progress'],
-    [2025, 24, 'NOR', 'mcl', 'Final'],
-    [2024, 24, 'VER', 'mcl', 'Final'],
-    [2023, 22, 'VER', 'rbr', 'Final'],
-    [2022, 22, 'VER', 'rbr', 'Final'],
-    [2021, 22, 'VER', 'mer', 'Final'],
-];
-
-export const SEASONS: SeasonRow[] = SEASONS_RAW.map(s => ({
-    races: s[1],
-    status: s[4],
-    wcc: TEAMS[s[3]],
-    wdc: driverByCode[s[2]],
-    year: s[0],
-}));
-
 export function getAllTimeDrivers(): AllTimeDriver[] {
     return ALL_TIME_DRIVERS;
 }
@@ -687,10 +669,6 @@ export function getDriverSeason(code: string): DriverSeasonDetail | undefined {
     });
 
     return { driver, finishes, pointsMax, pos, progression, races };
-}
-
-export function getSeasons(): SeasonRow[] {
-    return SEASONS;
 }
 
 export function getStandings(): Standings {

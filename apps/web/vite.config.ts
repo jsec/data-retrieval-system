@@ -9,6 +9,15 @@ const config = defineConfig({
         dedupe: ['react', 'react-dom'],
         tsconfigPaths: true,
     },
+    server: {
+        proxy: {
+            '/api': {
+                changeOrigin: true,
+                rewrite: path => path.replace(/^\/api/, ''),
+                target: 'http://localhost:3000',
+            },
+        },
+    },
 });
 
 export default config;

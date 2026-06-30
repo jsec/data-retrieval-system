@@ -8,7 +8,9 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@drs/contracts": "workspace:*",
     "@hono/node-server": "2.0.6",
+    "@hono/zod-validator": "^0.8.0",
     "hono": "4.12.26",
     "kysely": "^0.29.2",
     "pg": "^8.22.0"
