@@ -1,9 +1,20 @@
 import type { ReactNode } from 'react';
 
-import { Box, Card, Group, Text, UnstyledButton } from '@mantine/core';
 import { TrophyIcon } from '@phosphor-icons/react';
 
-export const GOLD = '#c79100';
+import { Badge } from './ui/badge';
+import {
+    Button,
+} from './ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from './ui/card';
+
+export const GOLD = 'var(--gold-500)';
 
 export function DriverAvatar({
     code,
@@ -15,7 +26,7 @@ export function DriverAvatar({
     size?: number;
 }) {
     return (
-        <Box
+        <div
             style={{
                 alignItems: 'center',
                 background: color,
@@ -24,14 +35,14 @@ export function DriverAvatar({
                 display: 'flex',
                 flexShrink: 0,
                 fontSize: size * 0.36,
-                fontWeight: 800,
+                fontWeight: 700,
                 height: size,
                 justifyContent: 'center',
                 width: size,
             }}
         >
             {code}
-        </Box>
+        </div>
     );
 }
 
@@ -43,31 +54,32 @@ export function GridHeader({
     columns: string;
 }) {
     return (
-        <Box
-            c="dimmed"
+        <div
             style={{
+                color: 'var(--color-muted-foreground)',
                 display: 'grid',
                 fontSize: 10.5,
                 fontWeight: 700,
                 gridTemplateColumns: columns,
                 letterSpacing: '0.5px',
                 padding: '0 18px 8px',
+                textTransform: 'uppercase',
             }}
         >
             {children}
-        </Box>
+        </div>
     );
 }
 
 export function MiniStat({ label, value }: { label: string; value: ReactNode }) {
     return (
-        <Card padding="md" radius="md" ta="center" withBorder>
-            <Text className="f1-num" fw={800} style={{ fontSize: 24, letterSpacing: '-0.4px' }}>
+        <Card className="f1-mini-stat">
+            <div className="f1-num f1-display f1-mini-stat-value">
                 {value}
-            </Text>
-            <Text c="dimmed" fw={600} mt={2} style={{ fontSize: 11 }}>
+            </div>
+            <div className="f1-mini-stat-label">
                 {label}
-            </Text>
+            </div>
         </Card>
     );
 }
@@ -83,34 +95,17 @@ export function Pill({
     onClick: () => void;
     variant?: 'solid' | 'subtle';
 }) {
-    const solid = variant === 'solid';
     return (
-        <UnstyledButton
+        <Button
+            aria-pressed={active}
+            data-active={active}
             onClick={onClick}
-            style={{
-                background: active
-                    ? (solid
-                            ? 'var(--mantine-color-gray-9)'
-                            : 'var(--mantine-color-blue-0)')
-                    : (solid
-                            ? 'var(--mantine-color-body)'
-                            : 'transparent'),
-                border: solid
-                    ? `1px solid ${active ? 'var(--mantine-color-gray-9)' : 'var(--mantine-color-default-border)'}`
-                    : 'none',
-                borderRadius: solid ? 8 : 7,
-                color: active
-                    ? (solid
-                            ? '#fff'
-                            : 'var(--mantine-color-blue-7)')
-                    : 'var(--mantine-color-dimmed)',
-                fontSize: solid ? 13 : 12,
-                fontWeight: 600,
-                padding: solid ? '8px 18px' : '6px 11px',
-            }}
+            size={variant === 'solid' ? 'default' : 'sm'}
+            type="button"
+            variant={variant === 'solid' ? 'outline' : 'subtle'}
         >
             {children}
-        </UnstyledButton>
+        </Button>
     );
 }
 
@@ -128,25 +123,19 @@ export function SectionCard({
     title: string;
 }) {
     return (
-        <Card padding={0} radius="md" withBorder>
-            <Group align="flex-start" justify="space-between" px={18} py={15} wrap="nowrap">
-                <Box>
-                    <Text fw={700} style={{ fontSize: 15 }}>
-                        {title}
-                    </Text>
+        <Card>
+            <CardHeader>
+                <div>
+                    <CardTitle>{title}</CardTitle>
                     {subtitle
-                        ? (
-                                <Text c="dimmed" mt={2} size="xs">
-                                    {subtitle}
-                                </Text>
-                            )
+                        ? <CardDescription>{subtitle}</CardDescription>
                         : null}
-                </Box>
+                </div>
                 {action}
-            </Group>
-            <Box pb={padded ? 18 : 0} px={padded ? 18 : 0}>
+            </CardHeader>
+            <CardContent data-flush={!padded}>
                 {children}
-            </Box>
+            </CardContent>
         </Card>
     );
 }
@@ -165,23 +154,31 @@ export function StatCard({
     value: ReactNode;
 }) {
     return (
-        <Card padding="md" radius="md" withBorder>
-            <Group gap={8} wrap="nowrap">
-                <Box c={accent} style={{ display: 'flex', fontSize: 15 }}>
-                    {icon}
-                </Box>
-                <Text c="dimmed" fw={600} size="xs" tt="uppercase">
+        <Card className="f1-stat-card">
+            <div className="f1-stat-card-label-row">
+                <span className="f1-stat-card-icon" style={{ color: accent }}>{icon}</span>
+                <span className="f1-stat-card-label">
                     {label}
-                </Text>
-            </Group>
-            <Text className="f1-num" fw={800} mt={9} style={{ fontSize: 23, letterSpacing: '-0.4px' }}>
+                </span>
+            </div>
+            <div className="f1-num f1-display f1-stat-card-value">
                 {value}
-            </Text>
-            <Text c="dimmed" mt={2} size="xs">
+            </div>
+            <div className="f1-stat-card-sub">
                 {sub}
-            </Text>
+            </div>
         </Card>
     );
+}
+
+export function StatusBadge({
+    children,
+    variant = 'secondary',
+}: {
+    children: ReactNode;
+    variant?: 'secondary' | 'success';
+}) {
+    return <Badge variant={variant}>{children}</Badge>;
 }
 
 export function TeamBar({
@@ -194,7 +191,7 @@ export function TeamBar({
     width?: number;
 }) {
     return (
-        <Box
+        <div
             style={{
                 background: color,
                 borderRadius: width,
@@ -209,9 +206,9 @@ export function TeamBar({
 export function TrophyCount({ count, size = 12 }: { count: number; size?: number }) {
     if (count <= 0) return null;
     return (
-        <Group gap={3} style={{ color: GOLD, fontSize: size + 1, fontWeight: 800 }} wrap="nowrap">
+        <span className="f1-trophy-count" style={{ fontSize: size + 1 }}>
             <TrophyIcon size={size} weight="fill" />
             {count}
-        </Group>
+        </span>
     );
 }

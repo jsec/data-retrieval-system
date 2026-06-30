@@ -1,6 +1,5 @@
 import type { SortingFn, SortingState } from '@tanstack/react-table';
 
-import { Box, Card, Group, Progress, Stack, Text, Title } from '@mantine/core';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import {
@@ -14,7 +13,9 @@ import { useMemo, useState } from 'react';
 import type { AllTimeConstructor } from '#/data/types';
 
 import { DataTable } from '#/components/data-table';
-import { Pill, TrophyCount } from '#/components/ui';
+import { Pill, TrophyCount } from '#/components/f1-ui';
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
 import { constructorsIndexQuery } from '#/data/queries';
 
 export const Route = createFileRoute('/constructors/')({
@@ -52,31 +53,15 @@ function Constructors() {
                 cell: (info) => {
                     const c = info.row.original;
                     return (
-                        <Group gap={11} wrap="nowrap">
-                            <Box style={{ background: c.color, borderRadius: 3, flexShrink: 0, height: 26, width: 6 }} />
-                            <Text fw={700} style={{ fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <div className="f1-control-group" style={{ gap: 11 }}>
+                            <div style={{ background: c.color, borderRadius: 3, flexShrink: 0, height: 26, width: 6 }} />
+                            <span className="f1-truncate" style={{ fontSize: 14, fontWeight: 700 }}>
                                 {c.name}
-                            </Text>
+                            </span>
                             {c.active
-                                ? (
-                                        <Text
-                                            span
-                                            style={{
-                                                background: 'var(--mantine-color-green-0)',
-                                                borderRadius: 4,
-                                                color: 'var(--mantine-color-green-7)',
-                                                flexShrink: 0,
-                                                fontSize: 9.5,
-                                                fontWeight: 700,
-                                                letterSpacing: '0.5px',
-                                                padding: '2px 6px',
-                                            }}
-                                        >
-                                            ACTIVE
-                                        </Text>
-                                    )
+                                ? <Badge variant="success">ACTIVE</Badge>
                                 : null}
-                        </Group>
+                        </div>
                     );
                 },
                 header: 'CONSTRUCTOR',
@@ -84,18 +69,18 @@ function Constructors() {
             }),
             ch.accessor('years', {
                 cell: info => (
-                    <Text c="dimmed" className="f1-num" style={{ fontSize: 12.5 }}>
+                    <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 12.5 }}>
                         {info.getValue()}
-                    </Text>
+                    </span>
                 ),
                 header: 'YEARS',
                 meta: { width: '10%' },
             }),
             ch.accessor('titles', {
                 cell: info => (
-                    <Group gap={0} justify="center">
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <TrophyCount count={info.getValue()} size={12} />
-                    </Group>
+                    </div>
                 ),
                 header: 'TITLES',
                 id: 'titles',
@@ -104,18 +89,14 @@ function Constructors() {
             }),
             ch.accessor('wins', {
                 cell: info => (
-                    <Group gap={10} wrap="nowrap">
-                        <Text className="f1-num" fw={800} style={{ fontSize: 13.5, width: 34 }}>
+                    <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 10 }}>
+                        <span className="f1-num f1-display" style={{ fontSize: 13.5, fontWeight: 700, width: 34 }}>
                             {info.getValue()}
-                        </Text>
-                        <Progress
-                            radius="xl"
-                            size={6}
-                            style={{ flex: 1, maxWidth: 150 }}
-                            styles={{ section: { background: info.row.original.color } }}
-                            value={(info.getValue() / maxWins) * 100}
-                        />
-                    </Group>
+                        </span>
+                        <div style={{ background: 'var(--color-border)', borderRadius: 9999, flex: 1, height: 6, maxWidth: 150, overflow: 'hidden' }}>
+                            <div style={{ background: info.row.original.color, borderRadius: 9999, height: '100%', width: `${(info.getValue() / maxWins) * 100}%` }} />
+                        </div>
+                    </div>
                 ),
                 header: 'WINS',
                 id: 'wins',
@@ -123,18 +104,18 @@ function Constructors() {
             }),
             ch.accessor('poles', {
                 cell: info => (
-                    <Text c="dimmed" className="f1-num">
+                    <span className="f1-num" style={{ color: 'var(--color-muted-foreground)' }}>
                         {info.getValue()}
-                    </Text>
+                    </span>
                 ),
                 header: 'POLES',
                 meta: { align: 'center', width: '8%' },
             }),
             ch.accessor('podiums', {
                 cell: info => (
-                    <Text c="dimmed" className="f1-num">
+                    <span className="f1-num" style={{ color: 'var(--color-muted-foreground)' }}>
                         {info.getValue()}
-                    </Text>
+                    </span>
                 ),
                 header: 'PODIUMS',
                 meta: { align: 'center', width: '8%' },
@@ -154,31 +135,29 @@ function Constructors() {
     });
 
     return (
-        <Stack gap="md">
-            <Group align="flex-end" justify="space-between">
-                <Box>
-                    <Title order={1} style={{ fontSize: 28 }}>
+        <div className="f1-page-stack">
+            <div className="f1-page-header">
+                <div>
+                    <h1 className="f1-page-title">
                         Constructors
-                    </Title>
-                    <Text c="dimmed" mt={4} size="13px">
+                    </h1>
+                    <div className="f1-page-description">
                         All-time index · Constructors&apos; Championships and records since 1958
-                    </Text>
-                </Box>
-                <Group align="center" gap={4}>
-                    <Text c="dimmed" fw={600} mr={4} style={{ fontSize: 11 }}>
-                        SORT
-                    </Text>
+                    </div>
+                </div>
+                <div className="f1-control-group">
+                    <span className="f1-sort-label">SORT</span>
                     {SORTS.map(s => (
                         <Pill active={sort === s.key} key={s.key} onClick={() => setSort(s.key)} variant="subtle">
                             {s.label}
                         </Pill>
                     ))}
-                </Group>
-            </Group>
+                </div>
+            </div>
 
-            <Card padding={0} radius="md" withBorder>
+            <Card className="f1-table-card">
                 <DataTable px={20} table={table} />
             </Card>
-        </Stack>
+        </div>
     );
 }

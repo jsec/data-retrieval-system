@@ -1,16 +1,8 @@
-import {
-    Box,
-    Card,
-    Group,
-    SimpleGrid,
-    Stack,
-    Text,
-} from '@mantine/core';
 import { CaretRightIcon, TrophyIcon } from '@phosphor-icons/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-import { GOLD, MiniStat } from '#/components/ui';
+import { GOLD, MiniStat } from '#/components/f1-ui';
 import { CURRENT_YEAR } from '#/data/fixtures';
 import { driverCareerQuery } from '#/data/queries';
 
@@ -34,93 +26,90 @@ function DriverCareer() {
     const { driver, seasons } = data;
 
     return (
-        <Stack gap="md">
-            <Box
-                style={{
-                    alignItems: 'center',
-                    background: `linear-gradient(120deg, ${driver.color}, #16181c)`,
-                    borderRadius: 10,
-                    color: '#fff',
-                    display: 'flex',
-                    gap: 22,
-                    padding: '24px 28px',
-                }}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{
+                alignItems: 'center',
+                background: `linear-gradient(120deg, ${driver.color}, var(--neutral-950))`,
+                borderRadius: 'var(--radius-lg)',
+                color: '#fff',
+                display: 'flex',
+                gap: 22,
+                padding: '24px 28px',
+            }}
             >
-                <Box
-                    style={{
-                        alignItems: 'center',
-                        background: 'rgba(255,255,255,.16)',
-                        border: '2px solid rgba(255,255,255,.45)',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        flexShrink: 0,
-                        fontSize: 21,
-                        fontWeight: 800,
-                        height: 70,
-                        justifyContent: 'center',
-                        width: 70,
-                    }}
+                <div style={{
+                    alignItems: 'center',
+                    background: 'rgba(255,255,255,.16)',
+                    border: '2px solid rgba(255,255,255,.45)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    flexShrink: 0,
+                    fontSize: 21,
+                    fontWeight: 700,
+                    height: 70,
+                    justifyContent: 'center',
+                    width: 70,
+                }}
                 >
                     {driver.code}
-                </Box>
-                <Box>
-                    <Group gap={10}>
-                        <Text style={{ fontSize: 30, fontWeight: 800, letterSpacing: '-0.6px' }}>
+                </div>
+                <div>
+                    <div style={{ alignItems: 'center', display: 'flex', gap: 10 }}>
+                        <span className="f1-display" style={{ fontFamily: 'var(--font-display)', fontSize: 30, fontWeight: 700, letterSpacing: '-0.02em' }}>
                             {driver.name}
-                        </Text>
+                        </span>
                         {driver.titles > 0
                             ? (
-                                    <Group
-                                        gap={4}
-                                        style={{
-                                            background: 'rgba(255,255,255,.18)',
-                                            borderRadius: 20,
-                                            fontSize: 13,
-                                            fontWeight: 800,
-                                            padding: '4px 10px',
-                                        }}
-                                        wrap="nowrap"
+                                    <div style={{
+                                        alignItems: 'center',
+                                        background: 'rgba(255,255,255,.18)',
+                                        borderRadius: 20,
+                                        display: 'flex',
+                                        flexWrap: 'nowrap',
+                                        fontSize: 13,
+                                        fontWeight: 700,
+                                        gap: 4,
+                                        padding: '4px 10px',
+                                    }}
                                     >
                                         <TrophyIcon size={13} weight="fill" />
                                         World Champion
-                                    </Group>
+                                    </div>
                                 )
                             : null}
-                    </Group>
-                    <Text mt={5} style={{ fontSize: 13, opacity: 0.9 }}>
+                    </div>
+                    <div style={{ fontSize: 13, marginTop: 5, opacity: 0.9 }}>
                         {`${driver.nat} · ${driver.years} · Career summary`}
-                    </Text>
-                </Box>
-            </Box>
+                    </div>
+                </div>
+            </div>
 
-            <SimpleGrid cols={{ base: 3, md: 6 }} spacing="sm">
+            <div style={{ display: 'grid', gap: 8, gridTemplateColumns: 'repeat(6, 1fr)' }}>
                 <MiniStat label="SEASONS" value={seasons.length} />
                 <MiniStat label="STARTS" value={driver.starts} />
                 <MiniStat label="WINS" value={driver.wins} />
                 <MiniStat label="POLES" value={driver.poles} />
                 <MiniStat label="PODIUMS" value={driver.podiums} />
                 <MiniStat label="TITLES" value={driver.titles} />
-            </SimpleGrid>
+            </div>
 
-            <Card padding={0} radius="md" withBorder>
-                <Group justify="space-between" px={20} py={15}>
-                    <Text fw={700} style={{ fontSize: 15 }}>
-                        Seasons
-                    </Text>
-                    <Text c="dimmed" size="xs">
+            <div className="f1-card" style={{ padding: 0 }}>
+                <div style={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between', padding: '15px 20px' }}>
+                    <span style={{ fontSize: 15, fontWeight: 700 }}>Seasons</span>
+                    <span style={{ color: 'var(--color-muted-foreground)', fontSize: 12 }}>
                         Select a season to open its full dashboard
-                    </Text>
-                </Group>
-                <Box
-                    c="dimmed"
-                    style={{
-                        display: 'grid',
-                        fontSize: 10.5,
-                        fontWeight: 700,
-                        gridTemplateColumns: COLS,
-                        letterSpacing: '0.5px',
-                        padding: '0 20px 8px',
-                    }}
+                    </span>
+                </div>
+                <div style={{
+                    color: 'var(--color-muted-foreground)',
+                    display: 'grid',
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    gridTemplateColumns: COLS,
+                    letterSpacing: '0.5px',
+                    padding: '0 20px 8px',
+                    textTransform: 'uppercase',
+                }}
                 >
                     <span>SEASON</span>
                     <span>CHAMPIONSHIP</span>
@@ -130,14 +119,14 @@ function DriverCareer() {
                     <span style={{ textAlign: 'center' }}>POLES</span>
                     <span style={{ textAlign: 'right' }}>POINTS</span>
                     <span />
-                </Box>
+                </div>
                 {seasons.map((s) => {
                     const posColor
                         = s.pos === 1
                             ? GOLD
                             : (s.pos <= 3
-                                    ? 'var(--mantine-color-gray-9)'
-                                    : 'var(--mantine-color-gray-6)');
+                                    ? 'var(--color-foreground)'
+                                    : 'var(--color-muted-foreground)');
                     return (
                         <Link
                             className="f1-row"
@@ -145,8 +134,8 @@ function DriverCareer() {
                             params={{ year: String(Math.min(s.year, CURRENT_YEAR)) }}
                             style={{
                                 alignItems: 'center',
-                                background: s.champ ? 'rgba(199,145,0,.07)' : undefined,
-                                borderTop: '1px solid var(--mantine-color-default-border)',
+                                background: s.champ ? 'color-mix(in srgb, var(--gold-500) 7%, transparent)' : undefined,
+                                borderTop: '1px solid var(--color-border)',
                                 color: 'inherit',
                                 display: 'grid',
                                 gridTemplateColumns: COLS,
@@ -155,42 +144,22 @@ function DriverCareer() {
                             }}
                             to="/seasons/$year"
                         >
-                            <Text className="f1-num" fw={800} style={{ fontSize: 16, letterSpacing: '-0.4px' }}>
-                                {s.year}
-                            </Text>
-                            <Group gap={9} wrap="nowrap">
-                                <Text className="f1-num" fw={700} style={{ color: posColor, fontSize: 13.5 }}>
-                                    {s.posLabel}
-                                </Text>
+                            <span className="f1-num f1-display" style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.4px' }}>{s.year}</span>
+                            <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 9 }}>
+                                <span className="f1-num" style={{ color: posColor, fontSize: 13.5, fontWeight: 700 }}>{s.posLabel}</span>
                                 {s.champ ? <TrophyIcon color={GOLD} size={12} weight="fill" /> : null}
-                                {s.label
-                                    ? (
-                                            <Text c="dimmed" fw={600} style={{ fontSize: 12 }}>
-                                                {s.label}
-                                            </Text>
-                                        )
-                                    : null}
-                            </Group>
-                            <Text c="dimmed" className="f1-num" ta="center">
-                                {s.starts}
-                            </Text>
-                            <Text className="f1-num" fw={700} ta="center">
-                                {s.wins}
-                            </Text>
-                            <Text c="dimmed" className="f1-num" ta="center">
-                                {s.podiums}
-                            </Text>
-                            <Text c="dimmed" className="f1-num" ta="center">
-                                {s.poles}
-                            </Text>
-                            <Text className="f1-num" fw={700} ta="right">
-                                {s.points}
-                            </Text>
-                            <CaretRightIcon color="var(--mantine-color-gray-5)" size={14} />
+                                {s.label ? <span style={{ color: 'var(--color-muted-foreground)', fontSize: 12, fontWeight: 600 }}>{s.label}</span> : null}
+                            </div>
+                            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', textAlign: 'center' }}>{s.starts}</span>
+                            <span className="f1-num f1-display" style={{ fontWeight: 700, textAlign: 'center' }}>{s.wins}</span>
+                            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', textAlign: 'center' }}>{s.podiums}</span>
+                            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', textAlign: 'center' }}>{s.poles}</span>
+                            <span className="f1-num f1-display" style={{ fontWeight: 700, textAlign: 'right' }}>{s.points}</span>
+                            <CaretRightIcon color="var(--neutral-400)" size={14} />
                         </Link>
                     );
                 })}
-            </Card>
-        </Stack>
+            </div>
+        </div>
     );
 }

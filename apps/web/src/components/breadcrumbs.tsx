@@ -1,4 +1,3 @@
-import { Box, Group } from '@mantine/core';
 import { CaretRightIcon } from '@phosphor-icons/react';
 import { Link, useMatches } from '@tanstack/react-router';
 
@@ -19,17 +18,17 @@ export function Breadcrumbs() {
     const crumbs = withCrumbs.at(-1)?.loaderData.crumbs ?? [];
 
     return (
-        <Group gap={8} style={{ fontSize: 13.5, minWidth: 0 }} wrap="nowrap">
+        <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', fontSize: 13.5, gap: 8, minWidth: 0 }}>
             {crumbs.map((c: Crumb, i: number) => {
                 const last = i === crumbs.length - 1;
                 return (
-                    <Group gap={8} key={`${c.label}-${i}`} wrap="nowrap">
+                    <div key={`${c.label}-${i}`} style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 8 }}>
                         {c.to && !last
                             ? (
                                     <Link
                                         params={c.params}
                                         style={{
-                                            color: 'var(--mantine-color-f1red-6)',
+                                            color: 'var(--color-primary)',
                                             fontWeight: 600,
                                             textDecoration: 'none',
                                             whiteSpace: 'nowrap',
@@ -40,18 +39,18 @@ export function Breadcrumbs() {
                                     </Link>
                                 )
                             : (
-                                    <Box fw={last ? 700 : 600} style={{ whiteSpace: 'nowrap' }}>
+                                    <span style={{ fontWeight: last ? 700 : 600, whiteSpace: 'nowrap' }}>
                                         {c.label}
-                                    </Box>
+                                    </span>
                                 )}
                         {last
                             ? null
                             : (
-                                    <CaretRightIcon color="var(--mantine-color-gray-5)" size={11} />
+                                    <CaretRightIcon color="var(--neutral-400)" size={11} />
                                 )}
-                    </Group>
+                    </div>
                 );
             })}
-        </Group>
+        </div>
     );
 }

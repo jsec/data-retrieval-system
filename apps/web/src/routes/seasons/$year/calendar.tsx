@@ -1,4 +1,3 @@
-import { Box, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { CaretRightIcon } from '@phosphor-icons/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
@@ -24,93 +23,85 @@ function Calendar() {
     const { data } = useSuspenseQuery(calendarQuery(Number(year)));
 
     return (
-        <Stack gap="md">
-            <Box>
-                <Title order={1} style={{ fontSize: 28 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div>
+                <h1 className="f1-display" style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
                     {`${year} Race Calendar`}
-                </Title>
-                <Text c="dimmed" mt={4} size="13px">
+                </h1>
+                <div style={{ color: 'var(--color-muted-foreground)', fontSize: 13, marginTop: 4 }}>
                     {`${data.completed} of ${TOTAL_ROUNDS} rounds completed`}
-                </Text>
-            </Box>
+                </div>
+            </div>
 
-            <Stack gap={9}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                 {data.calendar.map((r) => {
                     const done = r.round <= data.completed;
                     const next = r.round === data.completed + 1;
                     const winner = r.winner ? getSeasonDriver(r.winner) : null;
                     const row = (
-                        <Card className={done ? 'f1-row' : undefined} padding={0} radius="md" withBorder>
-                            <Group gap={18} px={20} py={14} wrap="nowrap">
-                                <Text
-                                    className="f1-num"
-                                    fw={800}
-                                    style={{ color: 'var(--mantine-color-gray-3)', fontSize: 20, width: 42 }}
-                                >
+                        <div
+                            className={`f1-card${done ? ' f1-row' : ''}`}
+                            style={{ overflow: 'hidden', padding: 0 }}
+                        >
+                            <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 18, padding: '14px 20px' }}>
+                                <span className="f1-num f1-display" style={{ color: 'var(--color-border)', fontSize: 20, fontWeight: 700, width: 42 }}>
                                     {r.round}
-                                </Text>
-                                <Box
-                                    style={{
-                                        alignItems: 'center',
-                                        background: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))',
-                                        borderRadius: 6,
-                                        color: 'var(--mantine-color-gray-7)',
-                                        display: 'flex',
-                                        fontSize: 13,
-                                        fontWeight: 800,
-                                        height: 40,
-                                        justifyContent: 'center',
-                                        width: 54,
-                                    }}
+                                </span>
+                                <div style={{
+                                    alignItems: 'center',
+                                    background: 'var(--color-accent)',
+                                    borderRadius: 6,
+                                    color: 'var(--color-foreground)',
+                                    display: 'flex',
+                                    fontSize: 13,
+                                    fontWeight: 700,
+                                    height: 40,
+                                    justifyContent: 'center',
+                                    width: 54,
+                                }}
                                 >
                                     {r.code}
-                                </Box>
-                                <Box style={{ flex: 1, minWidth: 0 }}>
-                                    <Text fw={700} style={{ fontSize: 15 }}>
-                                        {r.name}
-                                    </Text>
-                                    <Text c="dimmed" style={{ fontSize: 12 }}>
-                                        {r.circuit}
-                                    </Text>
-                                </Box>
-                                <Text c="dimmed" style={{ fontSize: 12.5, width: 120 }}>
-                                    {r.date}
-                                </Text>
-                                <Group gap={9} style={{ width: 200 }} wrap="nowrap">
-                                    {done && winner ? (
-                                        <>
-                                            <Text c="dimmed" fw={600} style={{ fontSize: 11 }}>
-                                                WINNER
-                                            </Text>
-                                            <Box style={{ background: winner.color, borderRadius: 2, height: 20, width: 4 }} />
-                                            <Text fw={600} style={{ fontSize: 13 }}>
-                                                {winner.short}
-                                            </Text>
-                                        </>
-                                    ) : (
-                                        <Text c="blue.6" fw={700} style={{ fontSize: 12 }}>
-                                            {next ? 'UP NEXT' : 'Scheduled'}
-                                        </Text>
-                                    )}
-                                </Group>
-                                <CaretRightIcon color="var(--mantine-color-gray-4)" size={15} />
-                            </Group>
-                        </Card>
+                                </div>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ fontSize: 15, fontWeight: 700 }}>{r.name}</div>
+                                    <div style={{ color: 'var(--color-muted-foreground)', fontSize: 12 }}>{r.circuit}</div>
+                                </div>
+                                <span style={{ color: 'var(--color-muted-foreground)', fontSize: 12.5, width: 120 }}>{r.date}</span>
+                                <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 9, width: 200 }}>
+                                    {done && winner
+                                        ? (
+                                                <>
+                                                    <span style={{ color: 'var(--color-muted-foreground)', fontSize: 11, fontWeight: 600 }}>WINNER</span>
+                                                    <div style={{ background: winner.color, borderRadius: 2, flexShrink: 0, height: 20, width: 4 }} />
+                                                    <span style={{ fontSize: 13, fontWeight: 600 }}>{winner.short}</span>
+                                                </>
+                                            )
+                                        : (
+                                                <span style={{ color: next ? 'var(--color-primary)' : 'var(--color-muted-foreground)', fontSize: 12, fontWeight: 700 }}>
+                                                    {next ? 'UP NEXT' : 'Scheduled'}
+                                                </span>
+                                            )}
+                                </div>
+                                <CaretRightIcon color="var(--neutral-300)" size={15} />
+                            </div>
+                        </div>
                     );
-                    return done ? (
-                        <Link
-                            key={r.round}
-                            params={{ round: String(r.round), year }}
-                            style={{ color: 'inherit', textDecoration: 'none' }}
-                            to="/seasons/$year/races/$round"
-                        >
-                            {row}
-                        </Link>
-                    ) : (
-                        <Box key={r.round}>{row}</Box>
-                    );
+                    return done
+                        ? (
+                                <Link
+                                    key={r.round}
+                                    params={{ round: String(r.round), year }}
+                                    style={{ color: 'inherit', textDecoration: 'none' }}
+                                    to="/seasons/$year/races/$round"
+                                >
+                                    {row}
+                                </Link>
+                            )
+                        : (
+                                <div key={r.round}>{row}</div>
+                            );
                 })}
-            </Stack>
-        </Stack>
+            </div>
+        </div>
     );
 }

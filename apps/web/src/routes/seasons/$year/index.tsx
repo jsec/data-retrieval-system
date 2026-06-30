@@ -1,15 +1,4 @@
 import {
-    Box,
-    Card,
-    Grid,
-    Group,
-    Progress,
-    SimpleGrid,
-    Stack,
-    Text,
-    Title,
-} from '@mantine/core';
-import {
     CalendarDotsIcon,
     CrownIcon,
     FlagCheckeredIcon,
@@ -18,8 +7,8 @@ import {
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
+import { SectionCard, StatCard, TeamBar } from '#/components/f1-ui';
 import { LineChart, roundLabels } from '#/components/line-chart';
-import { SectionCard, StatCard, TeamBar } from '#/components/ui';
 import { seasonOverviewQuery } from '#/data/queries';
 
 export const Route = createFileRoute('/seasons/$year/')({
@@ -33,6 +22,13 @@ export const Route = createFileRoute('/seasons/$year/')({
 
 const DRIVER_COLS = '34px 1fr 64px 56px 70px';
 
+const ACTION_LINK: React.CSSProperties = {
+    color: 'var(--color-primary)',
+    fontSize: 12,
+    fontWeight: 600,
+    textDecoration: 'none',
+};
+
 function SeasonOverview() {
     const { year } = Route.useParams();
     const { data } = useSuspenseQuery(seasonOverviewQuery(Number(year)));
@@ -44,210 +40,165 @@ function SeasonOverview() {
     xLabels[0] = 'Start';
 
     return (
-        <Stack gap="md">
-            <Group align="flex-end" justify="space-between">
-                <Box>
-                    <Text c="dimmed" fw={700} style={{ fontSize: 12, letterSpacing: '1.5px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Page header */}
+            <div style={{ alignItems: 'flex-end', display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                    <div style={{ color: 'var(--color-muted-foreground)', fontSize: 12, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
                         FIA FORMULA 1 WORLD CHAMPIONSHIP
-                    </Text>
-                    <Title mt={6} order={1}>
+                    </div>
+                    <h1 className="f1-display" style={{ fontFamily: 'var(--font-display)', fontSize: 30, fontWeight: 700, letterSpacing: '-0.02em', margin: '6px 0 0' }}>
                         {`${data.year} Season Overview`}
-                    </Title>
-                </Box>
-                <Box ta="right">
-                    <Text c="dimmed" size="xs">
-                        Last round
-                    </Text>
-                    <Text fw={700} style={{ fontSize: 15 }}>
-                        {data.lastRaceName}
-                    </Text>
-                </Box>
-            </Group>
+                    </h1>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                    <div style={{ color: 'var(--color-muted-foreground)', fontSize: 12 }}>Last round</div>
+                    <div style={{ fontSize: 15, fontWeight: 700 }}>{data.lastRaceName}</div>
+                </div>
+            </div>
 
-            <SimpleGrid cols={{ base: 2, md: 4 }} spacing="md">
+            {/* KPI cards */}
+            <div style={{ display: 'grid', gap: 16, gridTemplateColumns: 'repeat(2, 1fr)' }}>
                 <StatCard
-                    accent="#e8002d"
+                    accent="var(--color-primary)"
                     icon={<FlagCheckeredIcon size={15} weight="fill" />}
                     label="Round"
                     sub="season progress"
                     value={`${data.completed} / ${data.totalRounds}`}
                 />
                 <StatCard
-                    accent="var(--mantine-color-yellow-6)"
+                    accent="var(--gold-500)"
                     icon={<CrownIcon size={15} weight="fill" />}
                     label="Championship Leader"
                     sub={`${data.leader.points} pts`}
                     value={data.leader.short}
                 />
                 <StatCard
-                    accent="var(--mantine-color-blue-6)"
+                    accent="var(--color-primary)"
                     icon={<GaugeIcon size={15} weight="fill" />}
                     label="Lead Margin"
                     sub={`over ${data.runnerUp.short}`}
                     value={`+${data.leader.points - data.runnerUp.points}`}
                 />
                 <StatCard
-                    accent="var(--mantine-color-teal-7)"
+                    accent="var(--teal-500)"
                     icon={<CalendarDotsIcon size={15} />}
                     label="Next Race"
                     sub={data.nextRace.name}
                     value={data.nextRace.code}
                 />
-            </SimpleGrid>
+            </div>
 
-            <Grid gutter="md">
-                <Grid.Col span={{ base: 12, md: 7.2 }}>
-                    <SectionCard
-                        action={(
-                            <Link
-                                params={{ year }}
-                                style={{
-                                    color: 'var(--mantine-color-blue-6)',
-                                    fontSize: 12,
-                                    fontWeight: 600,
-                                    textDecoration: 'none',
-                                }}
-                                to="/seasons/$year/standings"
-                            >
-                                View full table →
-                            </Link>
-                        )}
-                        padded={false}
-                        title="Drivers' Championship"
+            {/* Drivers + Constructors panels */}
+            <div style={{ display: 'grid', gap: 16, gridTemplateColumns: '7.2fr 4.8fr' }}>
+                <SectionCard
+                    action={(
+                        <Link params={{ year }} style={ACTION_LINK} to="/seasons/$year/standings">
+                            View full table →
+                        </Link>
+                    )}
+                    padded={false}
+                    title="Drivers' Championship"
+                >
+                    <div style={{
+                        color: 'var(--color-muted-foreground)',
+                        display: 'grid',
+                        fontSize: 10.5,
+                        fontWeight: 700,
+                        gridTemplateColumns: DRIVER_COLS,
+                        letterSpacing: '0.5px',
+                        padding: '0 18px 7px',
+                        textTransform: 'uppercase',
+                    }}
                     >
-                        <Box
-                            c="dimmed"
+                        <span>POS</span>
+                        <span>DRIVER</span>
+                        <span style={{ textAlign: 'right' }}>PTS</span>
+                        <span style={{ textAlign: 'center' }}>WINS</span>
+                        <span style={{ textAlign: 'right' }}>GAP</span>
+                    </div>
+                    {topDrivers.map((d, i) => (
+                        <Link
+                            className="f1-row"
+                            key={d.code}
+                            params={{ driverId: d.code, year }}
                             style={{
+                                alignItems: 'center',
+                                borderTop: '1px solid var(--color-border)',
+                                color: 'inherit',
                                 display: 'grid',
-                                fontSize: 10.5,
-                                fontWeight: 700,
                                 gridTemplateColumns: DRIVER_COLS,
-                                letterSpacing: '0.5px',
-                                padding: '0 18px 7px',
+                                padding: '9px 18px',
+                                textDecoration: 'none',
                             }}
+                            to="/seasons/$year/drivers/$driverId"
                         >
-                            <span>POS</span>
-                            <span>DRIVER</span>
-                            <span style={{ textAlign: 'right' }}>PTS</span>
-                            <span style={{ textAlign: 'center' }}>WINS</span>
-                            <span style={{ textAlign: 'right' }}>GAP</span>
-                        </Box>
-                        {topDrivers.map((d, i) => (
-                            <Link
-                                className="f1-row"
-                                key={d.code}
-                                params={{ driverId: d.code, year }}
-                                style={{
-                                    alignItems: 'center',
-                                    borderTop: '1px solid var(--mantine-color-default-border)',
-                                    color: 'inherit',
-                                    display: 'grid',
-                                    gridTemplateColumns: DRIVER_COLS,
-                                    padding: '9px 18px',
-                                    textDecoration: 'none',
-                                }}
-                                to="/seasons/$year/drivers/$driverId"
-                            >
-                                <Text c="dimmed" className="f1-num" fw={700}>
-                                    {i + 1}
-                                </Text>
-                                <Group gap={11} wrap="nowrap">
-                                    <TeamBar color={d.color} />
-                                    <Box style={{ minWidth: 0 }}>
-                                        <Text fw={600} style={{ fontSize: 13.5, whiteSpace: 'nowrap' }}>
-                                            {d.short}
-                                        </Text>
-                                        <Text c="dimmed" style={{ fontSize: 11 }}>
-                                            {d.teamName}
-                                        </Text>
-                                    </Box>
-                                </Group>
-                                <Text className="f1-num" fw={800} ta="right">
-                                    {d.points}
-                                </Text>
-                                <Text c="dimmed" className="f1-num" ta="center">
-                                    {d.wins}
-                                </Text>
-                                <Text c="dimmed" className="f1-num" size="12.5px" ta="right">
-                                    {i === 0 ? '—' : `-${data.leader.points - d.points}`}
-                                </Text>
-                            </Link>
-                        ))}
-                    </SectionCard>
-                </Grid.Col>
+                            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontWeight: 700 }}>{i + 1}</span>
+                            <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 11 }}>
+                                <TeamBar color={d.color} />
+                                <div style={{ minWidth: 0 }}>
+                                    <div style={{ fontSize: 13.5, fontWeight: 600, whiteSpace: 'nowrap' }}>{d.short}</div>
+                                    <div style={{ color: 'var(--color-muted-foreground)', fontSize: 11 }}>{d.teamName}</div>
+                                </div>
+                            </div>
+                            <span className="f1-num f1-display" style={{ fontWeight: 700, textAlign: 'right' }}>{d.points}</span>
+                            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', textAlign: 'center' }}>{d.wins}</span>
+                            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 12.5, textAlign: 'right' }}>
+                                {i === 0 ? '—' : `-${data.leader.points - d.points}`}
+                            </span>
+                        </Link>
+                    ))}
+                </SectionCard>
 
-                <Grid.Col span={{ base: 12, md: 4.8 }}>
-                    <SectionCard
-                        action={(
-                            <Link
-                                style={{
-                                    color: 'var(--mantine-color-blue-6)',
-                                    fontSize: 12,
-                                    fontWeight: 600,
-                                    textDecoration: 'none',
-                                }}
-                                to="/constructors"
-                            >
-                                Compare →
-                            </Link>
-                        )}
-                        padded={false}
-                        title="Constructors"
-                    >
-                        {data.constructors.map(c => (
-                            <Box
-                                key={c.key}
-                                style={{
-                                    borderTop: '1px solid var(--mantine-color-default-border)',
-                                    padding: '8px 18px',
-                                }}
-                            >
-                                <Group justify="space-between" mb={5} wrap="nowrap">
-                                    <Group gap={9} wrap="nowrap">
-                                        <Text c="dimmed" className="f1-num" fw={700} style={{ fontSize: 11, textAlign: 'center', width: 18 }}>
-                                            {c.pos}
-                                        </Text>
-                                        <Text fw={600} style={{ fontSize: 13 }}>
-                                            {c.name}
-                                        </Text>
-                                    </Group>
-                                    <Text className="f1-num" fw={800} style={{ fontSize: 13 }}>
-                                        {c.points}
-                                    </Text>
-                                </Group>
-                                <Box ml={27}>
-                                    <Progress
-                                        radius="xl"
-                                        size={5}
-                                        styles={{ section: { background: c.color } }}
-                                        value={(c.points / maxConstructor) * 100}
-                                    />
-                                </Box>
-                            </Box>
-                        ))}
-                    </SectionCard>
-                </Grid.Col>
-            </Grid>
+                <SectionCard
+                    action={(
+                        <Link style={ACTION_LINK} to="/constructors">
+                            Compare →
+                        </Link>
+                    )}
+                    padded={false}
+                    title="Constructors"
+                >
+                    {data.constructors.map(c => (
+                        <div
+                            key={c.key}
+                            style={{ borderTop: '1px solid var(--color-border)', padding: '8px 18px' }}
+                        >
+                            <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', justifyContent: 'space-between', marginBottom: 5 }}>
+                                <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 9 }}>
+                                    <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 11, fontWeight: 700, textAlign: 'center', width: 18 }}>{c.pos}</span>
+                                    <span style={{ fontSize: 13, fontWeight: 600 }}>{c.name}</span>
+                                </div>
+                                <span className="f1-num f1-display" style={{ fontSize: 13, fontWeight: 700 }}>{c.points}</span>
+                            </div>
+                            <div style={{ marginLeft: 27 }}>
+                                <div style={{ background: 'var(--color-border)', borderRadius: 9999, height: 5, overflow: 'hidden' }}>
+                                    <div style={{ background: c.color, borderRadius: 9999, height: '100%', width: `${(c.points / maxConstructor) * 100}%` }} />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </SectionCard>
+            </div>
 
-            <Card padding="md" radius="md" withBorder>
-                <Group align="flex-start" justify="space-between" mb={6}>
-                    <Box>
-                        <Text fw={700} style={{ fontSize: 15 }}>
-                            Championship Points Progression
-                        </Text>
-                        <Text c="dimmed" mt={2} size="xs">
+            {/* Points progression chart */}
+            <div className="f1-card" style={{ padding: 16 }}>
+                <div style={{ alignItems: 'flex-start', display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <div>
+                        <div style={{ fontSize: 15, fontWeight: 700 }}>Championship Points Progression</div>
+                        <div style={{ color: 'var(--color-muted-foreground)', fontSize: 12, marginTop: 2 }}>
                             Cumulative points after each round · top 6 drivers
-                        </Text>
-                    </Box>
-                    <Group gap={14}>
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 14 }}>
                         {data.progression.map(l => (
-                            <Group gap={6} key={l.code} style={{ fontSize: 12, fontWeight: 600 }} wrap="nowrap">
-                                <Box style={{ background: l.color, borderRadius: 2, height: 3, width: 11 }} />
+                            <div key={l.code} style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', fontSize: 12, fontWeight: 600, gap: 6 }}>
+                                <div style={{ background: l.color, borderRadius: 2, height: 3, width: 11 }} />
                                 {l.code}
-                            </Group>
+                            </div>
                         ))}
-                    </Group>
-                </Group>
+                    </div>
+                </div>
                 <LineChart
                     height={280}
                     series={progressionSeries}
@@ -258,64 +209,51 @@ function SeasonOverview() {
                     yMax={250}
                     yMin={0}
                 />
-            </Card>
+            </div>
 
+            {/* Calendar strip */}
             <SectionCard
                 action={(
-                    <Link
-                        params={{ year }}
-                        style={{
-                            color: 'var(--mantine-color-blue-6)',
-                            fontSize: 12,
-                            fontWeight: 600,
-                            textDecoration: 'none',
-                        }}
-                        to="/seasons/$year/calendar"
-                    >
+                    <Link params={{ year }} style={ACTION_LINK} to="/seasons/$year/calendar">
                         Full calendar →
                     </Link>
                 )}
                 title={`${data.year} Calendar`}
             >
-                <SimpleGrid cols={{ base: 4, lg: 8, sm: 6 }} spacing={9}>
+                <div style={{ display: 'grid', gap: 9, gridTemplateColumns: 'repeat(8, 1fr)' }}>
                     {data.calendar.map((r) => {
                         const done = r.round <= data.completed;
                         const next = r.round === data.completed + 1;
                         const winner = r.winner ? data.drivers.find(d => d.code === r.winner) : null;
                         const cell = (
-                            <Box
+                            <div
                                 className={done ? 'f1-lift' : undefined}
                                 style={{
                                     background: done
-                                        ? 'var(--mantine-color-body)'
+                                        ? 'var(--color-card)'
                                         : (next
-                                                ? 'var(--mantine-color-blue-0)'
-                                                : 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))'),
-                                    border: `1px solid ${next ? 'var(--mantine-color-blue-3)' : 'var(--mantine-color-default-border)'}`,
+                                                ? 'color-mix(in srgb, var(--color-primary) 6%, var(--color-background))'
+                                                : 'var(--color-accent)'),
+                                    border: `1px solid ${next ? 'color-mix(in srgb, var(--color-primary) 40%, var(--color-border))' : 'var(--color-border)'}`,
                                     borderRadius: 7,
                                     cursor: done ? 'pointer' : 'default',
                                     padding: '9px 10px',
                                 }}
                             >
-                                <Text c="dimmed" className="f1-num" fw={700} style={{ fontSize: 10 }}>
+                                <div className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 10, fontWeight: 700 }}>
                                     R
                                     {r.round}
-                                </Text>
-                                <Text fw={700} mt={2} style={{ fontSize: 12.5 }}>
-                                    {r.code}
-                                </Text>
-                                <Text c="dimmed" mt={1} style={{ fontSize: 10.5 }}>
-                                    {r.date}
-                                </Text>
-                                <Box
-                                    mt={7}
-                                    style={{
-                                        background: winner ? winner.color : 'var(--mantine-color-default-border)',
-                                        borderRadius: 2,
-                                        height: 3,
-                                    }}
+                                </div>
+                                <div style={{ fontSize: 12.5, fontWeight: 700, marginTop: 2 }}>{r.code}</div>
+                                <div style={{ color: 'var(--color-muted-foreground)', fontSize: 10.5, marginTop: 1 }}>{r.date}</div>
+                                <div style={{
+                                    background: winner ? winner.color : 'var(--color-border)',
+                                    borderRadius: 2,
+                                    height: 3,
+                                    marginTop: 7,
+                                }}
                                 />
-                            </Box>
+                            </div>
                         );
                         return done
                             ? (
@@ -329,11 +267,11 @@ function SeasonOverview() {
                                     </Link>
                                 )
                             : (
-                                    <Box key={r.round}>{cell}</Box>
+                                    <div key={r.round}>{cell}</div>
                                 );
                     })}
-                </SimpleGrid>
+                </div>
             </SectionCard>
-        </Stack>
+        </div>
     );
 }

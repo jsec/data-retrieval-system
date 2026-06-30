@@ -1,9 +1,18 @@
 import type { LinkProps } from '@tanstack/react-router';
 import type { RowData, Table } from '@tanstack/react-table';
 
-import { Box, Table as MantineTable, Text } from '@mantine/core';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { flexRender } from '@tanstack/react-table';
+
+import {
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableHeader,
+    Table as TablePrimitive,
+    TableRow,
+} from '#/components/ui/table';
 
 declare module '@tanstack/react-table' {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions, @typescript-eslint/no-unused-vars
@@ -14,7 +23,6 @@ declare module '@tanstack/react-table' {
     }
 }
 
-const HEADER_BG = 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))';
 const LINK_STYLE = { color: 'inherit', display: 'block', textDecoration: 'none' } as const;
 
 type DataTableProps<T> = {
@@ -38,41 +46,33 @@ export function DataTable<T>({
     const rows = table.getRowModel().rows;
 
     return (
-        <MantineTable.ScrollContainer minWidth={720} type="native">
-            <MantineTable
-                highlightOnHover
-                horizontalSpacing={px}
-                layout="fixed"
-                verticalSpacing={rowPy}
-            >
+        <TableContainer>
+            <TablePrimitive>
                 <colgroup>
                     {columns.map(column => (
                         <col key={column.id} style={{ width: column.columnDef.meta?.width }} />
                     ))}
                 </colgroup>
-                <MantineTable.Thead bg={HEADER_BG}>
-                    <MantineTable.Tr>
+                <TableHeader>
+                    <tr>
                         {headers.map(h => (
-                            <MantineTable.Th
+                            <TableHead
                                 key={h.id}
                                 scope="col"
                                 style={{
-                                    color: 'var(--mantine-color-dimmed)',
-                                    fontSize: 10.5,
-                                    fontWeight: 700,
-                                    letterSpacing: '0.5px',
                                     paddingBlock: headerPy,
+                                    paddingInline: px,
                                     textAlign: h.column.columnDef.meta?.align ?? 'left',
                                 }}
                             >
                                 {h.isPlaceholder
                                     ? null
                                     : flexRender(h.column.columnDef.header, h.getContext())}
-                            </MantineTable.Th>
+                            </TableHead>
                         ))}
-                    </MantineTable.Tr>
-                </MantineTable.Thead>
-                <MantineTable.Tbody>
+                    </tr>
+                </TableHeader>
+                <TableBody>
                     {rows.map((row, i) => {
                         const visibleCells = row.getVisibleCells();
                         const link = rowLink?.(row.original);
@@ -81,7 +81,7 @@ export function DataTable<T>({
                             : -1;
 
                         return (
-                            <MantineTable.Tr
+                            <TableRow
                                 aria-label={link ? 'Open details' : undefined}
                                 className={link ? 'f1-row f1-row--clickable' : 'f1-row'}
                                 key={row.id}
@@ -92,18 +92,21 @@ export function DataTable<T>({
                                     const align = meta?.align ?? 'left';
                                     const content = meta?.ordinal
                                         ? (
-                                                <Text c="dimmed" className="f1-num" fw={700} style={{ textAlign: align }}>
+                                                <span className="f1-num f1-text-muted" style={{ display: 'block', fontWeight: 700, textAlign: align }}>
                                                     {i + 1}
-                                                </Text>
+                                                </span>
                                             )
                                         : (
-                                                <Box style={{ minWidth: 0, textAlign: align }}>
+                                                <div style={{ minWidth: 0, textAlign: align }}>
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                </Box>
+                                                </div>
                                             );
 
                                     return (
-                                        <MantineTable.Td key={cell.id} style={{ minWidth: 0, textAlign: align }}>
+                                        <TableCell
+                                            key={cell.id}
+                                            style={{ paddingBlock: rowPy, paddingInline: px, textAlign: align }}
+                                        >
                                             {link && index === linkCellIndex
                                                 ? (
                                                         <Link
@@ -115,14 +118,14 @@ export function DataTable<T>({
                                                         </Link>
                                                     )
                                                 : content}
-                                        </MantineTable.Td>
+                                        </TableCell>
                                     );
                                 })}
-                            </MantineTable.Tr>
+                            </TableRow>
                         );
                     })}
-                </MantineTable.Tbody>
-            </MantineTable>
-        </MantineTable.ScrollContainer>
+                </TableBody>
+            </TablePrimitive>
+        </TableContainer>
     );
 }

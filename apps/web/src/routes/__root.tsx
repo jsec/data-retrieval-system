@@ -2,17 +2,6 @@ import type { Icon } from '@phosphor-icons/react';
 import type { QueryClient } from '@tanstack/react-query';
 
 import {
-    ActionIcon,
-    AppShell,
-    Box,
-    Group,
-    Progress,
-    Stack,
-    Text,
-    useMantineColorScheme,
-} from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import {
     ChartPieSliceIcon,
     ClockCounterClockwiseIcon,
     FlagCheckeredIcon,
@@ -30,9 +19,13 @@ import {
     Outlet,
     useRouterState,
 } from '@tanstack/react-router';
+import { useState } from 'react';
 
 import { Breadcrumbs } from '#/components/breadcrumbs';
+import { Button } from '#/components/ui/button';
 import { COMPLETED, CURRENT_YEAR, TOTAL_ROUNDS } from '#/data/fixtures';
+import { useTheme } from '#/lib/theme';
+import { cn } from '#/lib/utils';
 
 type MyRouterContext = {
     queryClient: QueryClient;
@@ -45,7 +38,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 type NavItem = {
     icon: Icon;
     label: string;
-    /** Path prefixes that should also mark this item active. */
     match: string[];
     params?: Record<string, string>;
     to: string;
@@ -95,72 +87,43 @@ const navItems: NavItem[] = [
 ];
 
 function isActive(pathname: string, item: NavItem): boolean {
-    // The "Seasons" index must not steal activation from season-scoped pages.
     if (item.to === '/seasons') return pathname === '/seasons';
     return item.match.some(m => pathname === m || pathname.startsWith(m + '/'));
 }
 
+const progressPct = Math.round((COMPLETED / TOTAL_ROUNDS) * 100);
+
 function RootLayout() {
-    const [opened, { close, toggle }] = useDisclosure();
-    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-    const isDark = colorScheme === 'dark';
+    const [, setMobileOpen] = useState(false);
+    const { resolvedTheme, toggleTheme } = useTheme();
     const pathname = useRouterState({ select: s => s.location.pathname });
 
     return (
-        <AppShell
-            header={{ height: 60 }}
-            navbar={{
-                breakpoint: 'sm',
-                collapsed: { desktop: false, mobile: !opened },
-                width: 232,
-            }}
-        >
-            <AppShell.Navbar className="f1-sidebar" p={0} withBorder={false}>
-                <Group gap={11} pb={18} pt={20} px={20} wrap="nowrap">
-                    <Box
-                        style={{
-                            alignItems: 'center',
-                            background: '#e8002d',
-                            borderRadius: 7,
-                            boxShadow: '0 2px 8px rgba(232,0,45,.4)',
-                            display: 'flex',
-                            height: 32,
-                            justifyContent: 'center',
-                            width: 32,
-                        }}
-                    >
+        <div className="f1-app">
+            <nav className="f1-sidebar">
+                <div className="f1-brand">
+                    <div className="f1-brand-mark">
                         <FlagCheckeredIcon color="#fff" size={19} weight="bold" />
-                    </Box>
-                    <Box style={{ lineHeight: 1 }}>
-                        <Text c="#fff" style={{ fontSize: 16, fontWeight: 800, letterSpacing: '-0.4px' }}>
+                    </div>
+                    <div>
+                        <div className="f1-brand-title">
                             DRS
-                        </Text>
-                        <Text mt={2} style={{ color: '#6b7280', fontSize: 10, fontWeight: 600, letterSpacing: '1.5px' }}>
+                        </div>
+                        <div className="f1-brand-subtitle">
                             F1 ANALYTICS
-                        </Text>
-                    </Box>
-                </Group>
+                        </div>
+                    </div>
+                </div>
 
-                <Stack gap={2} px={12} style={{ flex: 1 }}>
+                <div className="f1-nav-list">
                     {navItems.map((item) => {
                         const active = isActive(pathname, item);
                         return (
                             <Link
+                                className={cn('f1-nav-item', active && 'f1-nav-item--active')}
                                 key={item.label}
-                                onClick={close}
+                                onClick={() => setMobileOpen(false)}
                                 params={item.params}
-                                style={{
-                                    alignItems: 'center',
-                                    background: active ? '#e8002d' : 'transparent',
-                                    borderRadius: 6,
-                                    color: active ? '#fff' : '#c9ccd1',
-                                    display: 'flex',
-                                    fontSize: 13.5,
-                                    fontWeight: 500,
-                                    gap: 12,
-                                    padding: '10px 12px',
-                                    textDecoration: 'none',
-                                }}
                                 to={item.to}
                             >
                                 <item.icon size={18} weight={active ? 'fill' : 'regular'} />
@@ -168,63 +131,55 @@ function RootLayout() {
                             </Link>
                         );
                     })}
-                </Stack>
+                </div>
 
-                <Box m={12} p="14px 16px" style={{ background: '#1e2127', borderRadius: 8 }}>
-                    <Text style={{ color: '#6b7280', fontSize: 10, fontWeight: 600, letterSpacing: '1px' }}>
+                <div className="f1-season-progress">
+                    <div className="f1-season-progress-label">
                         {`${CURRENT_YEAR} SEASON`}
-                    </Text>
-                    <Group align="baseline" gap={6} mt={5}>
-                        <Text className="f1-num" style={{ color: '#fff', fontSize: 24, fontWeight: 800 }}>
+                    </div>
+                    <div className="f1-season-progress-value">
+                        <span className="f1-num f1-display f1-season-progress-count">
                             {COMPLETED}
-                        </Text>
-                        <Text style={{ color: '#8b919a', fontSize: 13 }}>
+                        </span>
+                        <span className="f1-season-progress-total">
                             {`/ ${TOTAL_ROUNDS} rounds`}
-                        </Text>
-                    </Group>
-                    <Progress
-                        mt={9}
-                        radius="xl"
-                        size={5}
-                        styles={{
-                            root: { background: '#2e323a' },
-                            section: { background: 'linear-gradient(90deg,#e8002d,#ff5a3c)' },
-                        }}
-                        value={(COMPLETED / TOTAL_ROUNDS) * 100}
-                    />
-                </Box>
-            </AppShell.Navbar>
+                        </span>
+                    </div>
+                    <div className="f1-progress-track">
+                        <div className="f1-progress-fill" style={{ width: `${progressPct}%` }} />
+                    </div>
+                </div>
+            </nav>
 
-            <AppShell.Header>
-                <Group gap={16} h="100%" px={28} wrap="nowrap">
-                    <ActionIcon
+            <div className="f1-main">
+                <header className="f1-header">
+                    <Button
                         aria-label="Toggle navigation"
-                        hiddenFrom="sm"
-                        onClick={toggle}
-                        variant="subtle"
+                        className="f1-mobile-nav-button"
+                        onClick={() => setMobileOpen(o => !o)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <ListIcon size={18} />
-                    </ActionIcon>
+                    </Button>
                     <Breadcrumbs />
-                    <Box style={{ flex: 1 }} />
-                    <ActionIcon
+                    <div className="f1-toolbar-spacer" />
+                    <Button
                         aria-label="Toggle color scheme"
-                        onClick={toggleColorScheme}
-                        size="lg"
-                        variant="subtle"
+                        onClick={toggleTheme}
+                        size="icon"
+                        variant="outline"
                     >
-                        {isDark ? <SunIcon size={18} /> : <MoonIcon size={18} />}
-                    </ActionIcon>
-                </Group>
-            </AppShell.Header>
+                        {resolvedTheme === 'dark' ? <SunIcon size={18} /> : <MoonIcon size={18} />}
+                    </Button>
+                </header>
 
-            <AppShell.Main>
-                <Box className="f1-scroll" p={28}>
-                    <Box maw={1180} mx="auto">
+                <main className="f1-scroll f1-content">
+                    <div className="f1-content-inner">
                         <Outlet />
-                    </Box>
-                </Box>
-            </AppShell.Main>
-        </AppShell>
+                    </div>
+                </main>
+            </div>
+        </div>
     );
 }

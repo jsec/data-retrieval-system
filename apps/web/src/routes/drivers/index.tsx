@@ -1,7 +1,5 @@
 import type { FilterFn, SortingFn, SortingState } from '@tanstack/react-table';
-import type { ReactNode } from 'react';
 
-import { Box, Card, Group, Stack, Text, TextInput, Title } from '@mantine/core';
 import { CaretRightIcon, MagnifyingGlassIcon } from '@phosphor-icons/react';
 import { rankItem } from '@tanstack/match-sorter-utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -18,7 +16,9 @@ import { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import type { AllTimeDriver } from '#/data/types';
 
 import { DataTable } from '#/components/data-table';
-import { DriverAvatar, Pill, TrophyCount } from '#/components/ui';
+import { DriverAvatar, Pill, TrophyCount } from '#/components/f1-ui';
+import { Card } from '#/components/ui/card';
+import { Input, InputGroup } from '#/components/ui/input';
 import { allTimeDriversQuery } from '#/data/queries';
 
 export const Route = createFileRoute('/drivers/')({
@@ -62,25 +62,19 @@ const coreRowModel = getCoreRowModel<AllTimeDriver>();
 const filteredRowModel = getFilteredRowModel<AllTimeDriver>();
 const sortedRowModel = getSortedRowModel<AllTimeDriver>();
 
-const DimNum = ({ children }: { children: ReactNode }) => (
-    <Text c="dimmed" className="f1-num">
-        {children}
-    </Text>
-);
-
 const columns = [
     ch.display({ header: '#', id: 'rank', meta: { ordinal: true, width: '4%' } }),
     ch.accessor('name', {
         cell: (info) => {
             const d = info.row.original;
             return (
-                <Group gap={11} wrap="nowrap">
+                <div className="f1-control-group" style={{ gap: 11 }}>
                     <DriverAvatar code={d.code} color={d.color} />
-                    <Text fw={600} style={{ fontSize: 13.5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <span className="f1-truncate" style={{ fontSize: 13.5, fontWeight: 600 }}>
                         {d.name}
-                    </Text>
-                    <CaretRightIcon color="var(--mantine-color-gray-5)" size={13} />
-                </Group>
+                    </span>
+                    <CaretRightIcon color="var(--neutral-400)" size={13} />
+                </div>
             );
         },
         header: 'DRIVER',
@@ -90,23 +84,23 @@ const columns = [
     }),
     ch.accessor('years', {
         cell: info => (
-            <Text c="dimmed" className="f1-num" style={{ fontSize: 12.5 }}>
+            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 12.5 }}>
                 {info.getValue()}
-            </Text>
+            </span>
         ),
         header: 'YEARS',
         meta: { width: '11%' },
     }),
     ch.accessor('starts', {
-        cell: info => <DimNum>{info.getValue()}</DimNum>,
+        cell: info => (
+            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)' }}>{info.getValue()}</span>
+        ),
         header: 'STARTS',
         meta: { align: 'center', width: '8%' },
     }),
     ch.accessor('wins', {
         cell: info => (
-            <Text className="f1-num" fw={700}>
-                {info.getValue()}
-            </Text>
+            <span className="f1-num f1-display" style={{ fontWeight: 700 }}>{info.getValue()}</span>
         ),
         header: 'WINS',
         id: 'wins',
@@ -114,20 +108,24 @@ const columns = [
         sortingFn: byWins,
     }),
     ch.accessor('poles', {
-        cell: info => <DimNum>{info.getValue()}</DimNum>,
+        cell: info => (
+            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)' }}>{info.getValue()}</span>
+        ),
         header: 'POLES',
         meta: { align: 'center', width: '7%' },
     }),
     ch.accessor('podiums', {
-        cell: info => <DimNum>{info.getValue()}</DimNum>,
+        cell: info => (
+            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)' }}>{info.getValue()}</span>
+        ),
         header: 'PODIUMS',
         meta: { align: 'center', width: '10%' },
     }),
     ch.accessor('titles', {
         cell: info => (
-            <Group gap={0} justify="center">
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <TrophyCount count={info.getValue()} />
-            </Group>
+            </div>
         ),
         header: 'TITLES',
         id: 'titles',
@@ -175,55 +173,51 @@ function DriversIndex() {
     );
 
     return (
-        <Stack gap="md">
-            <Box>
-                <Title order={1} style={{ fontSize: 28 }}>
+        <div className="f1-page-stack">
+            <div>
+                <h1 className="f1-page-title">
                     Drivers
-                </Title>
-                <Text c="dimmed" mt={4} size="13px">
+                </h1>
+                <div className="f1-page-description">
                     {'All-time index · career statistics across every season · '}
-                    <Text component="span" fw={700}>
-                        {shown}
-                    </Text>
+                    <strong>{shown}</strong>
                     {` of ${drivers.length} shown`}
-                </Text>
-            </Box>
+                </div>
+            </div>
 
-            <Group align="center" gap={12} wrap="wrap">
-                <TextInput
-                    leftSection={<MagnifyingGlassIcon size={15} />}
-                    onChange={e => setSearch(e.currentTarget.value)}
-                    placeholder="Search name or nationality…"
-                    radius="md"
-                    value={search}
-                    w={260}
-                />
-                <Group gap={6}>
+            <div className="f1-toolbar">
+                <InputGroup>
+                    <MagnifyingGlassIcon color="var(--color-muted-foreground)" data-icon="inline-start" size={15} />
+                    <Input
+                        onChange={e => setSearch(e.currentTarget.value)}
+                        placeholder="Search name or nationality…"
+                        value={search}
+                    />
+                </InputGroup>
+
+                <div className="f1-control-group">
                     {CATEGORIES.map(c => (
                         <Pill active={category === c.key} key={c.key} onClick={() => setCategory(c.key)}>
                             {c.label}
                         </Pill>
                     ))}
-                </Group>
-                <Box style={{ flex: 1 }} />
-                <Group align="center" gap={4}>
-                    <Text c="dimmed" fw={600} mr={4} style={{ fontSize: 11 }}>
-                        SORT
-                    </Text>
+                </div>
+
+                <div className="f1-toolbar-spacer" />
+
+                <div className="f1-control-group">
+                    <span className="f1-sort-label">SORT</span>
                     {SORTS.map(s => (
                         <Pill active={sort === s.key} key={s.key} onClick={() => setSort(s.key)} variant="subtle">
                             {s.label}
                         </Pill>
                     ))}
-                </Group>
-            </Group>
+                </div>
+            </div>
 
-            <Card padding={0} radius="md" withBorder>
-                <DataTable
-                    rowLink={getDriverLink}
-                    table={table}
-                />
+            <Card className="f1-table-card">
+                <DataTable rowLink={getDriverLink} table={table} />
             </Card>
-        </Stack>
+        </div>
     );
 }
