@@ -5,10 +5,10 @@ import {
     ChartPieSliceIcon,
     ClockCounterClockwiseIcon,
     FlagCheckeredIcon,
-    ListIcon,
     ListNumbersIcon,
     MapTrifoldIcon,
     MoonIcon,
+    SidebarSimpleIcon,
     SunIcon,
     UserListIcon,
     WrenchIcon,
@@ -94,18 +94,18 @@ function isActive(pathname: string, item: NavItem): boolean {
 const progressPct = Math.round((COMPLETED / TOTAL_ROUNDS) * 100);
 
 function RootLayout() {
-    const [, setMobileOpen] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
     const { resolvedTheme, toggleTheme } = useTheme();
     const pathname = useRouterState({ select: s => s.location.pathname });
 
     return (
         <div className="f1-app">
-            <nav className="f1-sidebar">
+            <nav className="f1-sidebar" data-collapsed={collapsed}>
                 <div className="f1-brand">
                     <div className="f1-brand-mark">
                         <FlagCheckeredIcon color="#fff" size={19} weight="bold" />
                     </div>
-                    <div>
+                    <div className="f1-brand-text">
                         <div className="f1-brand-title">
                             DRS
                         </div>
@@ -122,12 +122,12 @@ function RootLayout() {
                             <Link
                                 className={cn('f1-nav-item', active && 'f1-nav-item--active')}
                                 key={item.label}
-                                onClick={() => setMobileOpen(false)}
                                 params={item.params}
+                                title={collapsed ? item.label : undefined}
                                 to={item.to}
                             >
                                 <item.icon size={18} weight={active ? 'fill' : 'regular'} />
-                                <span>{item.label}</span>
+                                <span className="f1-nav-label">{item.label}</span>
                             </Link>
                         );
                     })}
@@ -149,18 +149,18 @@ function RootLayout() {
                         <div className="f1-progress-fill" style={{ width: `${progressPct}%` }} />
                     </div>
                 </div>
+
             </nav>
 
             <div className="f1-main">
                 <header className="f1-header">
                     <Button
-                        aria-label="Toggle navigation"
-                        className="f1-mobile-nav-button"
-                        onClick={() => setMobileOpen(o => !o)}
+                        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                        onClick={() => setCollapsed(c => !c)}
                         size="icon"
                         variant="ghost"
                     >
-                        <ListIcon size={18} />
+                        <SidebarSimpleIcon size={18} />
                     </Button>
                     <Breadcrumbs />
                     <div className="f1-toolbar-spacer" />
