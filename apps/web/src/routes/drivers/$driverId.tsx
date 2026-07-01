@@ -6,21 +6,15 @@ import { GOLD, MiniStat } from '#/components/f1-ui';
 import { CURRENT_YEAR } from '#/data/fixtures';
 import { driverCareerQuery } from '#/data/queries';
 
-export const Route = createFileRoute('/drivers/$driverId')({
-    component: DriverCareer,
-    loader: async ({ context, params }) => {
-        const { driver } = await context.queryClient.ensureQueryData(
-            driverCareerQuery(Number(params.driverId)),
-        );
-        return {
-            crumbs: [{ label: 'Drivers', to: '/drivers' }, { label: driver.name }],
-        };
-    },
-});
-
 const COLS = '84px 1fr 64px 60px 78px 60px 80px 24px';
 
-function DriverCareer() {
+const getPositionColor = (pos: number): string => {
+    if (pos === 1) return GOLD;
+    if (pos <= 3) return 'var(--color-foreground)';
+    return 'var(--color-muted-foreground)';
+};
+
+const DriverCareer = () => {
     const { driverId } = Route.useParams();
     const { data } = useSuspenseQuery(driverCareerQuery(Number(driverId)));
     const { driver, seasons } = data;
@@ -121,12 +115,7 @@ function DriverCareer() {
                     <span />
                 </div>
                 {seasons.map((s) => {
-                    const posColor
-                        = s.pos === 1
-                            ? GOLD
-                            : (s.pos <= 3
-                                    ? 'var(--color-foreground)'
-                                    : 'var(--color-muted-foreground)');
+                    const posColor = getPositionColor(s.pos);
                     return (
                         <Link
                             className="f1-row"
@@ -162,4 +151,16 @@ function DriverCareer() {
             </div>
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/drivers/$driverId')({
+    component: DriverCareer,
+    loader: async ({ context, params }) => {
+        const { driver } = await context.queryClient.ensureQueryData(
+            driverCareerQuery(Number(params.driverId)),
+        );
+        return {
+            crumbs: [{ label: 'Drivers', to: '/drivers' }, { label: driver.name }],
+        };
+    },
+});

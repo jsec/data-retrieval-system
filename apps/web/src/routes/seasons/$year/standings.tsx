@@ -6,19 +6,6 @@ import { Pill, TeamBar } from '#/components/f1-ui';
 import { TOTAL_ROUNDS } from '#/data/fixtures';
 import { standingsQuery } from '#/data/queries';
 
-export const Route = createFileRoute('/seasons/$year/standings')({
-    component: Standings,
-    loader: async ({ context, params }) => {
-        await context.queryClient.ensureQueryData(standingsQuery(Number(params.year)));
-        return {
-            crumbs: [
-                { label: params.year, params: { year: params.year }, to: '/seasons/$year' },
-                { label: 'Standings' },
-            ],
-        };
-    },
-});
-
 const COLS = '46px 1fr 130px 70px 80px 80px 80px';
 
 const HEADER_STYLE: React.CSSProperties = {
@@ -33,7 +20,7 @@ const HEADER_STYLE: React.CSSProperties = {
     textTransform: 'uppercase',
 };
 
-function Standings() {
+const Standings = () => {
     const { year } = Route.useParams();
     const { data } = useSuspenseQuery(standingsQuery(Number(year)));
     const [tab, setTab] = useState<'constructors' | 'drivers'>('drivers');
@@ -41,10 +28,8 @@ function Standings() {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
-                <h1 className="f1-display" style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
-                    Championship Standings
-                </h1>
-                <div style={{ color: 'var(--color-muted-foreground)', fontSize: 13, marginTop: 4 }}>
+                <h1 className="f1-page-title">Championship Standings</h1>
+                <div className="f1-page-description">
                     {`After Round ${data.completed} of ${TOTAL_ROUNDS} · ${year} season`}
                 </div>
             </div>
@@ -124,4 +109,17 @@ function Standings() {
                     )}
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/seasons/$year/standings')({
+    component: Standings,
+    loader: async ({ context, params }) => {
+        await context.queryClient.ensureQueryData(standingsQuery(Number(params.year)));
+        return {
+            crumbs: [
+                { label: params.year, params: { year: params.year }, to: '/seasons/$year' },
+                { label: 'Standings' },
+            ],
+        };
+    },
+});

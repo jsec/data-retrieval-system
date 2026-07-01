@@ -7,18 +7,9 @@ import {
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-import { SectionCard, StatCard, TeamBar } from '#/components/f1-ui';
+import { GridHeader, SectionCard, StatCard, TeamBar } from '#/components/f1-ui';
 import { LineChart, roundLabels } from '#/components/line-chart';
 import { seasonOverviewQuery } from '#/data/queries';
-
-export const Route = createFileRoute('/seasons/$year/')({
-    component: SeasonOverview,
-    loader: async ({ context, params }) => {
-        const year = Number(params.year);
-        await context.queryClient.ensureQueryData(seasonOverviewQuery(year));
-        return { crumbs: [{ label: 'Season Overview' }] };
-    },
-});
 
 const DRIVER_COLS = '34px 1fr 64px 56px 70px';
 
@@ -29,7 +20,7 @@ const ACTION_LINK: React.CSSProperties = {
     textDecoration: 'none',
 };
 
-function SeasonOverview() {
+const SeasonOverview = () => {
     const { year } = Route.useParams();
     const { data } = useSuspenseQuery(seasonOverviewQuery(Number(year)));
     const maxConstructor = data.constructors[0]?.points || 1;
@@ -98,23 +89,13 @@ function SeasonOverview() {
                     padded={false}
                     title="Drivers' Championship"
                 >
-                    <div style={{
-                        color: 'var(--color-muted-foreground)',
-                        display: 'grid',
-                        fontSize: 10.5,
-                        fontWeight: 700,
-                        gridTemplateColumns: DRIVER_COLS,
-                        letterSpacing: '0.5px',
-                        padding: '0 18px 7px',
-                        textTransform: 'uppercase',
-                    }}
-                    >
+                    <GridHeader columns={DRIVER_COLS}>
                         <span>POS</span>
                         <span>DRIVER</span>
                         <span style={{ textAlign: 'right' }}>PTS</span>
                         <span style={{ textAlign: 'center' }}>WINS</span>
                         <span style={{ textAlign: 'right' }}>GAP</span>
-                    </div>
+                    </GridHeader>
                     {topDrivers.map((d, i) => (
                         <Link
                             className="f1-row"
@@ -271,4 +252,13 @@ function SeasonOverview() {
             </SectionCard>
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/seasons/$year/')({
+    component: SeasonOverview,
+    loader: async ({ context, params }) => {
+        const year = Number(params.year);
+        await context.queryClient.ensureQueryData(seasonOverviewQuery(year));
+        return { crumbs: [{ label: 'Season Overview' }] };
+    },
+});

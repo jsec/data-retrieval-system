@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 
 import { TrophyIcon } from '@phosphor-icons/react';
 
-import { Badge } from './ui/badge';
 import {
     Button,
 } from './ui/button';
@@ -16,7 +15,7 @@ import {
 
 export const GOLD = 'var(--gold-500)';
 
-export function DriverAvatar({
+export const DriverAvatar = ({
     code,
     color,
     size = 30,
@@ -24,7 +23,7 @@ export function DriverAvatar({
     code: string;
     color: string;
     size?: number;
-}) {
+}) => {
     return (
         <div
             style={{
@@ -44,15 +43,17 @@ export function DriverAvatar({
             {code}
         </div>
     );
-}
+};
 
-export function GridHeader({
+export const GridHeader = ({
     children,
     columns,
+    px = 18,
 }: {
     children: ReactNode;
     columns: string;
-}) {
+    px?: number;
+}) => {
     return (
         <div
             style={{
@@ -62,16 +63,16 @@ export function GridHeader({
                 fontWeight: 700,
                 gridTemplateColumns: columns,
                 letterSpacing: '0.5px',
-                padding: '0 18px 8px',
+                padding: `0 ${px}px 8px`,
                 textTransform: 'uppercase',
             }}
         >
             {children}
         </div>
     );
-}
+};
 
-export function MiniStat({ label, value }: { label: string; value: ReactNode }) {
+export const MiniStat = ({ label, value }: { label: string; value: ReactNode }) => {
     return (
         <Card className="f1-mini-stat">
             <div className="f1-num f1-display f1-mini-stat-value">
@@ -82,9 +83,9 @@ export function MiniStat({ label, value }: { label: string; value: ReactNode }) 
             </div>
         </Card>
     );
-}
+};
 
-export function Pill({
+export const Pill = ({
     active,
     children,
     onClick,
@@ -94,7 +95,7 @@ export function Pill({
     children: ReactNode;
     onClick: () => void;
     variant?: 'solid' | 'subtle';
-}) {
+}) => {
     return (
         <Button
             aria-pressed={active}
@@ -107,9 +108,9 @@ export function Pill({
             {children}
         </Button>
     );
-}
+};
 
-export function SectionCard({
+export const SectionCard = ({
     action,
     children,
     padded = true,
@@ -121,7 +122,7 @@ export function SectionCard({
     padded?: boolean;
     subtitle?: string;
     title: string;
-}) {
+}) => {
     return (
         <Card>
             <CardHeader>
@@ -138,9 +139,9 @@ export function SectionCard({
             </CardContent>
         </Card>
     );
-}
+};
 
-export function StatCard({
+export const StatCard = ({
     accent,
     icon,
     label,
@@ -152,7 +153,7 @@ export function StatCard({
     label: string;
     sub: string;
     value: ReactNode;
-}) {
+}) => {
     return (
         <Card className="f1-stat-card">
             <div className="f1-stat-card-label-row">
@@ -169,19 +170,9 @@ export function StatCard({
             </div>
         </Card>
     );
-}
+};
 
-export function StatusBadge({
-    children,
-    variant = 'secondary',
-}: {
-    children: ReactNode;
-    variant?: 'secondary' | 'success';
-}) {
-    return <Badge variant={variant}>{children}</Badge>;
-}
-
-export function TeamBar({
+export const TeamBar = ({
     color,
     height = 26,
     width = 4,
@@ -189,7 +180,7 @@ export function TeamBar({
     color: string;
     height?: number;
     width?: number;
-}) {
+}) => {
     return (
         <div
             style={{
@@ -201,9 +192,9 @@ export function TeamBar({
             }}
         />
     );
-}
+};
 
-export function TeamSquare({
+export const TeamSquare = ({
     color,
     height = 14,
     width = 14,
@@ -211,7 +202,7 @@ export function TeamSquare({
     color: string;
     height?: number;
     width?: number;
-}) {
+}) => {
     return (
         <div
             style={{
@@ -223,14 +214,17 @@ export function TeamSquare({
             }}
         />
     );
-}
+};
 
-export function TrophyCount({ count, size = 12 }: { count: number; size?: number }) {
-    if (count <= 0) return null;
+export const TrophyCount = ({ count, size = 12 }: { count: number; size?: number }) => {
+    if (count <= 0) {
+        return null;
+    }
+
     return (
         <span className="f1-trophy-count" style={{ fontSize: size + 1 }}>
             <TrophyIcon size={size} weight="fill" />
             {count}
         </span>
     );
-}
+};

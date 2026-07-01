@@ -11,7 +11,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import { useCallback, useDeferredValue, useMemo, useState } from 'react';
+import { useDeferredValue, useMemo, useState } from 'react';
 
 import type { AllTimeDriver } from '#/data/types';
 
@@ -20,14 +20,6 @@ import { DriverAvatar, Pill, TrophyCount } from '#/components/f1-ui';
 import { Card } from '#/components/ui/card';
 import { Input, InputGroup } from '#/components/ui/input';
 import { allTimeDriversQuery } from '#/data/queries';
-
-export const Route = createFileRoute('/drivers/')({
-    component: DriversIndex,
-    loader: async ({ context }) => {
-        await context.queryClient.ensureQueryData(allTimeDriversQuery());
-        return { crumbs: [{ label: 'Drivers' }] };
-    },
-});
 
 type Category = 'active' | 'all' | 'champions';
 type Sort = 'name' | 'poles' | 'starts' | 'titles' | 'wins';
@@ -59,6 +51,10 @@ const fuzzy: FilterFn<AllTimeDriver> = (row, _columnId, value, addMeta) => {
 
 const ch = createColumnHelper<AllTimeDriver>();
 const coreRowModel = getCoreRowModel<AllTimeDriver>();
+
+function getDriverLink(d: AllTimeDriver) {
+    return { params: { driverId: String(d.id) }, to: '/drivers/$driverId' } as const;
+}
 const filteredRowModel = getFilteredRowModel<AllTimeDriver>();
 const sortedRowModel = getSortedRowModel<AllTimeDriver>();
 
@@ -134,7 +130,7 @@ const columns = [
     }),
 ];
 
-function DriversIndex() {
+const DriversIndex = () => {
     const { data: drivers } = useSuspenseQuery(allTimeDriversQuery());
     const [category, setCategory] = useState<Category>('all');
     const [sort, setSort] = useState<Sort>('titles');
@@ -167,10 +163,6 @@ function DriversIndex() {
     });
 
     const shown = table.getRowModel().rows.length;
-    const getDriverLink = useCallback(
-        (d: AllTimeDriver) => ({ params: { driverId: String(d.id) }, to: '/drivers/$driverId' }) as const,
-        [],
-    );
 
     return (
         <div className="f1-page-stack">
@@ -220,4 +212,12 @@ function DriversIndex() {
             </Card>
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/drivers/')({
+    component: DriversIndex,
+    loader: async ({ context }) => {
+        await context.queryClient.ensureQueryData(allTimeDriversQuery());
+        return { crumbs: [{ label: 'Drivers' }] };
+    },
+});

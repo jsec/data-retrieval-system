@@ -18,14 +18,6 @@ import { Badge } from '#/components/ui/badge';
 import { Card } from '#/components/ui/card';
 import { constructorsIndexQuery } from '#/data/queries';
 
-export const Route = createFileRoute('/constructors/')({
-    component: Constructors,
-    loader: async ({ context }) => {
-        await context.queryClient.ensureQueryData(constructorsIndexQuery());
-        return { crumbs: [{ label: 'Constructors' }] };
-    },
-});
-
 type Sort = 'podiums' | 'poles' | 'titles' | 'wins';
 
 const SORTS: { key: Sort; label: string }[] = [
@@ -39,8 +31,10 @@ const byTitles: SortingFn<AllTimeConstructor> = (a, b) =>
     a.original.titles - b.original.titles || a.original.wins - b.original.wins;
 
 const ch = createColumnHelper<AllTimeConstructor>();
+const coreRowModel = getCoreRowModel<AllTimeConstructor>();
+const sortedRowModel = getSortedRowModel<AllTimeConstructor>();
 
-function Constructors() {
+const Constructors = () => {
     const { data } = useSuspenseQuery(constructorsIndexQuery());
     const [sort, setSort] = useState<Sort>('titles');
 
@@ -124,13 +118,16 @@ function Constructors() {
         [maxWins],
     );
 
-    const sorting: SortingState = [{ desc: true, id: sort }];
+    const sorting = useMemo<SortingState>(
+        () => [{ desc: true, id: sort }],
+        [sort],
+    );
 
     const table = useReactTable({
         columns,
         data,
-        getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
+        getCoreRowModel: coreRowModel,
+        getSortedRowModel: sortedRowModel,
         state: { sorting },
     });
 
@@ -160,4 +157,12 @@ function Constructors() {
             </Card>
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/constructors/')({
+    component: Constructors,
+    loader: async ({ context }) => {
+        await context.queryClient.ensureQueryData(constructorsIndexQuery());
+        return { crumbs: [{ label: 'Constructors' }] };
+    },
+});

@@ -7,7 +7,7 @@ export type Crumb = {
     to?: string;
 };
 
-export function Breadcrumbs() {
+export const Breadcrumbs = () => {
     const matches = useMatches();
 
     const withCrumbs = matches.filter(
@@ -53,4 +53,4 @@ export function Breadcrumbs() {
             })}
         </div>
     );
-}
+};

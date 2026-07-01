@@ -8,20 +8,13 @@ import { api } from '#/lib/query/api';
 
 import { SeasonsTable } from './-components/seasons-table';
 
-export const Route = createFileRoute('/seasons/')({
-    component: Seasons,
-    loader: async () => {
-        return { crumbs: [{ label: 'Seasons' }] };
-    },
+const seasonsQuery = queryOptions({
+    queryFn: () => api.get('seasons').json<ListSeasonsResponse>(),
+    queryKey: ['seasons'],
 });
 
-function Seasons() {
-    const { data: seasons } = useSuspenseQuery(
-        queryOptions({
-            queryFn: () => api.get('seasons').json<ListSeasonsResponse>(),
-            queryKey: ['seasons'],
-        }),
-    );
+const Seasons = () => {
+    const { data: seasons } = useSuspenseQuery(seasonsQuery);
 
     return (
         <div className="f1-page-stack">
@@ -35,4 +28,12 @@ function Seasons() {
             </Card>
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/seasons/')({
+    component: Seasons,
+    loader: async ({ context }) => {
+        await context.queryClient.ensureQueryData(seasonsQuery);
+        return { crumbs: [{ label: 'Seasons' }] };
+    },
+});

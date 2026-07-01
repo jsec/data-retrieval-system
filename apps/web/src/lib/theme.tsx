@@ -15,7 +15,7 @@ type ThemeContextValue = {
 const STORAGE_KEY = 'drs-theme';
 const ThemeContext = createContext<null | ThemeContextValue>(null);
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const [theme, setThemeState] = useState<Theme>(getInitialTheme);
     const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(getSystemTheme);
 
@@ -53,21 +53,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             {children}
         </ThemeContext>
     );
-}
+};
 
-export function useTheme() {
+export const useTheme = () => {
     const context = useContext(ThemeContext);
     if (!context) {
         throw new Error('useTheme must be used within ThemeProvider.');
     }
     return context;
-}
+};
 
-function getInitialTheme(): Theme {
+const getInitialTheme = (): Theme => {
     const stored = globalThis.window.localStorage.getItem(STORAGE_KEY);
     return stored === 'dark' || stored === 'light' || stored === 'system' ? stored : 'system';
-}
+};
 
-function getSystemTheme(): ResolvedTheme {
+const getSystemTheme = (): ResolvedTheme => {
     return globalThis.window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
+};

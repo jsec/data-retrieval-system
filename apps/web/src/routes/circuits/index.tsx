@@ -6,27 +6,24 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { COMPLETED, CURRENT_YEAR } from '#/data/fixtures';
 import { circuitsQuery } from '#/data/queries';
 
-export const Route = createFileRoute('/circuits/')({
-    component: Circuits,
-    loader: async ({ context }) => {
-        await context.queryClient.ensureQueryData(circuitsQuery(CURRENT_YEAR));
-        return { crumbs: [{ label: 'Circuits' }] };
-    },
-});
+const CircuitStat = ({ label, value }: { label: string; value: ReactNode }) => {
+    return (
+        <div>
+            <div className="f1-num f1-display" style={{ fontSize: 13, fontWeight: 700 }}>{value}</div>
+            <div style={{ color: 'var(--color-muted-foreground)', fontSize: 10 }}>{label}</div>
+        </div>
+    );
+};
 
-function Circuits() {
+const Circuits = () => {
     const { data: circuits } = useSuspenseQuery(circuitsQuery(CURRENT_YEAR));
     const year = String(CURRENT_YEAR);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
-                <h1 className="f1-display" style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
-                    Circuits
-                </h1>
-                <div style={{ color: 'var(--color-muted-foreground)', fontSize: 13, marginTop: 4 }}>
-                    {`${CURRENT_YEAR} championship venues`}
-                </div>
+                <h1 className="f1-page-title">Circuits</h1>
+                <div className="f1-page-description">{`${CURRENT_YEAR} championship venues`}</div>
             </div>
 
             <div style={{ display: 'grid', gap: 16, gridTemplateColumns: 'repeat(3, 1fr)' }}>
@@ -84,13 +81,12 @@ function Circuits() {
             </div>
         </div>
     );
-}
+};
 
-function CircuitStat({ label, value }: { label: string; value: ReactNode }) {
-    return (
-        <div>
-            <div className="f1-num f1-display" style={{ fontSize: 13, fontWeight: 700 }}>{value}</div>
-            <div style={{ color: 'var(--color-muted-foreground)', fontSize: 10 }}>{label}</div>
-        </div>
-    );
-}
+export const Route = createFileRoute('/circuits/')({
+    component: Circuits,
+    loader: async ({ context }) => {
+        await context.queryClient.ensureQueryData(circuitsQuery(CURRENT_YEAR));
+        return { crumbs: [{ label: 'Circuits' }] };
+    },
+});

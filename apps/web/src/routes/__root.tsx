@@ -31,10 +31,6 @@ type MyRouterContext = {
     queryClient: QueryClient;
 };
 
-export const Route = createRootRouteWithContext<MyRouterContext>()({
-    component: RootLayout,
-});
-
 type NavItem = {
     icon: Icon;
     label: string;
@@ -86,14 +82,14 @@ const navItems: NavItem[] = [
     },
 ];
 
-function isActive(pathname: string, item: NavItem): boolean {
+const isActive = (pathname: string, item: NavItem): boolean => {
     if (item.to === '/seasons') return pathname === '/seasons';
     return item.match.some(m => pathname === m || pathname.startsWith(m + '/'));
-}
+};
 
 const progressPct = Math.round((COMPLETED / TOTAL_ROUNDS) * 100);
 
-function RootLayout() {
+const RootLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
     const { resolvedTheme, toggleTheme } = useTheme();
     const pathname = useRouterState({ select: s => s.location.pathname });
@@ -182,4 +178,8 @@ function RootLayout() {
             </div>
         </div>
     );
-}
+};
+
+export const Route = createRootRouteWithContext<MyRouterContext>()({
+    component: RootLayout,
+});

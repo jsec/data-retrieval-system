@@ -5,30 +5,15 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { getSeasonDriver, TOTAL_ROUNDS } from '#/data/fixtures';
 import { calendarQuery } from '#/data/queries';
 
-export const Route = createFileRoute('/seasons/$year/calendar')({
-    component: Calendar,
-    loader: async ({ context, params }) => {
-        await context.queryClient.ensureQueryData(calendarQuery(Number(params.year)));
-        return {
-            crumbs: [
-                { label: params.year, params: { year: params.year }, to: '/seasons/$year' },
-                { label: 'Calendar' },
-            ],
-        };
-    },
-});
-
-function Calendar() {
+const Calendar = () => {
     const { year } = Route.useParams();
     const { data } = useSuspenseQuery(calendarQuery(Number(year)));
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
-                <h1 className="f1-display" style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, letterSpacing: '-0.02em', margin: 0 }}>
-                    {`${year} Race Calendar`}
-                </h1>
-                <div style={{ color: 'var(--color-muted-foreground)', fontSize: 13, marginTop: 4 }}>
+                <h1 className="f1-page-title">{`${year} Race Calendar`}</h1>
+                <div className="f1-page-description">
                     {`${data.completed} of ${TOTAL_ROUNDS} rounds completed`}
                 </div>
             </div>
@@ -104,4 +89,17 @@ function Calendar() {
             </div>
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/seasons/$year/calendar')({
+    component: Calendar,
+    loader: async ({ context, params }) => {
+        await context.queryClient.ensureQueryData(calendarQuery(Number(params.year)));
+        return {
+            crumbs: [
+                { label: params.year, params: { year: params.year }, to: '/seasons/$year' },
+                { label: 'Calendar' },
+            ],
+        };
+    },
+});

@@ -5,7 +5,7 @@ import {
 } from './lib/query/root-provider';
 import { routeTree } from './routeTree.gen';
 
-export function getRouter() {
+export const getRouter = () => {
     const context = getContext();
 
     const router = createTanStackRouter({
@@ -17,7 +17,7 @@ export function getRouter() {
     });
 
     return router;
-}
+};
 
 declare module '@tanstack/react-router' {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions

@@ -1,31 +1,20 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-import { DriverAvatar, SectionCard, TeamBar } from '#/components/f1-ui';
+import { DriverAvatar, GridHeader, SectionCard, TeamBar } from '#/components/f1-ui';
 import { LineChart } from '#/components/line-chart';
 import { raceDetailQuery } from '#/data/queries';
-
-export const Route = createFileRoute('/seasons/$year/races/$round')({
-    component: RaceDetail,
-    loader: async ({ context, params }) => {
-        const year = Number(params.year);
-        const race = await context.queryClient.ensureQueryData(
-            raceDetailQuery(year, Number(params.round)),
-        );
-        return {
-            crumbs: [
-                { label: params.year, params: { year: params.year }, to: '/seasons/$year' },
-                { label: 'Calendar', params: { year: params.year }, to: '/seasons/$year/calendar' },
-                { label: race.name },
-            ],
-        };
-    },
-});
 
 const MEDALS = ['#f59f00', '#adb5bd', '#e8590c'];
 const RESULT_COLS = '36px 1fr 72px 90px 48px';
 
-function RaceDetail() {
+const getDeltaColor = (delta: number): string => {
+    if (delta > 0) return 'var(--green-500)';
+    if (delta < 0) return 'var(--color-primary)';
+    return 'var(--neutral-300)';
+};
+
+const RaceDetail = () => {
     const { round, year } = Route.useParams();
     const { data } = useSuspenseQuery(raceDetailQuery(Number(year), Number(round)));
 
@@ -146,23 +135,13 @@ function RaceDetail() {
             {/* Results + Qual vs Race */}
             <div style={{ display: 'grid', gap: 16, gridTemplateColumns: '7.2fr 4.8fr' }}>
                 <SectionCard padded={false} title="Race Results">
-                    <div style={{
-                        color: 'var(--color-muted-foreground)',
-                        display: 'grid',
-                        fontSize: 10.5,
-                        fontWeight: 700,
-                        gridTemplateColumns: RESULT_COLS,
-                        letterSpacing: '0.5px',
-                        padding: '0 18px 8px',
-                        textTransform: 'uppercase',
-                    }}
-                    >
+                    <GridHeader columns={RESULT_COLS}>
                         <span>POS</span>
                         <span>DRIVER</span>
                         <span style={{ textAlign: 'center' }}>GRID</span>
                         <span style={{ textAlign: 'right' }}>GAP</span>
                         <span style={{ textAlign: 'right' }}>PTS</span>
-                    </div>
+                    </GridHeader>
                     <div className="f1-scroll" style={{ maxHeight: 430, overflowY: 'auto' }}>
                         {data.results.map(r => (
                             <Link
@@ -203,12 +182,7 @@ function RaceDetail() {
                     {data.results.slice(0, 10).map((r) => {
                         const delta = r.grid - r.pos;
                         const mag = (Math.min(Math.abs(delta), 8) / 8) * 45;
-                        const color
-                            = delta > 0
-                                ? 'var(--green-500)'
-                                : (delta < 0
-                                        ? 'var(--color-primary)'
-                                        : 'var(--neutral-300)');
+                        const color = getDeltaColor(delta);
                         return (
                             <div key={r.code} style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 10, marginBottom: 11 }}>
                                 <span style={{ fontSize: 12, fontWeight: 700, width: 40 }}>{r.code}</span>
@@ -249,4 +223,21 @@ function RaceDetail() {
             </div>
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/seasons/$year/races/$round')({
+    component: RaceDetail,
+    loader: async ({ context, params }) => {
+        const year = Number(params.year);
+        const race = await context.queryClient.ensureQueryData(
+            raceDetailQuery(year, Number(params.round)),
+        );
+        return {
+            crumbs: [
+                { label: params.year, params: { year: params.year }, to: '/seasons/$year' },
+                { label: 'Calendar', params: { year: params.year }, to: '/seasons/$year/calendar' },
+                { label: race.name },
+            ],
+        };
+    },
+});

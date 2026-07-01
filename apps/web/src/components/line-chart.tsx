@@ -16,7 +16,7 @@ type LineChartProps = {
 const GRID = '#e9ecef';
 const AXIS = '#868e96';
 
-export function LineChart({
+export const LineChart = ({
     height = 220,
     invertY = false,
     series,
@@ -27,7 +27,7 @@ export function LineChart({
     yFormat,
     yMax,
     yMin,
-}: LineChartProps) {
+}: LineChartProps) => {
     const padLeft = 38;
     const padRight = 14;
     const padTop = 14;
@@ -91,10 +91,10 @@ export function LineChart({
             })}
         </svg>
     );
-}
+};
 
-export function roundLabels(count: number, every: number, prefix = 'R'): (null | string)[] {
+export const roundLabels = (count: number, every: number, prefix = 'R'): (null | string)[] => {
     return Array.from({ length: count }, (_, i) =>
         i % every === 0 ? `${prefix}${i}` : null,
     );
-}
+};

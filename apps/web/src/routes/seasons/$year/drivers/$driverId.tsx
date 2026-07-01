@@ -1,28 +1,13 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-import { MiniStat } from '#/components/f1-ui';
+import { GridHeader, MiniStat } from '#/components/f1-ui';
 import { LineChart, roundLabels } from '#/components/line-chart';
 import { driverSeasonQuery } from '#/data/queries';
 
-export const Route = createFileRoute('/seasons/$year/drivers/$driverId')({
-    component: DriverSeason,
-    loader: async ({ context, params }) => {
-        const detail = await context.queryClient.ensureQueryData(
-            driverSeasonQuery(Number(params.year), params.driverId),
-        );
-        return {
-            crumbs: [
-                { label: params.year, params: { year: params.year }, to: '/seasons/$year' },
-                { label: detail.driver.name },
-            ],
-        };
-    },
-});
-
 const COLS = '44px 1fr 70px 70px 70px 60px';
 
-function DriverSeason() {
+const DriverSeason = () => {
     const { driverId, year } = Route.useParams();
     const { data } = useSuspenseQuery(driverSeasonQuery(Number(year), driverId));
     const { driver, pos } = data;
@@ -142,24 +127,14 @@ function DriverSeason() {
 
             <div className="f1-card" style={{ padding: 0 }}>
                 <div style={{ fontSize: 15, fontWeight: 700, padding: '15px 18px' }}>Race-by-Race Results</div>
-                <div style={{
-                    color: 'var(--color-muted-foreground)',
-                    display: 'grid',
-                    fontSize: 10.5,
-                    fontWeight: 700,
-                    gridTemplateColumns: COLS,
-                    letterSpacing: '0.5px',
-                    padding: '0 18px 8px',
-                    textTransform: 'uppercase',
-                }}
-                >
+                <GridHeader columns={COLS}>
                     <span>RND</span>
                     <span>GRAND PRIX</span>
                     <span style={{ textAlign: 'center' }}>GRID</span>
                     <span style={{ textAlign: 'center' }}>FINISH</span>
                     <span style={{ textAlign: 'center' }}>STATUS</span>
                     <span style={{ textAlign: 'right' }}>PTS</span>
-                </div>
+                </GridHeader>
                 {data.races.map(r => (
                     <Link
                         className="f1-row"
@@ -187,4 +162,19 @@ function DriverSeason() {
             </div>
         </div>
     );
-}
+};
+
+export const Route = createFileRoute('/seasons/$year/drivers/$driverId')({
+    component: DriverSeason,
+    loader: async ({ context, params }) => {
+        const detail = await context.queryClient.ensureQueryData(
+            driverSeasonQuery(Number(params.year), params.driverId),
+        );
+        return {
+            crumbs: [
+                { label: params.year, params: { year: params.year }, to: '/seasons/$year' },
+                { label: detail.driver.name },
+            ],
+        };
+    },
+});
