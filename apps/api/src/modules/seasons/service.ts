@@ -1,27 +1,16 @@
 import { type ListSeasonsResponse, listSeasonsResponseSchema } from '@drs/contracts';
 
-import { db } from '../../db/database.js';
+import { getSeasonSummaries } from './repo.js';
 
 export const listSeasons = async (): Promise<ListSeasonsResponse> => {
-    const seasons = await db.withSchema('effone')
-        .selectFrom('seasons')
-        .select([
-            'season',
-            'raceCount',
-            'constructorCount',
-            'wdcDriverId',
-            'wdcDriverName',
-            'wccConstructorId',
-            'wccConstructorName',
-        ])
-        .orderBy('season', 'desc')
-        .execute();
+    const seasons = await getSeasonSummaries();
 
     const dto = seasons.map((s) => {
         let wcc = null;
 
         if (s.wccConstructorId && s.wccConstructorName) {
             wcc = {
+                color: s.wccColor,
                 id: s.wccConstructorId,
                 name: s.wccConstructorName,
             };

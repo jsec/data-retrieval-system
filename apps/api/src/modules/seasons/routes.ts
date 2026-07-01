@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 
-import { listSeasons } from './store.js';
+import { listSeasons } from './service.js';
 
 const app = new Hono();
 

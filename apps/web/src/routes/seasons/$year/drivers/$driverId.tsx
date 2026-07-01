@@ -23,8 +23,7 @@ export const Route = createFileRoute('/seasons/$year/drivers/$driverId')({
 const COLS = '44px 1fr 70px 70px 70px 60px';
 
 function DriverSeason() {
-    const { year } = Route.useParams();
-    const { driverId } = Route.useParams();
+    const { driverId, year } = Route.useParams();
     const { data } = useSuspenseQuery(driverSeasonQuery(Number(year), driverId));
     const { driver, pos } = data;
 

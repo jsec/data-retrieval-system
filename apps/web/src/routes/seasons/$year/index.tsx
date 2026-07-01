@@ -41,7 +41,6 @@ function SeasonOverview() {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {/* Page header */}
             <div style={{ alignItems: 'flex-end', display: 'flex', justifyContent: 'space-between' }}>
                 <div>
                     <div style={{ color: 'var(--color-muted-foreground)', fontSize: 12, fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
@@ -89,7 +88,6 @@ function SeasonOverview() {
                 />
             </div>
 
-            {/* Drivers + Constructors panels */}
             <div style={{ display: 'grid', gap: 16, gridTemplateColumns: '7.2fr 4.8fr' }}>
                 <SectionCard
                     action={(
@@ -211,7 +209,6 @@ function SeasonOverview() {
                 />
             </div>
 
-            {/* Calendar strip */}
             <SectionCard
                 action={(
                     <Link params={{ year }} style={ACTION_LINK} to="/seasons/$year/calendar">

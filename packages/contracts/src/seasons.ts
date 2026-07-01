@@ -6,6 +6,7 @@ export const listSeasonsResponseSchema = z.array(
         raceCount: z.number().int(),
         season: z.number().int(),
         wcc: z.object({
+            color: z.string(),
             id: z.string(),
             name: z.string(),
         }).nullable(),

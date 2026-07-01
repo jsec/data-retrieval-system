@@ -26,8 +26,7 @@ const MEDALS = ['#f59f00', '#adb5bd', '#e8590c'];
 const RESULT_COLS = '36px 1fr 72px 90px 48px';
 
 function RaceDetail() {
-    const { year } = Route.useParams();
-    const { round } = Route.useParams();
+    const { round, year } = Route.useParams();
     const { data } = useSuspenseQuery(raceDetailQuery(Number(year), Number(round)));
 
     const positionSeries = data.positionLines.map(p => ({ color: p.color, values: p.values }));
