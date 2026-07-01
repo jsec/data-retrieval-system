@@ -1,7 +1,9 @@
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
-import { Pool } from 'pg';
+import { Pool, types } from 'pg';
 
 import type { DB } from './db.js';
+
+types.setTypeParser(1082, value => Temporal.PlainDate.from(value));
 
 const dialect = new PostgresDialect({
     pool: new Pool({
