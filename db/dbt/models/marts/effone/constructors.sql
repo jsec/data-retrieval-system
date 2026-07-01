@@ -24,6 +24,10 @@ first_last_races as (
     window
         first_race as (partition by constructor_id order by race_date, race_id),
         last_race as (partition by constructor_id order by race_date desc, race_id desc)
+),
+
+constructor_branding as (
+    select * from {{ ref('constructor_branding') }}
 )
 
 select
@@ -46,6 +50,8 @@ select
     constructors.total_championship_wins as championship_count,
     constructors.total_points,
     (constructors.total_points * 100)::integer as total_points_x100,
+    constructor_branding.primary_color_hex,
+    constructor_branding.secondary_color_hex,
     first_last_races.first_race_id,
     first_last_races.first_race_name,
     first_last_races.first_race_date,
@@ -56,4 +62,5 @@ select
 from constructors
 left join first_last_races
     on constructors.constructor_id = first_last_races.constructor_id
-
+left join constructor_branding
+    on constructors.constructor_id = constructor_branding.constructor_id

@@ -1,0 +1,24 @@
+version: 2
+
+seeds:
+  - name: constructor_branding
+    description: Curated constructor branding colors keyed by F1DB constructor identifier.
+    columns:
+      - name: constructor_id
+        description: F1DB constructor identifier.
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_f1db__constructor')
+                field: constructor_id
+      - name: primary_color_hex
+        description: Primary constructor color as a six-digit hex code.
+        tests:
+          - not_null
+          - hex_color
+      - name: secondary_color_hex
+        description: Optional secondary constructor color as a six-digit hex code.
+        tests:
+          - hex_color
