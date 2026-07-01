@@ -19,6 +19,7 @@
                 "!.next/dev/**"
             ]
         },
+        "codegen": {},
         "lint": {
             "dependsOn": [
                 "^lint"

@@ -14,7 +14,7 @@ export const Route = createFileRoute('/seasons/')({
     },
 });
 
-const COLS = '90px 80px 1fr 1fr 110px';
+const COLS = '90px 80px 1fr 1fr';
 
 const HEADER_STYLE: React.CSSProperties = {
     background: 'var(--color-accent)',
@@ -53,10 +53,8 @@ function Seasons() {
                     <span style={{ textAlign: 'center' }}>RACES</span>
                     <span>WORLD CHAMPION</span>
                     <span>CONSTRUCTORS&apos; CHAMPION</span>
-                    <span>STATUS</span>
                 </div>
                 {seasons.map((s) => {
-                    const inProgress = !s.wcc; // rough proxy for in-progress season
                     return (
                         <Link
                             className="f1-row"
@@ -93,22 +91,6 @@ function Seasons() {
                                             </>
                                         )
                                     : <span style={{ color: 'var(--color-muted-foreground)', fontSize: 13 }}>—</span>}
-                            </div>
-                            <div>
-                                <span style={{
-                                    background: inProgress
-                                        ? 'color-mix(in srgb, var(--green-500) 10%, transparent)'
-                                        : 'var(--color-accent)',
-                                    borderRadius: 4,
-                                    color: inProgress ? 'var(--green-600)' : 'var(--color-muted-foreground)',
-                                    fontSize: 10,
-                                    fontWeight: 700,
-                                    letterSpacing: '0.5px',
-                                    padding: '3px 7px',
-                                }}
-                                >
-                                    {inProgress ? 'IN PROGRESS' : 'FINAL'}
-                                </span>
                             </div>
                         </Link>
                     );

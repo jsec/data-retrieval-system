@@ -45,11 +45,13 @@ export type Constructors = {
     lastRaceName: null | string;
     nationality: null | string;
     podiumCount: null | number;
+    primaryColorHex: null | string;
     qualifyingEntryCount: null | number;
     qualifyingP1Count: null | number;
     raceEntryCount: null | number;
     raceStartCount: null | number;
     refreshId: Int8 | null;
+    secondaryColorHex: null | string;
     sprintEntryCount: null | number;
     sprintStartCount: null | number;
     startCount: null | number;
