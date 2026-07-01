@@ -4,7 +4,13 @@ import viteReact from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 const config = defineConfig({
-    plugins: [devtools(), tanstackRouter(), viteReact()],
+    plugins: [
+        devtools(),
+        tanstackRouter({
+            autoCodeSplitting: true,
+        }),
+        viteReact(),
+    ],
     resolve: {
         dedupe: ['react', 'react-dom'],
         tsconfigPaths: true,
