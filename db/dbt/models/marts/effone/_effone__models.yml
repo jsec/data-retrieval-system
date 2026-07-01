@@ -3,111 +3,569 @@ version: 2
 models:
   - name: circuits
     description: One row per circuit with location, layout, and race history fields.
+    config:
+      contract:
+        enforced: true
     columns:
+      - name: circuit_full_name
+        data_type: text
+        constraints:
+          - type: not_null
       - name: circuit_id
+        data_type: text
         description: F1DB circuit identifier.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - unique
+      - name: circuit_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: circuit_type
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: country
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: country_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: direction
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: first_race_date
+        data_type: date
+      - name: first_race_id
+        data_type: integer
+      - name: first_race_name
+        data_type: text
+      - name: last_race_date
+        data_type: date
+      - name: last_race_id
+        data_type: integer
+      - name: last_race_name
+        data_type: text
+      - name: latitude
+        data_type: numeric(10, 6)
+        constraints:
+          - type: not_null
+      - name: length_km
+        data_type: numeric(6, 3)
+        constraints:
+          - type: not_null
+      - name: location
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: longitude
+        data_type: numeric(10, 6)
+        constraints:
+          - type: not_null
+      - name: previous_names
+        data_type: text
+      - name: race_count
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
+
+      - name: turns
+        data_type: integer
+        constraints:
+          - type: not_null
 
   - name: constructors
     description: One row per constructor with all-time summary metrics.
+    config:
+      contract:
+        enforced: true
     columns:
+      - name: championship_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: constructor_full_name
+        data_type: text
+        constraints:
+          - type: not_null
       - name: constructor_id
+        data_type: text
         description: F1DB constructor identifier.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - unique
+      - name: constructor_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: country_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: fastest_lap_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: first_race_date
+        data_type: date
+      - name: first_race_id
+        data_type: integer
+      - name: first_race_name
+        data_type: text
+      - name: last_race_date
+        data_type: date
+      - name: last_race_id
+        data_type: integer
+      - name: last_race_name
+        data_type: text
+      - name: nationality
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: podium_count
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: primary_color_hex
+        data_type: text
         description: Primary constructor display color as a six-digit hex code.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - hex_color
-      - name: secondary_color_hex
-        description: Optional secondary constructor display color as a six-digit hex code.
-        tests:
-          - hex_color
+      - name: qualifying_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: qualifying_p1_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_start_count
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
 
+      - name: secondary_color_hex
+        data_type: text
+        description: Optional secondary constructor display color as a six-digit hex code.
+        tests:
+          - hex_color
+      - name: sprint_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: sprint_start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: total_points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: total_points_x100
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: win_count
+        data_type: integer
+        constraints:
+          - type: not_null
+
   - name: drivers
     description: One row per driver with biographical fields and all-time summary metrics.
+    config:
+      contract:
+        enforced: true
     columns:
-      - name: driver_id
-        description: F1DB driver identifier.
-        tests:
-          - not_null
-          - unique
+      - name: championship_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: country_of_birth_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: date_of_birth
+        data_type: date
+        constraints:
+          - type: not_null
+      - name: date_of_death
+        data_type: date
       - name: driver_code
+        data_type: text
         description: Short driver code used in race timing and result displays.
-        tests:
-          - not_null
-      - name: driver_name
-        description: Display name for UI contexts.
+        constraints:
+          - type: not_null
         tests:
           - not_null
       - name: driver_full_name
+        data_type: text
         description: Full display name.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: driver_id
+        data_type: text
+        description: F1DB driver identifier.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - unique
+      - name: driver_name
+        data_type: text
+        description: Display name for UI contexts.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: driver_number
+        data_type: integer
+      - name: entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: fastest_lap_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: first_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: first_race_date
+        data_type: date
+      - name: first_race_id
+        data_type: integer
+      - name: first_race_name
+        data_type: text
+      - name: gender
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: last_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: last_race_date
+        data_type: date
+      - name: last_race_id
+        data_type: integer
+      - name: last_race_name
+        data_type: text
+      - name: nationality
+        data_type: text
+        description: Driver nationality display label.
+        constraints:
+          - type: not_null
         tests:
           - not_null
       - name: nationality_country_id
+        data_type: text
         description: F1DB identifier for the driver's primary nationality.
+        constraints:
+          - type: not_null
         tests:
           - not_null
-      - name: nationality
-        description: Driver nationality display label.
+      - name: place_of_birth
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: podium_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: qualifying_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: qualifying_p1_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: refresh_id
+        data_type: bigint
+        description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
+
+      - name: second_nationality_country_id
+        data_type: text
+      - name: sprint_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: sprint_start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: total_points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
       - name: total_points_x100
+        data_type: integer
         description: Driver career points multiplied by 100 for integer comparisons.
+        constraints:
+          - type: not_null
         tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
                 inclusive: true
-      - name: refresh_id
-        description: Identifier for the refresh run that produced this row.
-        tests:
-          - not_null
+      - name: win_count
+        data_type: integer
+        constraints:
+          - type: not_null
 
   - name: seasons
     description: One row per Formula 1 season with event counts and final champion references.
+    config:
+      contract:
+        enforced: true
     columns:
+      - name: constructor_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: driver_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: first_race_date
+        data_type: date
+      - name: last_race_date
+        data_type: date
+      - name: race_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: refresh_id
+        data_type: bigint
+        description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+
       - name: season
+        data_type: integer
         description: Championship year.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - unique
-      - name: refresh_id
-        description: Identifier for the refresh run that produced this row.
-        tests:
-          - not_null
+      - name: sprint_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: wcc_constructor_id
+        data_type: text
+      - name: wcc_constructor_name
+        data_type: text
+      - name: wdc_driver_id
+        data_type: text
+      - name: wdc_driver_name
+        data_type: text
 
   - name: races
     description: One row per race with schedule, circuit, format, and winner summary fields.
+    config:
+      contract:
+        enforced: true
     columns:
+      - name: circuit_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: circuit_layout_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: circuit_type
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: course_length_km
+        data_type: numeric(6, 3)
+        constraints:
+          - type: not_null
+      - name: direction
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: fp1_date
+        data_type: date
+      - name: fp1_time
+        data_type: time
+      - name: fp2_date
+        data_type: date
+      - name: fp2_time
+        data_type: time
+      - name: fp3_date
+        data_type: date
+      - name: fp3_time
+        data_type: time
+      - name: grand_prix_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: grand_prix_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: pole_driver_id
+        data_type: text
+      - name: pole_driver_name
+        data_type: text
+      - name: qualifying_date
+        data_type: date
+      - name: qualifying_format
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: qualifying_time
+        data_type: time
+      - name: race_date
+        data_type: date
+        constraints:
+          - type: not_null
+      - name: race_distance_km
+        data_type: numeric(6, 3)
+        constraints:
+          - type: not_null
       - name: race_id
+        data_type: integer
         description: F1DB race identifier.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - unique
-      - name: season
-        description: Championship year for the race.
-        tests:
-          - not_null
+      - name: race_laps
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_official_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_round
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_time
+        data_type: time
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
 
+      - name: scheduled_distance_km
+        data_type: numeric(6, 3)
+      - name: scheduled_laps
+        data_type: integer
+      - name: season
+        data_type: integer
+        description: Championship year for the race.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: sprint_date
+        data_type: date
+      - name: sprint_qualifying_date
+        data_type: date
+      - name: sprint_qualifying_format
+        data_type: text
+      - name: sprint_qualifying_time
+        data_type: time
+      - name: sprint_time
+        data_type: time
+      - name: sprint_winner_constructor_id
+        data_type: text
+      - name: sprint_winner_constructor_name
+        data_type: text
+      - name: sprint_winner_driver_id
+        data_type: text
+      - name: sprint_winner_driver_name
+        data_type: text
+      - name: turns
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: winner_constructor_id
+        data_type: text
+      - name: winner_constructor_name
+        data_type: text
+      - name: winner_driver_id
+        data_type: text
+      - name: winner_driver_name
+        data_type: text
+
   - name: race_results
     description: One row per official race result entry. The grain is race plus finish order because historical races can contain multiple entries for one driver.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -115,43 +573,192 @@ models:
               - race_id
               - finish_order
     columns:
-      - name: race_id
-        description: Race associated with the result row.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('races')
-                field: race_id
-      - name: driver_id
-        description: Driver associated with this official result entry.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('drivers')
-                field: driver_id
+      - name: car_number
+        data_type: integer
+      - name: circuit_id
+        data_type: text
+        constraints:
+          - type: not_null
       - name: constructor_id
+        data_type: text
         description: Constructor associated with this official result entry.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('constructors')
                 field: constructor_id
-      - name: finish_order
-        description: Source display order for official result rows. Use this for official wins, podiums, and race result ordering.
+      - name: constructor_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: driver_code
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: driver_id
+        data_type: text
+        description: Driver associated with this official result entry.
+        constraints:
+          - type: not_null
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
+      - name: driver_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: elapsed_time
+        data_type: text
+      - name: elapsed_time_ms
+        data_type: integer
+      - name: engine_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: finish_order
+        data_type: integer
+        description: Source display order for official result rows. Use this for official wins, podiums, and race result ordering.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: finish_position
+        data_type: integer
+      - name: gap
+        data_type: text
+      - name: gap_laps
+        data_type: integer
+      - name: gap_ms
+        data_type: integer
+      - name: grid_position
+        data_type: integer
+      - name: interval
+        data_type: text
+      - name: interval_ms
+        data_type: integer
+      - name: is_classified_finish
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_dnf
+        data_type: boolean
+        description: True when the entry started but did not finish, based on F1DB retirement/status text.
+        constraints:
+          - type: not_null
+      - name: is_driver_of_the_day
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_entry
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_fastest_lap
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_grand_slam
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_grid_p1
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_podium
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_points_finish
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_pole_position
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_start
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_win
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: laps_completed
+        data_type: integer
+      - name: pit_stop_count
+        data_type: integer
+      - name: points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
       - name: points_x100
+        data_type: integer
         description: Race points multiplied by 100 for exact integer comparisons.
+        constraints:
+          - type: not_null
         tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
                 inclusive: true
+      - name: positions_gained
+        data_type: integer
+      - name: position_text
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: qualifying_position
+        data_type: integer
+      - name: race_date
+        data_type: date
+        constraints:
+          - type: not_null
+      - name: race_id
+        data_type: integer
+        description: Race associated with the result row.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
+      - name: race_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_round
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: refresh_id
+        data_type: bigint
+        description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+
+      - name: season
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: status
+        data_type: text
       - name: status_category
+        data_type: text
         description: Retirement/result category derived from F1DB result status.
+        constraints:
+          - type: not_null
         tests:
           - accepted_values:
               arguments:
@@ -166,15 +773,20 @@ models:
                   - mechanical
                   - driver_error
                   - other_retirement
-      - name: is_dnf
-        description: True when the entry started but did not finish, based on F1DB retirement/status text.
-      - name: refresh_id
-        description: Identifier for the refresh run that produced this row.
-        tests:
-          - not_null
+      - name: time_penalty
+        data_type: text
+      - name: time_penalty_ms
+        data_type: integer
+      - name: tyre_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
 
   - name: sprint_results
     description: One row per official sprint result entry. Race and sprint points remain separate.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -182,43 +794,174 @@ models:
               - race_id
               - driver_id
     columns:
-      - name: race_id
-        description: Race weekend associated with the sprint result row.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('races')
-                field: race_id
-      - name: driver_id
-        description: Driver associated with this sprint result entry.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('drivers')
-                field: driver_id
+      - name: car_number
+        data_type: integer
+      - name: circuit_id
+        data_type: text
+        constraints:
+          - type: not_null
       - name: constructor_id
+        data_type: text
         description: Constructor associated with this sprint result entry.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('constructors')
                 field: constructor_id
-      - name: finish_order
-        description: Source display order for official sprint result rows.
+      - name: constructor_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: driver_code
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: driver_id
+        data_type: text
+        description: Driver associated with this sprint result entry.
+        constraints:
+          - type: not_null
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
+      - name: driver_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: elapsed_time
+        data_type: text
+      - name: elapsed_time_ms
+        data_type: integer
+      - name: engine_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: finish_order
+        data_type: integer
+        description: Source display order for official sprint result rows.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: finish_position
+        data_type: integer
+      - name: gap
+        data_type: text
+      - name: gap_laps
+        data_type: integer
+      - name: gap_ms
+        data_type: integer
+      - name: grid_position
+        data_type: integer
+      - name: interval
+        data_type: text
+      - name: interval_ms
+        data_type: integer
+      - name: is_classified_finish
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_dnf
+        data_type: boolean
+        description: True when the sprint entry started but did not finish, based on F1DB retirement/status text.
+        constraints:
+          - type: not_null
+      - name: is_entry
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_grid_p1
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_podium
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_points_finish
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_start
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_win
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: laps_completed
+        data_type: integer
+      - name: points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
       - name: points_x100
+        data_type: integer
         description: Sprint points multiplied by 100 for integer comparisons.
+        constraints:
+          - type: not_null
         tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
                 inclusive: true
+      - name: positions_gained
+        data_type: integer
+      - name: position_text
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: qualifying_position
+        data_type: integer
+      - name: race_date
+        data_type: date
+        constraints:
+          - type: not_null
+      - name: race_id
+        data_type: integer
+        description: Race weekend associated with the sprint result row.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
+      - name: race_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_round
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: refresh_id
+        data_type: bigint
+        description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+
+      - name: season
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: status
+        data_type: text
       - name: status_category
+        data_type: text
         description: Sprint result category derived from F1DB result status text.
+        constraints:
+          - type: not_null
         tests:
           - accepted_values:
               arguments:
@@ -233,15 +976,20 @@ models:
                   - mechanical
                   - driver_error
                   - other_retirement
-      - name: is_dnf
-        description: True when the sprint entry started but did not finish, based on F1DB retirement/status text.
-      - name: refresh_id
-        description: Identifier for the refresh run that produced this row.
-        tests:
-          - not_null
+      - name: time_penalty
+        data_type: text
+      - name: time_penalty_ms
+        data_type: integer
+      - name: tyre_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
 
   - name: qualifying_results
     description: One row per qualifying result entry. The grain is race plus source qualifying order.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -249,41 +997,148 @@ models:
               - race_id
               - qualifying_order
     columns:
-      - name: race_id
-        description: Race weekend associated with the qualifying result row.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('races')
-                field: race_id
-      - name: driver_id
-        description: Driver associated with this qualifying entry.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('drivers')
-                field: driver_id
-      - name: qualifying_order
-        description: Source display order for qualifying result rows.
-        tests:
-          - not_null
+      - name: advanced_to_q2
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: advanced_to_q3
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: best_qualifying_ms
+        data_type: integer
+      - name: best_qualifying_time
+        data_type: text
+      - name: car_number
+        data_type: integer
+      - name: circuit_id
+        data_type: text
+        constraints:
+          - type: not_null
       - name: constructor_id
+        data_type: text
         description: Constructor associated with this qualifying entry.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('constructors')
                 field: constructor_id
+      - name: constructor_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: driver_code
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: driver_id
+        data_type: text
+        description: Driver associated with this qualifying entry.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('drivers')
+                field: driver_id
+      - name: driver_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: engine_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: gap
+        data_type: text
+      - name: gap_ms
+        data_type: integer
+      - name: interval
+        data_type: text
+      - name: interval_ms
+        data_type: integer
+      - name: is_entry
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: is_qualifying_p1
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: laps
+        data_type: integer
+      - name: position_text
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: q1
+        data_type: text
+      - name: q1_ms
+        data_type: integer
+      - name: q2
+        data_type: text
+      - name: q2_ms
+        data_type: integer
+      - name: q3
+        data_type: text
+      - name: q3_ms
+        data_type: integer
+      - name: qualifying_order
+        data_type: integer
+        description: Source display order for qualifying result rows.
+        tests:
+          - not_null
+      - name: qualifying_position
+        data_type: integer
+      - name: race_date
+        data_type: date
+        constraints:
+          - type: not_null
+      - name: race_id
+        data_type: integer
+        description: Race weekend associated with the qualifying result row.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
+      - name: race_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_round
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
 
+      - name: season
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: tyre_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+
   - name: fastest_laps
     description: One row per fastest lap ranking entry from F1DB.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -291,29 +1146,112 @@ models:
               - race_id
               - driver_id
     columns:
-      - name: race_id
-        description: Race associated with the fastest lap row.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('races')
-                field: race_id
+      - name: car_number
+        data_type: integer
+      - name: circuit_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: constructor_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: constructor_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: driver_code
+        data_type: text
+        constraints:
+          - type: not_null
       - name: driver_id
+        data_type: text
         description: Driver associated with the fastest lap row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('drivers')
                 field: driver_id
+      - name: driver_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: engine_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: fastest_lap_order
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: fastest_lap_position
+        data_type: integer
+      - name: gap
+        data_type: text
+      - name: gap_ms
+        data_type: integer
+      - name: interval
+        data_type: text
+      - name: interval_ms
+        data_type: integer
+      - name: lap_number
+        data_type: integer
+      - name: lap_time
+        data_type: text
+      - name: lap_time_ms
+        data_type: integer
+      - name: position_text
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_date
+        data_type: date
+        constraints:
+          - type: not_null
+      - name: race_id
+        data_type: integer
+        description: Race associated with the fastest lap row.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
+      - name: race_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_round
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
 
+      - name: season
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: tyre_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+
   - name: pit_stops
     description: One row per pit stop event from F1DB. The grain is race plus source stop order.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -321,37 +1259,116 @@ models:
               - race_id
               - stop_order
     columns:
-      - name: race_id
-        description: Race associated with the pit stop row.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('races')
-                field: race_id
+      - name: car_number
+        data_type: integer
+      - name: circuit_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: constructor_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: constructor_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: driver_code
+        data_type: text
+        constraints:
+          - type: not_null
       - name: driver_id
+        data_type: text
         description: Driver associated with the pit stop row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('drivers')
                 field: driver_id
-      - name: stop_number
-        description: Driver-specific stop number within the race.
+      - name: driver_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: duration
+        data_type: text
+      - name: duration_ms
+        data_type: integer
+      - name: engine_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: lap_number
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: position_text
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_date
+        data_type: date
+        constraints:
+          - type: not_null
+      - name: race_id
+        data_type: integer
+        description: Race associated with the pit stop row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
-      - name: stop_order
-        description: Source display order for pit stop rows within a race.
-        tests:
-          - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
+      - name: race_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: race_round
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
 
+      - name: season
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: stop_number
+        data_type: integer
+        description: Driver-specific stop number within the race.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: stop_order
+        data_type: integer
+        description: Source display order for pit stop rows within a race.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: stop_position
+        data_type: integer
+      - name: tyre_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+
   - name: driver_standings_snapshots
     description: One row per driver standing snapshot after each race.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -359,36 +1376,94 @@ models:
               - race_id
               - driver_id
     columns:
-      - name: race_id
-        description: Race after which the standing snapshot applies.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('races')
-                field: race_id
+      - name: championship_won
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: driver_code
+        data_type: text
+        constraints:
+          - type: not_null
       - name: driver_id
+        data_type: text
         description: Driver in the standing snapshot.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('drivers')
                 field: driver_id
+      - name: driver_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: points_gained
+        data_type: numeric(8, 2)
+      - name: points_gained_x100
+        data_type: integer
       - name: points_x100
+        data_type: integer
         description: Official standing points multiplied by 100 for integer comparisons.
+        constraints:
+          - type: not_null
         tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
                 inclusive: true
+      - name: position
+        data_type: integer
+      - name: position_change
+        data_type: integer
+      - name: position_text
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: previous_points
+        data_type: numeric(8, 2)
+      - name: previous_points_x100
+        data_type: integer
+      - name: previous_position
+        data_type: integer
+      - name: race_id
+        data_type: integer
+        description: Race after which the standing snapshot applies.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
+      - name: race_round
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
 
+      - name: season
+        data_type: integer
+        constraints:
+          - type: not_null
+
   - name: constructor_standings_snapshots
     description: One row per constructor standing snapshot after each race. Engine manufacturer is part of the grain for historical seasons.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -397,40 +1472,97 @@ models:
               - constructor_id
               - engine_manufacturer_id
     columns:
-      - name: race_id
-        description: Race after which the standing snapshot applies.
-        tests:
-          - not_null
-          - relationships:
-              arguments:
-                to: ref('races')
-                field: race_id
+      - name: championship_won
+        data_type: boolean
+        constraints:
+          - type: not_null
       - name: constructor_id
+        data_type: text
         description: Constructor in the standing snapshot.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('constructors')
                 field: constructor_id
+      - name: constructor_name
+        data_type: text
+        constraints:
+          - type: not_null
       - name: engine_manufacturer_id
+        data_type: text
         description: Engine manufacturer for this constructor standing row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
+      - name: points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: points_gained
+        data_type: numeric(8, 2)
+      - name: points_gained_x100
+        data_type: integer
       - name: points_x100
+        data_type: integer
         description: Official standing points multiplied by 100 for integer comparisons.
+        constraints:
+          - type: not_null
         tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
                 inclusive: true
+      - name: position
+        data_type: integer
+      - name: position_change
+        data_type: integer
+      - name: position_text
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: previous_points
+        data_type: numeric(8, 2)
+      - name: previous_points_x100
+        data_type: integer
+      - name: previous_position
+        data_type: integer
+      - name: race_id
+        data_type: integer
+        description: Race after which the standing snapshot applies.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('races')
+                field: race_id
+      - name: race_round
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
 
+      - name: season
+        data_type: integer
+        constraints:
+          - type: not_null
+
   - name: driver_season_summaries
     description: One row per driver season with computed race/sprint totals and official final standing fields.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -438,41 +1570,153 @@ models:
               - season
               - driver_id
     columns:
-      - name: season
-        description: Championship year.
-        tests:
-          - not_null
+      - name: average_qualifying_position
+        data_type: numeric(6, 2)
+      - name: championship_won
+        data_type: boolean
+        constraints:
+          - type: not_null
+      - name: driver_code
+        data_type: text
+        constraints:
+          - type: not_null
       - name: driver_id
+        data_type: text
         description: Driver summarized for the season.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('drivers')
                 field: driver_id
-      - name: total_points_x100
-        description: Computed race plus sprint points multiplied by 100.
-        tests:
-          - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
-                inclusive: true
+      - name: driver_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: fastest_lap_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: final_points
+        data_type: numeric(8, 2)
       - name: final_points_x100
+        data_type: integer
         description: Official final standing points multiplied by 100.
         tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
                 inclusive: true
+      - name: final_position
+        data_type: integer
+      - name: final_position_text
+        data_type: text
+      - name: podium_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: points_delta
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
       - name: points_delta_x100
+        data_type: integer
         description: Difference between computed total points and official final standing points, multiplied by 100.
+        constraints:
+          - type: not_null
+      - name: qualifying_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: qualifying_p1_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: qualifying_position_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: race_points_x100
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_start_count
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
 
+      - name: season
+        data_type: integer
+        description: Championship year.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: sprint_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: sprint_points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: sprint_points_x100
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: sprint_start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: total_points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: total_points_x100
+        data_type: integer
+        description: Computed race plus sprint points multiplied by 100.
+        constraints:
+          - type: not_null
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: win_count
+        data_type: integer
+        constraints:
+          - type: not_null
+
   - name: constructor_season_summaries
     description: One row per official constructor season standing row with computed race/sprint totals and final standing fields.
+    config:
+      contract:
+        enforced: true
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -480,39 +1724,150 @@ models:
               - season
               - final_order
     columns:
-      - name: season
-        description: Championship year.
-        tests:
-          - not_null
-      - name: final_order
-        description: Source display order for official final constructor standings rows.
-        tests:
-          - not_null
+      - name: average_qualifying_position
+        data_type: numeric(6, 2)
+      - name: championship_won
+        data_type: boolean
+        constraints:
+          - type: not_null
       - name: constructor_id
+        data_type: text
         description: Constructor summarized for the season.
+        constraints:
+          - type: not_null
         tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('constructors')
                 field: constructor_id
-      - name: total_points_x100
-        description: Computed race plus sprint points multiplied by 100.
+      - name: constructor_name
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: engine_manufacturer_id
+        data_type: text
+        constraints:
+          - type: not_null
+      - name: entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: fastest_lap_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: final_order
+        data_type: integer
+        description: Source display order for official final constructor standings rows.
+        constraints:
+          - type: not_null
         tests:
-          - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
-                inclusive: true
+          - not_null
+      - name: final_points
+        data_type: numeric(8, 2)
       - name: final_points_x100
+        data_type: integer
         description: Official final standing points multiplied by 100.
         tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
                 inclusive: true
+      - name: final_position
+        data_type: integer
+      - name: final_position_text
+        data_type: text
+      - name: podium_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: points_delta
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
       - name: points_delta_x100
+        data_type: integer
         description: Difference between computed total points and official final standing points, multiplied by 100.
+        constraints:
+          - type: not_null
+      - name: qualifying_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: qualifying_p1_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: qualifying_position_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: race_points_x100
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: race_start_count
+        data_type: integer
+        constraints:
+          - type: not_null
       - name: refresh_id
+        data_type: bigint
         description: Identifier for the refresh run that produced this row.
+        constraints:
+          - type: not_null
         tests:
           - not_null
+      - name: season
+        data_type: integer
+        description: Championship year.
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+      - name: sprint_entry_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: sprint_points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: sprint_points_x100
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: sprint_start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: start_count
+        data_type: integer
+        constraints:
+          - type: not_null
+      - name: total_points
+        data_type: numeric(8, 2)
+        constraints:
+          - type: not_null
+      - name: total_points_x100
+        data_type: integer
+        description: Computed race plus sprint points multiplied by 100.
+        constraints:
+          - type: not_null
+        tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: win_count
+        data_type: integer
+        constraints:
+          - type: not_null

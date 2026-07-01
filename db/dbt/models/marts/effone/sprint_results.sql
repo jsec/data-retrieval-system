@@ -52,10 +52,9 @@ select
     laps is not null as is_start,
     reason_retired is not null as is_dnf,
     position_number is not null as is_classified_finish,
-    position_display_order = 1 as is_win,
-    position_display_order <= 3 as is_podium,
+    coalesce(position_display_order = 1, false) as is_win,
+    coalesce(position_display_order <= 3, false) as is_podium,
     coalesce(points, 0) > 0 as is_points_finish,
-    grid_position_number = 1 as is_grid_p1,
+    coalesce(grid_position_number = 1, false) as is_grid_p1,
     {{ var('refresh_id') }}::bigint as refresh_id
 from results
-

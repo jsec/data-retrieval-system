@@ -34,7 +34,7 @@ select
     interval_millis as interval_ms,
     laps,
     true as is_entry,
-    position_display_order = 1 as is_qualifying_p1,
+    coalesce(position_display_order = 1, false) as is_qualifying_p1,
     q2 is not null as advanced_to_q2,
     q3 is not null as advanced_to_q3,
     {{ var('refresh_id') }}::bigint as refresh_id
