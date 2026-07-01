@@ -1,7 +1,7 @@
 set dotenv-load
 
 build:
-    uv run python scripts/build.py
+    uv run python -m scripts.build
 
 check: lint format-check typecheck
 
@@ -24,7 +24,7 @@ lint:
     uv run ruff check .
 
 load:
-    uv run python scripts/load.py
+    uv run python -m scripts.load
 
 migrate:
     goose -table app_goose_db_version -dir ./migrations postgres "$DATABASE_URL" up
