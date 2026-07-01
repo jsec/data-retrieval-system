@@ -203,6 +203,28 @@ export function TeamBar({
     );
 }
 
+export function TeamSquare({
+    color,
+    height = 14,
+    width = 14,
+}: {
+    color: string;
+    height?: number;
+    width?: number;
+}) {
+    return (
+        <div
+            style={{
+                background: color,
+                borderRadius: 3,
+                flexShrink: 0,
+                height,
+                width,
+            }}
+        />
+    );
+}
+
 export function TrophyCount({ count, size = 12 }: { count: number; size?: number }) {
     if (count <= 0) return null;
     return (
