@@ -303,6 +303,13 @@ models:
           - type: not_null
         tests:
           - not_null
+      - name: nationality_country_code
+        data_type: text
+        constraints:
+          - type: not_null
+        tests:
+          - not_null
+          - iso_alpha2_country_code
       - name: place_of_birth
         data_type: text
         constraints:
@@ -337,6 +344,10 @@ models:
 
       - name: second_nationality_country_id
         data_type: text
+      - name: second_nationality_country_code
+        data_type: text
+        tests:
+          - iso_alpha2_country_code
       - name: sprint_entry_count
         data_type: integer
         constraints:

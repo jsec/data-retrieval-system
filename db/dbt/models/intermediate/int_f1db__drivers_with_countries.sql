@@ -17,7 +17,10 @@ second_nationality_countries as (
 select
     drivers.*,
     nationality_countries.country_name as nationality,
+    nationality_countries.alpha2_code as nationality_country_code,
     birth_countries.country_name as country_of_birth,
+    birth_countries.alpha2_code as country_of_birth_code,
+    second_nationality_countries.alpha2_code as second_nationality_country_code,
     second_nationality_countries.country_name as second_nationality
 from drivers
 join nationality_countries

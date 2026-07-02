@@ -156,6 +156,7 @@ export type Drivers = {
     lastRaceId: null | number;
     lastRaceName: null | string;
     nationality: string;
+    nationalityCountryCode: string;
     nationalityCountryId: string;
     placeOfBirth: string;
     podiumCount: number;
@@ -164,6 +165,7 @@ export type Drivers = {
     raceEntryCount: number;
     raceStartCount: number;
     refreshId: Int8;
+    secondNationalityCountryCode: null | string;
     secondNationalityCountryId: null | string;
     sprintEntryCount: number;
     sprintStartCount: number;
