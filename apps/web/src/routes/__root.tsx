@@ -5,7 +5,6 @@ import {
     ChartPieSliceIcon,
     ClockCounterClockwiseIcon,
     FlagCheckeredIcon,
-    ListNumbersIcon,
     MapTrifoldIcon,
     MoonIcon,
     SidebarSimpleIcon,
@@ -60,13 +59,6 @@ const navItems: NavItem[] = [
         label: 'Drivers',
         match: ['/drivers'],
         to: '/drivers',
-    },
-    {
-        icon: ListNumbersIcon,
-        label: 'Standings',
-        match: ['/seasons/' + year + '/standings'],
-        params: { year },
-        to: '/seasons/$year/standings',
     },
     {
         icon: WrenchIcon,
