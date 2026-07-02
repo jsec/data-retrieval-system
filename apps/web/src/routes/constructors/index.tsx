@@ -1,6 +1,7 @@
+import type { ListConstructorsResponse } from '@drs/contracts';
 import type { SortingFn, SortingState } from '@tanstack/react-table';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import {
     createColumnHelper,
@@ -10,32 +11,34 @@ import {
 } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 
-import type { AllTimeConstructor } from '#/data/types';
-
 import { DataTable } from '#/components/data-table';
 import { Pill, TrophyCount } from '#/components/f1-ui';
-import { Badge } from '#/components/ui/badge';
 import { Card } from '#/components/ui/card';
-import { constructorsIndexQuery } from '#/data/queries';
+import { api } from '#/lib/query/api';
 
-type Sort = 'podiums' | 'poles' | 'titles' | 'wins';
+type Constructor = ListConstructorsResponse[number];
+type Sort = 'podiums' | 'titles' | 'wins';
+
+const constructorsQuery = queryOptions({
+    queryFn: () => api.get('constructors').json<ListConstructorsResponse>(),
+    queryKey: ['constructors'],
+});
 
 const SORTS: { key: Sort; label: string }[] = [
     { key: 'titles', label: 'Titles' },
     { key: 'wins', label: 'Wins' },
-    { key: 'poles', label: 'Poles' },
     { key: 'podiums', label: 'Podiums' },
 ];
 
-const byTitles: SortingFn<AllTimeConstructor> = (a, b) =>
-    a.original.titles - b.original.titles || a.original.wins - b.original.wins;
+const byTitles: SortingFn<Constructor> = (a, b) =>
+    a.original.championships - b.original.championships || a.original.wins - b.original.wins;
 
-const ch = createColumnHelper<AllTimeConstructor>();
-const coreRowModel = getCoreRowModel<AllTimeConstructor>();
-const sortedRowModel = getSortedRowModel<AllTimeConstructor>();
+const ch = createColumnHelper<Constructor>();
+const coreRowModel = getCoreRowModel<Constructor>();
+const sortedRowModel = getSortedRowModel<Constructor>();
 
 const Constructors = () => {
-    const { data } = useSuspenseQuery(constructorsIndexQuery());
+    const { data } = useSuspenseQuery(constructorsQuery);
     const [sort, setSort] = useState<Sort>('titles');
 
     const maxWins = useMemo(() => Math.max(...data.map(c => c.wins)), [data]);
@@ -52,25 +55,42 @@ const Constructors = () => {
                             <span className="f1-truncate" style={{ fontSize: 14, fontWeight: 700 }}>
                                 {c.name}
                             </span>
-                            {c.active
-                                ? <Badge variant="success">ACTIVE</Badge>
-                                : null}
                         </div>
                     );
                 },
                 header: 'CONSTRUCTOR',
                 meta: { width: '38%' },
             }),
-            ch.accessor('years', {
-                cell: info => (
-                    <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 12.5 }}>
-                        {info.getValue()}
-                    </span>
-                ),
-                header: 'YEARS',
-                meta: { width: '10%' },
-            }),
-            ch.accessor('titles', {
+            ch.accessor(
+                row => ({
+                    firstRaceDate: row.firstRaceDate,
+                    lastRaceDate: row.lastRaceDate,
+                }),
+                {
+                    cell: (info) => {
+                        const { firstRaceDate, lastRaceDate } = info.getValue();
+
+                        let years = '-';
+
+                        if (firstRaceDate) {
+                            const firstYear = Temporal.PlainDate.from(firstRaceDate).year;
+                            const lastYear = lastRaceDate ? Temporal.PlainDate.from(lastRaceDate).year : '';
+
+                            years = `${firstYear}-${lastYear}`;
+                        }
+
+                        return (
+                            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 12.5 }}>
+                                {years}
+                            </span>
+                        );
+                    },
+                    header: 'YEARS',
+                    id: 'years',
+                    meta: { width: '10%' },
+                },
+            ),
+            ch.accessor('championships', {
                 cell: info => (
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <TrophyCount count={info.getValue()} size={12} />
@@ -95,15 +115,6 @@ const Constructors = () => {
                 header: 'WINS',
                 id: 'wins',
                 meta: { width: '23%' },
-            }),
-            ch.accessor('poles', {
-                cell: info => (
-                    <span className="f1-num" style={{ color: 'var(--color-muted-foreground)' }}>
-                        {info.getValue()}
-                    </span>
-                ),
-                header: 'POLES',
-                meta: { align: 'center', width: '8%' },
             }),
             ch.accessor('podiums', {
                 cell: info => (
@@ -162,7 +173,7 @@ const Constructors = () => {
 export const Route = createFileRoute('/constructors/')({
     component: Constructors,
     loader: async ({ context }) => {
-        await context.queryClient.ensureQueryData(constructorsIndexQuery());
+        await context.queryClient.ensureQueryData(constructorsQuery);
         return { crumbs: [{ label: 'Constructors' }] };
     },
 });

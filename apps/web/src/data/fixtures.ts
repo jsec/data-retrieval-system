@@ -608,10 +608,6 @@ const CIRCUITS: Circuit[] = [
     },
 ];
 
-export function getAllTimeConstructors(): AllTimeConstructor[] {
-    return ALL_TIME_CONSTRUCTORS;
-}
-
 export function getCalendar(): { calendar: CalendarRound[]; completed: number } {
     return { calendar: CALENDAR, completed: COMPLETED };
 }

@@ -1,7 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 
 import {
-    getAllTimeConstructors,
     getAllTimeDrivers,
     getCalendar,
     getCircuits,
@@ -42,12 +41,6 @@ export const raceDetailQuery = (year: number, round: number) =>
             return race;
         },
         queryKey: ['race-detail', year, round],
-    });
-
-export const constructorsIndexQuery = () =>
-    queryOptions({
-        queryFn: () => getAllTimeConstructors(),
-        queryKey: ['constructors-index'],
     });
 
 export const standingsQuery = (year: number) =>
