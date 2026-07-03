@@ -31,4 +31,4 @@ select
     total_sprint_race_wins,
     total_driver_of_the_day,
     total_grand_slams
-from {{ source('f1db', 'driver') }}
+from {{ source("f1db", "driver") }}

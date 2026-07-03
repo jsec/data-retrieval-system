@@ -7,5 +7,4 @@ select
     points,
     positions_gained,
     championship_won
-from {{ source('f1db', 'race_driver_standing') }}
-
+from {{ source("f1db", "race_driver_standing") }}

@@ -12,4 +12,4 @@ select
     "length" as length_km,
     turns,
     total_races_held
-from {{ source('f1db', 'circuit') }}
+from {{ source("f1db", "circuit") }}

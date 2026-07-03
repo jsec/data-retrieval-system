@@ -25,4 +25,4 @@ select
     grid_position_number,
     grid_position_text,
     positions_gained
-from {{ source('f1db', 'sprint_race_result') }}
+from {{ source("f1db", "sprint_race_result") }}

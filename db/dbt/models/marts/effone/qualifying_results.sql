@@ -1,6 +1,4 @@
-with results as (
-    select * from {{ ref('int_f1db__qualifying_results_with_entities') }}
-)
+with results as (select * from {{ ref("int_f1db__qualifying_results_with_entities") }})
 
 select
     season,
@@ -37,5 +35,5 @@ select
     coalesce(position_display_order = 1, false) as is_qualifying_p1,
     q2 is not null as advanced_to_q2,
     q3 is not null as advanced_to_q3,
-    {{ var('refresh_id') }}::bigint as refresh_id
+    {{ var("refresh_id") }}::bigint as refresh_id
 from results

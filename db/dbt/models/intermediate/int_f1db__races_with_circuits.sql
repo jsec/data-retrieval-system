@@ -1,14 +1,9 @@
-with races as (
-    select * from {{ ref('stg_f1db__race') }}
-),
+with
+    races as (select * from {{ ref("stg_f1db__race") }}),
 
-circuits as (
-    select * from {{ ref('int_f1db__circuits_with_countries') }}
-),
+    circuits as (select * from {{ ref("int_f1db__circuits_with_countries") }}),
 
-grands_prix as (
-    select * from {{ ref('stg_f1db__grand_prix') }}
-)
+    grands_prix as (select * from {{ ref("stg_f1db__grand_prix") }})
 
 select
     races.*,
@@ -23,7 +18,5 @@ select
     circuits.latitude as circuit_latitude,
     circuits.longitude as circuit_longitude
 from races
-join circuits
-    on races.circuit_id = circuits.circuit_id
-join grands_prix
-    on races.grand_prix_id = grands_prix.grand_prix_id
+join circuits on races.circuit_id = circuits.circuit_id
+join grands_prix on races.grand_prix_id = grands_prix.grand_prix_id

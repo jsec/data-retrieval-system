@@ -16,9 +16,11 @@ dbt-parse:
 
 format:
     uv run ruff format .
+    uv run sqlfmt dbt/models dbt/macros dbt/tests
 
 format-check:
     uv run ruff format --check .
+    uv run sqlfmt --check dbt/models dbt/macros dbt/tests
 
 lint:
     uv run ruff check .

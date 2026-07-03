@@ -7,5 +7,4 @@ select
     engine_manufacturer_id,
     points,
     championship_won
-from {{ source('f1db', 'season_constructor_standing') }}
-
+from {{ source("f1db", "season_constructor_standing") }}

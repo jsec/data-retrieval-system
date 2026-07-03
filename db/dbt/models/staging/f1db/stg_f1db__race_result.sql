@@ -31,4 +31,4 @@ select
     fastest_lap,
     driver_of_the_day,
     grand_slam
-from {{ source('f1db', 'race_result') }}
+from {{ source("f1db", "race_result") }}

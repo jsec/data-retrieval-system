@@ -1,18 +1,11 @@
-with qualifying_results as (
-    select * from {{ ref('stg_f1db__qualifying_result') }}
-),
+with
+    qualifying_results as (select * from {{ ref("stg_f1db__qualifying_result") }}),
 
-races as (
-    select * from {{ ref('int_f1db__races_with_circuits') }}
-),
+    races as (select * from {{ ref("int_f1db__races_with_circuits") }}),
 
-drivers as (
-    select * from {{ ref('int_f1db__drivers_with_countries') }}
-),
+    drivers as (select * from {{ ref("int_f1db__drivers_with_countries") }}),
 
-constructors as (
-    select * from {{ ref('int_f1db__constructors_with_countries') }}
-)
+    constructors as (select * from {{ ref("int_f1db__constructors_with_countries") }})
 
 select
     qualifying_results.*,
@@ -31,9 +24,6 @@ select
     constructors.constructor_full_name,
     constructors.constructor_nationality
 from qualifying_results
-join races
-    on qualifying_results.race_id = races.race_id
-join drivers
-    on qualifying_results.driver_id = drivers.driver_id
-join constructors
-    on qualifying_results.constructor_id = constructors.constructor_id
+join races on qualifying_results.race_id = races.race_id
+join drivers on qualifying_results.driver_id = drivers.driver_id
+join constructors on qualifying_results.constructor_id = constructors.constructor_id

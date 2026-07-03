@@ -1,34 +1,27 @@
-with constructors as (
-    select * from {{ ref('int_f1db__constructors_with_countries') }}
-),
+with
+    constructors as (select * from {{ ref("int_f1db__constructors_with_countries") }}),
 
-constructor_races as (
-    select
-        constructor_id,
-        race_id,
-        race_official_name,
-        race_date
-    from {{ ref('int_f1db__race_results_with_entities') }}
-),
+    constructor_races as (
+        select constructor_id, race_id, race_official_name, race_date
+        from {{ ref("int_f1db__race_results_with_entities") }}
+    ),
 
-first_last_races as (
-    select distinct
-        constructor_id,
-        first_value(race_id) over first_race as first_race_id,
-        first_value(race_official_name) over first_race as first_race_name,
-        first_value(race_date) over first_race as first_race_date,
-        first_value(race_id) over last_race as last_race_id,
-        first_value(race_official_name) over last_race as last_race_name,
-        first_value(race_date) over last_race as last_race_date
-    from constructor_races
-    window
-        first_race as (partition by constructor_id order by race_date, race_id),
-        last_race as (partition by constructor_id order by race_date desc, race_id desc)
-),
+    first_last_races as (
+        select distinct
+            constructor_id,
+            first_value(race_id) over first_race as first_race_id,
+            first_value(race_official_name) over first_race as first_race_name,
+            first_value(race_date) over first_race as first_race_date,
+            first_value(race_id) over last_race as last_race_id,
+            first_value(race_official_name) over last_race as last_race_name,
+            first_value(race_date) over last_race as last_race_date
+        from constructor_races
+        window
+            first_race as (partition by constructor_id order by race_date, race_id),
+            last_race as (partition by constructor_id order by race_date desc, race_id desc)
+    ),
 
-constructor_branding as (
-    select * from {{ ref('constructor_branding') }}
-)
+    constructor_branding as (select * from {{ ref("constructor_branding") }})
 
 select
     constructors.constructor_id,
@@ -58,9 +51,7 @@ select
     first_last_races.last_race_id,
     first_last_races.last_race_name,
     first_last_races.last_race_date,
-    {{ var('refresh_id') }}::bigint as refresh_id
+    {{ var("refresh_id") }}::bigint as refresh_id
 from constructors
-left join first_last_races
-    on constructors.constructor_id = first_last_races.constructor_id
-left join constructor_branding
-    on constructors.constructor_id = constructor_branding.constructor_id
+left join first_last_races on constructors.constructor_id = first_last_races.constructor_id
+left join constructor_branding on constructors.constructor_id = constructor_branding.constructor_id

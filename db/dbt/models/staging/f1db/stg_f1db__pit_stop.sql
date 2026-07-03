@@ -12,4 +12,4 @@ select
     lap as lap_number,
     "time" as pit_time,
     time_millis as pit_time_millis
-from {{ source('f1db', 'pit_stop') }}
+from {{ source("f1db", "pit_stop") }}

@@ -1,6 +1,4 @@
-with results as (
-    select * from {{ ref('int_f1db__race_results_with_entities') }}
-)
+with results as (select * from {{ ref("int_f1db__race_results_with_entities") }})
 
 select
     season,
@@ -38,15 +36,26 @@ select
     pit_stops as pit_stop_count,
     reason_retired as status,
     case
-        when reason_retired is null then 'finished'
-        when lower(reason_retired) like '%accident%' then 'accident'
-        when lower(reason_retired) like '%collision%' then 'collision'
-        when lower(reason_retired) like '%disqualified%' then 'disqualified'
-        when lower(reason_retired) like '%not qualified%' then 'not_qualified'
-        when lower(reason_retired) like '%not classified%' then 'not_classified'
-        when lower(reason_retired) like '%withdraw%' then 'withdrawn'
-        when lower(reason_retired) ~ '(engine|gearbox|hydraulic|electrical|brake|transmission|clutch|suspension|power|fuel|oil|water|radiator|battery)' then 'mechanical'
-        when lower(reason_retired) ~ '(spin|spun|driver)' then 'driver_error'
+        when reason_retired is null
+        then 'finished'
+        when lower(reason_retired) like '%accident%'
+        then 'accident'
+        when lower(reason_retired) like '%collision%'
+        then 'collision'
+        when lower(reason_retired) like '%disqualified%'
+        then 'disqualified'
+        when lower(reason_retired) like '%not qualified%'
+        then 'not_qualified'
+        when lower(reason_retired) like '%not classified%'
+        then 'not_classified'
+        when lower(reason_retired) like '%withdraw%'
+        then 'withdrawn'
+        when
+            lower(reason_retired)
+            ~ '(engine|gearbox|hydraulic|electrical|brake|transmission|clutch|suspension|power|fuel|oil|water|radiator|battery)'
+        then 'mechanical'
+        when lower(reason_retired) ~ '(spin|spun|driver)'
+        then 'driver_error'
         else 'other_retirement'
     end as status_category,
     true as is_entry,
@@ -61,5 +70,5 @@ select
     coalesce(fastest_lap, false) as is_fastest_lap,
     coalesce(driver_of_the_day, false) as is_driver_of_the_day,
     coalesce(grand_slam, false) as is_grand_slam,
-    {{ var('refresh_id') }}::bigint as refresh_id
+    {{ var("refresh_id") }}::bigint as refresh_id
 from results

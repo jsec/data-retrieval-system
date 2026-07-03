@@ -21,4 +21,4 @@ select
     "interval",
     interval_millis,
     laps
-from {{ source('f1db', 'qualifying_result') }}
+from {{ source("f1db", "qualifying_result") }}

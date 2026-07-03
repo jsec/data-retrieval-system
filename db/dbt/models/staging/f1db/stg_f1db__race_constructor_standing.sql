@@ -8,5 +8,4 @@ select
     points,
     positions_gained,
     championship_won
-from {{ source('f1db', 'race_constructor_standing') }}
-
+from {{ source("f1db", "race_constructor_standing") }}

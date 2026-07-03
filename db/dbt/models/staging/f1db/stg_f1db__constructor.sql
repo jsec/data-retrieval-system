@@ -21,5 +21,4 @@ select
     total_fastest_laps,
     total_sprint_race_starts,
     total_sprint_race_wins
-from {{ source('f1db', 'constructor') }}
-
+from {{ source("f1db", "constructor") }}

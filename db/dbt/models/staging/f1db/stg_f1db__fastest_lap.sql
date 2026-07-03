@@ -15,4 +15,4 @@ select
     gap_millis,
     "interval",
     interval_millis
-from {{ source('f1db', 'fastest_lap') }}
+from {{ source("f1db", "fastest_lap") }}

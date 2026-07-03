@@ -1,39 +1,33 @@
-with standings as (
-    select * from {{ ref('stg_f1db__race_constructor_standing') }}
-),
+with
+    standings as (select * from {{ ref("stg_f1db__race_constructor_standing") }}),
 
-races as (
-    select * from {{ ref('int_f1db__races_with_circuits') }}
-),
+    races as (select * from {{ ref("int_f1db__races_with_circuits") }}),
 
-constructors as (
-    select * from {{ ref('int_f1db__constructors_with_countries') }}
-),
+    constructors as (select * from {{ ref("int_f1db__constructors_with_countries") }}),
 
-joined as (
-    select
-        races.season,
-        races.race_round,
-        standings.race_id,
-        standings.constructor_id,
-        constructors.constructor_name,
-        standings.engine_manufacturer_id,
-        standings.points,
-        standings.position_number as position,
-        standings.position_text,
-        standings.championship_won,
-        lag(standings.points) over constructor_order as previous_points,
-        lag(standings.position_number) over constructor_order as previous_position
-    from standings
-    join races
-        on standings.race_id = races.race_id
-    join constructors
-        on standings.constructor_id = constructors.constructor_id
-    window constructor_order as (
-        partition by standings.constructor_id, standings.engine_manufacturer_id, races.season
-        order by races.race_round
+    joined as (
+        select
+            races.season,
+            races.race_round,
+            standings.race_id,
+            standings.constructor_id,
+            constructors.constructor_name,
+            standings.engine_manufacturer_id,
+            standings.points,
+            standings.position_number as position,
+            standings.position_text,
+            standings.championship_won,
+            lag(standings.points) over constructor_order as previous_points,
+            lag(standings.position_number) over constructor_order as previous_position
+        from standings
+        join races on standings.race_id = races.race_id
+        join constructors on standings.constructor_id = constructors.constructor_id
+        window
+            constructor_order as (
+                partition by standings.constructor_id, standings.engine_manufacturer_id, races.season
+                order by races.race_round
+            )
     )
-)
 
 select
     season,
@@ -53,6 +47,5 @@ select
     previous_position,
     previous_position - position as position_change,
     championship_won,
-    {{ var('refresh_id') }}::bigint as refresh_id
+    {{ var("refresh_id") }}::bigint as refresh_id
 from joined
-

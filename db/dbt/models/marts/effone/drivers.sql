@@ -1,30 +1,24 @@
-with drivers as (
-    select * from {{ ref('int_f1db__drivers_with_countries') }}
-),
+with
+    drivers as (select * from {{ ref("int_f1db__drivers_with_countries") }}),
 
-driver_races as (
-    select
-        driver_id,
-        race_id,
-        race_official_name,
-        race_date
-    from {{ ref('int_f1db__race_results_with_entities') }}
-),
+    driver_races as (
+        select driver_id, race_id, race_official_name, race_date from {{ ref("int_f1db__race_results_with_entities") }}
+    ),
 
-first_last_races as (
-    select distinct
-        driver_id,
-        first_value(race_id) over first_race as first_race_id,
-        first_value(race_official_name) over first_race as first_race_name,
-        first_value(race_date) over first_race as first_race_date,
-        first_value(race_id) over last_race as last_race_id,
-        first_value(race_official_name) over last_race as last_race_name,
-        first_value(race_date) over last_race as last_race_date
-    from driver_races
-    window
-        first_race as (partition by driver_id order by race_date, race_id),
-        last_race as (partition by driver_id order by race_date desc, race_id desc)
-)
+    first_last_races as (
+        select distinct
+            driver_id,
+            first_value(race_id) over first_race as first_race_id,
+            first_value(race_official_name) over first_race as first_race_name,
+            first_value(race_date) over first_race as first_race_date,
+            first_value(race_id) over last_race as last_race_id,
+            first_value(race_official_name) over last_race as last_race_name,
+            first_value(race_date) over last_race as last_race_date
+        from driver_races
+        window
+            first_race as (partition by driver_id order by race_date, race_id),
+            last_race as (partition by driver_id order by race_date desc, race_id desc)
+    )
 
 select
     drivers.driver_id,
@@ -64,7 +58,6 @@ select
     first_last_races.last_race_id,
     first_last_races.last_race_name,
     first_last_races.last_race_date,
-    {{ var('refresh_id') }}::bigint as refresh_id
+    {{ var("refresh_id") }}::bigint as refresh_id
 from drivers
-left join first_last_races
-    on drivers.driver_id = first_last_races.driver_id
+left join first_last_races on drivers.driver_id = first_last_races.driver_id

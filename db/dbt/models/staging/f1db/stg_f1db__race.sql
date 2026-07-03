@@ -42,4 +42,4 @@ select
     sprint_race_time::time as sprint_race_time,
     warming_up_date,
     warming_up_time::time as warming_up_time
-from {{ source('f1db', 'race') }}
+from {{ source("f1db", "race") }}

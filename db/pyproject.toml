@@ -19,29 +19,16 @@ line-length = 120
 target-version = "py313"
 
 [tool.ruff.lint]
-select = [
-    "B",
-    "C4",
-    "E",
-    "F",
-    "I",
-    "PLC",
-    "PLE",
-    "PLW",
-    "SIM",
-    "UP",
-    "W",
-]
-ignore = [
-    "E501",
-]
+select = ["B", "C4", "E", "F", "I", "PLC", "PLE", "PLW", "SIM", "UP", "W"]
+ignore = ["E501"]
 
 [tool.ruff.format]
 indent-style = "space"
 quote-style = "double"
 
+[tool.sqlfmt]
+line_length = 120
+exclude = ["dbt/target/**/*", "dbt/dbt_packages/**/*", ".venv"]
+
 [dependency-groups]
-dev = [
-    "pyrefly>=1.1.1",
-    "ruff>=0.15.19",
-]
+dev = ["pyrefly>=1.1.1", "ruff>=0.15.19"]
