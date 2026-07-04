@@ -22,7 +22,7 @@ export const Breadcrumbs = () => {
             {crumbs.map((c: Crumb, i: number) => {
                 const last = i === crumbs.length - 1;
                 return (
-                    <div key={`${c.label}-${i}`} style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 8 }}>
+                    <div key={c.to ?? c.label} style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 8 }}>
                         {c.to && !last
                             ? (
                                     <Link

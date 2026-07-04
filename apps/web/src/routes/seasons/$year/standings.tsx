@@ -8,6 +8,25 @@ import { standingsQuery } from '#/data/queries';
 
 const COLS = '46px 1fr 130px 70px 80px 80px 80px';
 
+const DRIVER_ROW_STYLE: React.CSSProperties = {
+    alignItems: 'center',
+    borderTop: '1px solid var(--color-border)',
+    color: 'inherit',
+    display: 'grid',
+    gridTemplateColumns: COLS,
+    padding: '11px 20px',
+    textDecoration: 'none',
+};
+
+const CONSTRUCTOR_ROW_STYLE: React.CSSProperties = {
+    alignItems: 'center',
+    borderTop: '1px solid var(--color-border)',
+    display: 'flex',
+    flexWrap: 'nowrap',
+    gap: 16,
+    padding: '11px 0',
+};
+
 const HEADER_STYLE: React.CSSProperties = {
     background: 'var(--color-accent)',
     color: 'var(--color-muted-foreground)',
@@ -56,15 +75,7 @@ const Standings = () => {
                                     className="f1-row"
                                     key={d.code}
                                     params={{ driverId: d.code, year }}
-                                    style={{
-                                        alignItems: 'center',
-                                        borderTop: '1px solid var(--color-border)',
-                                        color: 'inherit',
-                                        display: 'grid',
-                                        gridTemplateColumns: COLS,
-                                        padding: '11px 20px',
-                                        textDecoration: 'none',
-                                    }}
+                                    style={DRIVER_ROW_STYLE}
                                     to="/seasons/$year/drivers/$driverId"
                                 >
                                     <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontWeight: 700 }}>{i + 1}</span>
@@ -87,14 +98,7 @@ const Standings = () => {
                             {data.constructors.map(c => (
                                 <div
                                     key={c.key}
-                                    style={{
-                                        alignItems: 'center',
-                                        borderTop: '1px solid var(--color-border)',
-                                        display: 'flex',
-                                        flexWrap: 'nowrap',
-                                        gap: 16,
-                                        padding: '11px 0',
-                                    }}
+                                    style={CONSTRUCTOR_ROW_STYLE}
                                 >
                                     <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontWeight: 700, width: 26 }}>{c.pos}</span>
                                     <div style={{ background: c.color, borderRadius: 3, flexShrink: 0, height: 30, width: 10 }} />

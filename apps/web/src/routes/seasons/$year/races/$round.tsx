@@ -8,6 +8,43 @@ import { raceDetailQuery } from '#/data/queries';
 const MEDALS = ['#f59f00', '#adb5bd', '#e8590c'];
 const RESULT_COLS = '36px 1fr 72px 90px 48px';
 
+const HERO_STYLE: React.CSSProperties = {
+    alignItems: 'center',
+    background: 'linear-gradient(110deg, var(--neutral-950), var(--neutral-800))',
+    borderRadius: 'var(--radius-lg)',
+    color: '#fff',
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '22px 26px',
+};
+
+const RESULT_ROW_STYLE: React.CSSProperties = {
+    alignItems: 'center',
+    borderTop: '1px solid var(--color-border)',
+    color: 'inherit',
+    display: 'grid',
+    gridTemplateColumns: RESULT_COLS,
+    padding: '8px 18px',
+    textDecoration: 'none',
+};
+
+const QUAL_ROW_STYLE: React.CSSProperties = {
+    alignItems: 'center',
+    display: 'flex',
+    flexWrap: 'nowrap',
+    gap: 10,
+    marginBottom: 11,
+};
+
+const CENTER_LINE_STYLE: React.CSSProperties = {
+    background: 'var(--color-border)',
+    bottom: 0,
+    left: '50%',
+    position: 'absolute',
+    top: 0,
+    width: 1,
+};
+
 const getDeltaColor = (delta: number): string => {
     if (delta > 0) return 'var(--green-500)';
     if (delta < 0) return 'var(--color-primary)';
@@ -32,16 +69,7 @@ const RaceDetail = () => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* Hero */}
-            <div style={{
-                alignItems: 'center',
-                background: 'linear-gradient(110deg, var(--neutral-950), var(--neutral-800))',
-                borderRadius: 'var(--radius-lg)',
-                color: '#fff',
-                display: 'flex',
-                justifyContent: 'space-between',
-                padding: '22px 26px',
-            }}
-            >
+            <div style={HERO_STYLE}>
                 <div>
                     <div style={{ color: 'var(--color-sidebar-muted)', fontSize: 12, fontWeight: 700, letterSpacing: '1px' }}>
                         {`ROUND ${data.round} · ${data.year}`}
@@ -148,15 +176,7 @@ const RaceDetail = () => {
                                 className="f1-row"
                                 key={r.code}
                                 params={{ driverId: r.code, year }}
-                                style={{
-                                    alignItems: 'center',
-                                    borderTop: '1px solid var(--color-border)',
-                                    color: 'inherit',
-                                    display: 'grid',
-                                    gridTemplateColumns: RESULT_COLS,
-                                    padding: '8px 18px',
-                                    textDecoration: 'none',
-                                }}
+                                style={RESULT_ROW_STYLE}
                                 to="/seasons/$year/drivers/$driverId"
                             >
                                 <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontWeight: 700 }}>{r.pos}</span>
@@ -184,7 +204,7 @@ const RaceDetail = () => {
                         const mag = (Math.min(Math.abs(delta), 8) / 8) * 45;
                         const color = getDeltaColor(delta);
                         return (
-                            <div key={r.code} style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 10, marginBottom: 11 }}>
+                            <div key={r.code} style={QUAL_ROW_STYLE}>
                                 <span style={{ fontSize: 12, fontWeight: 700, width: 40 }}>{r.code}</span>
                                 <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 11, width: 62 }}>
                                     P
@@ -193,15 +213,7 @@ const RaceDetail = () => {
                                     {r.pos}
                                 </span>
                                 <div style={{ flex: 1, height: 14, position: 'relative' }}>
-                                    <div style={{
-                                        background: 'var(--color-border)',
-                                        bottom: 0,
-                                        left: '50%',
-                                        position: 'absolute',
-                                        top: 0,
-                                        width: 1,
-                                    }}
-                                    />
+                                    <div style={CENTER_LINE_STYLE} />
                                     <div style={{
                                         background: color,
                                         borderRadius: 3,

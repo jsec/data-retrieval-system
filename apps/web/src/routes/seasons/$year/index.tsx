@@ -1,3 +1,5 @@
+import type { CalendarRound, SeasonDriver } from '#/data/types';
+
 import {
     CalendarDotsIcon,
     CrownIcon,
@@ -6,12 +8,63 @@ import {
 } from '@phosphor-icons/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { memo, useMemo } from 'react';
 
 import { GridHeader, SectionCard, StatCard, TeamBar } from '#/components/f1-ui';
 import { LineChart, roundLabels } from '#/components/line-chart';
 import { seasonOverviewQuery } from '#/data/queries';
 
 const DRIVER_COLS = '34px 1fr 64px 56px 70px';
+
+type MiniRaceCellProps = {
+    completed: number;
+    driverByCode: Map<string, SeasonDriver>;
+    r: CalendarRound;
+    year: string;
+};
+
+const MiniRaceCell = memo(function MiniRaceCell({ completed, driverByCode, r, year }: MiniRaceCellProps) {
+    const done = r.round <= completed;
+    const next = r.round === completed + 1;
+    const winner = r.winner ? driverByCode.get(r.winner) : null;
+
+    let background: string;
+    let border: string;
+    if (done) {
+        background = 'var(--color-card)';
+        border = '1px solid var(--color-border)';
+    } else if (next) {
+        background = 'color-mix(in srgb, var(--color-primary) 6%, var(--color-background))';
+        border = '1px solid color-mix(in srgb, var(--color-primary) 40%, var(--color-border))';
+    } else {
+        background = 'var(--color-accent)';
+        border = '1px solid var(--color-border)';
+    }
+
+    const cell = (
+        <div
+            className={done ? 'f1-lift' : undefined}
+            style={{ background, border, borderRadius: 7, cursor: done ? 'pointer' : 'default', padding: '9px 10px' }}
+        >
+            <div className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 10, fontWeight: 700 }}>
+                R{r.round}
+            </div>
+            <div style={{ fontSize: 12.5, fontWeight: 700, marginTop: 2 }}>{r.code}</div>
+            <div style={{ color: 'var(--color-muted-foreground)', fontSize: 10.5, marginTop: 1 }}>{r.date}</div>
+            <div style={{ background: winner?.color ?? 'var(--color-border)', borderRadius: 2, height: 3, marginTop: 7 }} />
+        </div>
+    );
+
+    if (done) {
+        return (
+            <Link params={{ round: String(r.round), year }} style={{ textDecoration: 'none' }} to="/seasons/$year/races/$round">
+                {cell}
+            </Link>
+        );
+    }
+
+    return cell;
+});
 
 const ACTION_LINK: React.CSSProperties = {
     color: 'var(--color-primary)',
@@ -25,6 +78,10 @@ const SeasonOverview = () => {
     const { data } = useSuspenseQuery(seasonOverviewQuery(Number(year)));
     const maxConstructor = data.constructors[0]?.points || 1;
     const topDrivers = data.drivers.slice(0, 8);
+    const driverByCode = useMemo(
+        () => new Map(data.drivers.map(d => [d.code, d])),
+        [data.drivers],
+    );
 
     const progressionSeries = data.progression.map(p => ({ color: p.color, values: p.values }));
     const xLabels = roundLabels(data.completed + 1, 2);
@@ -199,55 +256,15 @@ const SeasonOverview = () => {
                 title={`${data.year} Calendar`}
             >
                 <div style={{ display: 'grid', gap: 9, gridTemplateColumns: 'repeat(8, 1fr)' }}>
-                    {data.calendar.map((r) => {
-                        const done = r.round <= data.completed;
-                        const next = r.round === data.completed + 1;
-                        const winner = r.winner ? data.drivers.find(d => d.code === r.winner) : null;
-                        const cell = (
-                            <div
-                                className={done ? 'f1-lift' : undefined}
-                                style={{
-                                    background: done
-                                        ? 'var(--color-card)'
-                                        : (next
-                                                ? 'color-mix(in srgb, var(--color-primary) 6%, var(--color-background))'
-                                                : 'var(--color-accent)'),
-                                    border: `1px solid ${next ? 'color-mix(in srgb, var(--color-primary) 40%, var(--color-border))' : 'var(--color-border)'}`,
-                                    borderRadius: 7,
-                                    cursor: done ? 'pointer' : 'default',
-                                    padding: '9px 10px',
-                                }}
-                            >
-                                <div className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 10, fontWeight: 700 }}>
-                                    R
-                                    {r.round}
-                                </div>
-                                <div style={{ fontSize: 12.5, fontWeight: 700, marginTop: 2 }}>{r.code}</div>
-                                <div style={{ color: 'var(--color-muted-foreground)', fontSize: 10.5, marginTop: 1 }}>{r.date}</div>
-                                <div style={{
-                                    background: winner ? winner.color : 'var(--color-border)',
-                                    borderRadius: 2,
-                                    height: 3,
-                                    marginTop: 7,
-                                }}
-                                />
-                            </div>
-                        );
-                        return done
-                            ? (
-                                    <Link
-                                        key={r.round}
-                                        params={{ round: String(r.round), year }}
-                                        style={{ textDecoration: 'none' }}
-                                        to="/seasons/$year/races/$round"
-                                    >
-                                        {cell}
-                                    </Link>
-                                )
-                            : (
-                                    <div key={r.round}>{cell}</div>
-                                );
-                    })}
+                    {data.calendar.map(r => (
+                        <MiniRaceCell
+                            completed={data.completed}
+                            driverByCode={driverByCode}
+                            key={r.round}
+                            r={r}
+                            year={year}
+                        />
+                    ))}
                 </div>
             </SectionCard>
         </div>

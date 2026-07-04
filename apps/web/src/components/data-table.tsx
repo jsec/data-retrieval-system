@@ -4,6 +4,7 @@ import type { RowData, Table } from '@tanstack/react-table';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { flexRender } from '@tanstack/react-table';
 
+import { cn } from '#/lib/utils';
 import {
     TableBody,
     TableCell,
@@ -65,9 +66,7 @@ export function DataTable<T>({
                                     textAlign: h.column.columnDef.meta?.align ?? 'left',
                                 }}
                             >
-                                {h.isPlaceholder
-                                    ? null
-                                    : flexRender(h.column.columnDef.header, h.getContext())}
+                                {!h.isPlaceholder && flexRender(h.column.columnDef.header, h.getContext())}
                             </TableHead>
                         ))}
                     </tr>
@@ -82,25 +81,28 @@ export function DataTable<T>({
 
                         return (
                             <TableRow
-                                aria-label={link ? 'Open details' : undefined}
-                                className={link ? 'f1-row f1-row--clickable' : 'f1-row'}
+                                className={cn('f1-row', link && 'f1-row--clickable')}
                                 key={row.id}
                                 onClick={link ? () => void navigate(link) : undefined}
                             >
                                 {visibleCells.map((cell, index) => {
                                     const meta = cell.column.columnDef.meta;
                                     const align = meta?.align ?? 'left';
-                                    const content = meta?.ordinal
-                                        ? (
-                                                <span className="f1-num f1-text-muted" style={{ display: 'block', fontWeight: 700, textAlign: align }}>
-                                                    {i + 1}
-                                                </span>
-                                            )
-                                        : (
-                                                <div style={{ minWidth: 0, textAlign: align }}>
-                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                </div>
-                                            );
+
+                                    let content: React.ReactNode;
+                                    if (meta?.ordinal) {
+                                        content = (
+                                            <span className="f1-num f1-text-muted" style={{ display: 'block', fontWeight: 700, textAlign: align }}>
+                                                {i + 1}
+                                            </span>
+                                        );
+                                    } else {
+                                        content = (
+                                            <div style={{ minWidth: 0, textAlign: align }}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </div>
+                                        );
+                                    }
 
                                     return (
                                         <TableCell
@@ -111,6 +113,7 @@ export function DataTable<T>({
                                                 ? (
                                                         <Link
                                                             {...link}
+                                                            aria-label="Open details"
                                                             onClick={event => event.stopPropagation()}
                                                             style={LINK_STYLE}
                                                         >

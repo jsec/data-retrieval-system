@@ -25,6 +25,7 @@ const Calendar = () => {
                     const winner = r.winner ? getSeasonDriver(r.winner) : null;
                     const row = (
                         <div
+                            key={r.round}
                             className={`f1-card${done ? ' f1-row' : ''}`}
                             style={{ overflow: 'hidden', padding: 0 }}
                         >
@@ -71,20 +72,20 @@ const Calendar = () => {
                             </div>
                         </div>
                     );
-                    return done
-                        ? (
-                                <Link
-                                    key={r.round}
-                                    params={{ round: String(r.round), year }}
-                                    style={{ color: 'inherit', textDecoration: 'none' }}
-                                    to="/seasons/$year/races/$round"
-                                >
-                                    {row}
-                                </Link>
-                            )
-                        : (
-                                <div key={r.round}>{row}</div>
-                            );
+                    if (done) {
+                        return (
+                            <Link
+                                key={r.round}
+                                params={{ round: String(r.round), year }}
+                                style={{ color: 'inherit', textDecoration: 'none' }}
+                                to="/seasons/$year/races/$round"
+                            >
+                                {row}
+                            </Link>
+                        );
+                    }
+
+                    return row;
                 })}
             </div>
         </div>
