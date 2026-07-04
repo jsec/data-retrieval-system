@@ -342,10 +342,36 @@ function initials(name: string): string {
     return last.slice(0, 3).toUpperCase();
 }
 
-const activeByName: Record<string, { code: string; color: string }> = {};
+const activeByName: Partial<Record<string, { code: string; color: string }>> = {};
 for (const d of SEASON_DRIVERS) {
     activeByName[d.name] = { code: d.code, color: d.color };
 }
+
+const nationalityToCountryCode: Record<string, string> = {
+    ARG: 'AR',
+    AUS: 'AU',
+    AUT: 'AT',
+    BEL: 'BE',
+    BRA: 'BR',
+    CAN: 'CA',
+    COL: 'CO',
+    ESP: 'ES',
+    FIN: 'FI',
+    FRA: 'FR',
+    GBR: 'GB',
+    GER: 'DE',
+    ITA: 'IT',
+    JPN: 'JP',
+    MEX: 'MX',
+    MON: 'MC',
+    NED: 'NL',
+    NZL: 'NZ',
+    RSA: 'ZA',
+    SUI: 'CH',
+    SWE: 'SE',
+    THA: 'TH',
+    USA: 'US',
+};
 
 export const ALL_TIME_DRIVERS: AllTimeDriver[] = ALL_TIME_RAW.map((a, i) => {
     const active = activeByName[a[0]];
@@ -353,6 +379,7 @@ export const ALL_TIME_DRIVERS: AllTimeDriver[] = ALL_TIME_RAW.map((a, i) => {
         active: !!active,
         code: active ? active.code : initials(a[0]),
         color: active ? active.color : (a[7] > 0 ? '#c79100' : GRAY_FALLBACK),
+        countryCode: nationalityToCountryCode[a[1]],
         id: i,
         name: a[0],
         nat: a[1],

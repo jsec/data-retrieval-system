@@ -1,7 +1,10 @@
+import type { CSSProperties } from 'react';
+
 import { CaretRightIcon, TrophyIcon } from '@phosphor-icons/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 
+import { CountryFlag } from '#/components/country-flag';
 import { GOLD, MiniStat } from '#/components/f1-ui';
 import { CURRENT_YEAR } from '#/data/fixtures';
 import { driverCareerQuery } from '#/data/queries';
@@ -18,62 +21,47 @@ const DriverCareer = () => {
     const { driverId } = Route.useParams();
     const { data } = useSuspenseQuery(driverCareerQuery(Number(driverId)));
     const { driver, seasons } = data;
+    const countryCode = driver.countryCode;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div style={{
-                alignItems: 'center',
-                background: `linear-gradient(120deg, ${driver.color}, var(--neutral-950))`,
-                borderRadius: 'var(--radius-lg)',
-                color: '#fff',
-                display: 'flex',
-                gap: 22,
-                padding: '24px 28px',
-            }}
+            <div
+                className="driver-hero"
+                style={{ '--driver-color': driver.color } as CSSProperties}
             >
-                <div style={{
-                    alignItems: 'center',
-                    background: 'rgba(255,255,255,.16)',
-                    border: '2px solid rgba(255,255,255,.45)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    flexShrink: 0,
-                    fontSize: 21,
-                    fontWeight: 700,
-                    height: 70,
-                    justifyContent: 'center',
-                    width: 70,
-                }}
-                >
-                    {driver.code}
-                </div>
-                <div>
-                    <div style={{ alignItems: 'center', display: 'flex', gap: 10 }}>
-                        <span className="f1-display" style={{ fontFamily: 'var(--font-display)', fontSize: 30, fontWeight: 700, letterSpacing: '-0.02em' }}>
-                            {driver.name}
-                        </span>
-                        {driver.titles > 0
-                            ? (
-                                    <div style={{
-                                        alignItems: 'center',
-                                        background: 'rgba(255,255,255,.18)',
-                                        borderRadius: 20,
-                                        display: 'flex',
-                                        flexWrap: 'nowrap',
-                                        fontSize: 13,
-                                        fontWeight: 700,
-                                        gap: 4,
-                                        padding: '4px 10px',
-                                    }}
-                                    >
-                                        <TrophyIcon size={13} weight="fill" />
-                                        World Champion
-                                    </div>
-                                )
-                            : null}
+                {countryCode ? <CountryFlag aria-hidden className="driver-hero-flag" code={countryCode} /> : null}
+                <div className="driver-hero-content">
+                    <div className="driver-hero-code">
+                        {driver.code}
                     </div>
-                    <div style={{ fontSize: 13, marginTop: 5, opacity: 0.9 }}>
-                        {`${driver.nat} · ${driver.years} · Career summary`}
+                    <div>
+                        <div style={{ alignItems: 'center', display: 'flex', gap: 10 }}>
+                            <span className="f1-display" style={{ fontFamily: 'var(--font-display)', fontSize: 30, fontWeight: 700, letterSpacing: '-0.02em' }}>
+                                {driver.name}
+                            </span>
+                            {driver.titles > 0
+                                ? (
+                                        <div style={{
+                                            alignItems: 'center',
+                                            background: 'rgba(255,255,255,.18)',
+                                            borderRadius: 20,
+                                            display: 'flex',
+                                            flexWrap: 'nowrap',
+                                            fontSize: 13,
+                                            fontWeight: 700,
+                                            gap: 4,
+                                            padding: '4px 10px',
+                                        }}
+                                        >
+                                            <TrophyIcon size={13} weight="fill" />
+                                            World Champion
+                                        </div>
+                                    )
+                                : null}
+                        </div>
+                        <div style={{ fontSize: 13, marginTop: 5, opacity: 0.9 }}>
+                            {`${driver.nat} · ${driver.years} · Career summary`}
+                        </div>
                     </div>
                 </div>
             </div>

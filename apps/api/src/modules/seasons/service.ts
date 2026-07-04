@@ -22,6 +22,7 @@ export const listSeasons = async (): Promise<ListSeasonsResponse> => {
             season: s.season,
             wcc,
             wdc: {
+                countryCode: s.wdcCountryCode,
                 id: s.wdcDriverId,
                 name: s.wdcDriverName,
             },

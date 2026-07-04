@@ -13,6 +13,7 @@ export type AllTimeDriver = {
     active: boolean;
     code: string;
     color: string;
+    countryCode?: string;
     id: number;
     name: string;
     nat: string;

@@ -1,8 +1,8 @@
 import type { ListSeasonsResponse } from '@drs/contracts';
 
-import { TrophyIcon } from '@phosphor-icons/react';
 import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
+import { CountryFlag } from '#/components/country-flag';
 import { DataTable } from '#/components/data-table';
 import { TeamSquare } from '#/components/f1-ui';
 
@@ -39,7 +39,7 @@ const columns = [
             const wdc = info.getValue();
             return (
                 <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 10, minWidth: 0 }}>
-                    <TrophyIcon color="var(--gold-500)" size={15} weight="fill" />
+                    <CountryFlag aria-hidden className="season-champion-flag" code={wdc.countryCode} />
                     <span className="f1-truncate" style={{ fontSize: 14, fontWeight: 600 }}>{wdc.name}</span>
                 </div>
             );

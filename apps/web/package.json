@@ -29,6 +29,7 @@
         "@tanstack/react-router-devtools": "1.167.0",
         "@tanstack/react-table": "8.21.3",
         "@tanstack/router-plugin": "1.168.18",
+        "country-flag-icons": "^1.6.20",
         "ky": "^2.0.2",
         "react": "19.2.7",
         "react-dom": "19.2.7"

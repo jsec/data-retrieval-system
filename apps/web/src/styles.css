@@ -839,3 +839,68 @@ body {
   outline: 3px solid color-mix(in srgb, var(--color-ring) 25%, transparent);
   outline-offset: 2px;
 }
+
+.driver-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(120deg, var(--driver-color), var(--neutral-950));
+  color: #fff;
+}
+
+.driver-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.08),
+      rgba(0, 0, 0, 0.26)
+    );
+  pointer-events: none;
+}
+
+.driver-hero-flag {
+  position: absolute;
+  top: 50%;
+  right: -6%;
+  width: min(42%, 360px);
+  height: auto;
+  transform: translateY(-50%) rotate(-4deg);
+  opacity: 0.28;
+  filter: saturate(1.08) contrast(1.08);
+  pointer-events: none;
+}
+
+.driver-hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 24px 28px;
+}
+
+.driver-hero-code {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.season-champion-flag {
+  flex-shrink: 0;
+  width: 24px;
+  height: 16px;
+  border-radius: 2px;
+  object-fit: cover;
+}

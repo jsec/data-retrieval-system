@@ -11,6 +11,7 @@ export const listSeasonsResponseSchema = z.array(
             name: z.string(),
         }).nullable(),
         wdc: z.object({
+            countryCode: z.string().length(2),
             id: z.string(),
             name: z.string(),
         }),
