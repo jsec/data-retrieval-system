@@ -6,9 +6,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import TanStackQueryDevtools from './lib/query/devtools';
+import { queryClient } from './lib/query/root-provider';
 import { ThemeProvider } from './lib/theme';
+import { router } from './router';
 import './styles.css';
-import { getRouter } from './router';
 
 const rootElement = document.querySelector('#app');
 
@@ -16,12 +17,10 @@ if (!rootElement) {
     throw new Error('Root element #app was not found.');
 }
 
-const router = getRouter();
-
 createRoot(rootElement).render(
     <StrictMode>
         <ThemeProvider>
-            <QueryClientProvider client={router.options.context.queryClient}>
+            <QueryClientProvider client={queryClient}>
                 <RouterProvider router={router} />
                 {import.meta.env.DEV && (
                     <TanStackDevtools

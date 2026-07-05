@@ -2,14 +2,14 @@ import type { ListConstructorsResponse } from '@drs/contracts';
 import type { SortingFn, SortingState } from '@tanstack/react-table';
 
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
     createColumnHelper,
     getCoreRowModel,
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { DataTable } from '#/components/data-table';
 import { Pill, TrophyCount } from '#/components/f1-ui';
@@ -39,7 +39,10 @@ const sortedRowModel = getSortedRowModel<Constructor>();
 
 const Constructors = () => {
     const { data } = useSuspenseQuery(constructorsQuery);
-    const [sort, setSort] = useState<Sort>('titles');
+    const { sort = 'titles' } = Route.useSearch();
+    const navigate = useNavigate({ from: Route.fullPath });
+    const setSort = (next: Sort) =>
+        void navigate({ search: () => ({ sort: next }) });
 
     const maxWins = useMemo(() => Math.max(...data.map(c => c.wins)), [data]);
 
@@ -176,4 +179,7 @@ export const Route = createFileRoute('/constructors/')({
         await context.queryClient.ensureQueryData(constructorsQuery);
         return { crumbs: [{ label: 'Constructors' }] };
     },
+    validateSearch: (s: Record<string, unknown>): { sort?: Sort } => ({
+        sort: SORTS.some(so => so.key === s.sort) ? (s.sort as Sort) : undefined,
+    }),
 });

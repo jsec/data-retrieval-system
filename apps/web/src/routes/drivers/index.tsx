@@ -3,7 +3,7 @@ import type { FilterFn, SortingFn, SortingState } from '@tanstack/react-table';
 import { CaretRightIcon, MagnifyingGlassIcon } from '@phosphor-icons/react';
 import { rankItem } from '@tanstack/match-sorter-utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import {
     createColumnHelper,
     getCoreRowModel,
@@ -51,12 +51,12 @@ const fuzzy: FilterFn<AllTimeDriver> = (row, _columnId, value, addMeta) => {
 
 const ch = createColumnHelper<AllTimeDriver>();
 const coreRowModel = getCoreRowModel<AllTimeDriver>();
+const filteredRowModel = getFilteredRowModel<AllTimeDriver>();
+const sortedRowModel = getSortedRowModel<AllTimeDriver>();
 
 function getDriverLink(d: AllTimeDriver) {
     return { params: { driverId: String(d.id) }, to: '/drivers/$driverId' } as const;
 }
-const filteredRowModel = getFilteredRowModel<AllTimeDriver>();
-const sortedRowModel = getSortedRowModel<AllTimeDriver>();
 
 const columns = [
     ch.display({ header: '#', id: 'rank', meta: { ordinal: true, width: '4%' } }),
@@ -132,10 +132,15 @@ const columns = [
 
 const DriversIndex = () => {
     const { data: drivers } = useSuspenseQuery(allTimeDriversQuery());
-    const [category, setCategory] = useState<Category>('all');
-    const [sort, setSort] = useState<Sort>('titles');
+    const { category = 'all', sort = 'titles' } = Route.useSearch();
+    const navigate = useNavigate({ from: Route.fullPath });
     const [search, setSearch] = useState('');
     const deferredSearch = useDeferredValue(search);
+
+    const setCategory = (next: Category) =>
+        void navigate({ search: prev => ({ ...prev, category: next }) });
+    const setSort = (next: Sort) =>
+        void navigate({ search: prev => ({ ...prev, sort: next }) });
 
     const data = useMemo(
         () =>
@@ -220,4 +225,8 @@ export const Route = createFileRoute('/drivers/')({
         await context.queryClient.ensureQueryData(allTimeDriversQuery());
         return { crumbs: [{ label: 'Drivers' }] };
     },
+    validateSearch: (s: Record<string, unknown>): { category?: Category; sort?: Sort } => ({
+        category: CATEGORIES.some(c => c.key === s.category) ? (s.category as Category) : undefined,
+        sort: SORTS.some(so => so.key === s.sort) ? (s.sort as Sort) : undefined,
+    }),
 });

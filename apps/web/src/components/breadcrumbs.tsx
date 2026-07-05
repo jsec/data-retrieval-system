@@ -10,12 +10,12 @@ export type Crumb = {
 export const Breadcrumbs = () => {
     const matches = useMatches();
 
-    const withCrumbs = matches.filter(
+    const deepest = matches.findLast(
         (m): m is typeof m & { loaderData: { crumbs: Crumb[] } } =>
             !!(m.loaderData as undefined | { crumbs?: Crumb[] })?.crumbs,
     );
 
-    const crumbs = withCrumbs.at(-1)?.loaderData.crumbs ?? [];
+    const crumbs = deepest?.loaderData.crumbs ?? [];
 
     return (
         <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', fontSize: 13.5, gap: 8, minWidth: 0 }}>

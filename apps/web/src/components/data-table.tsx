@@ -4,7 +4,6 @@ import type { RowData, Table } from '@tanstack/react-table';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { flexRender } from '@tanstack/react-table';
 
-import { cn } from '#/lib/utils';
 import {
     TableBody,
     TableCell,
@@ -14,6 +13,7 @@ import {
     Table as TablePrimitive,
     TableRow,
 } from '#/components/ui/table';
+import { cn } from '#/lib/utils';
 
 declare module '@tanstack/react-table' {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions, @typescript-eslint/no-unused-vars
@@ -89,20 +89,17 @@ export function DataTable<T>({
                                     const meta = cell.column.columnDef.meta;
                                     const align = meta?.align ?? 'left';
 
-                                    let content: React.ReactNode;
-                                    if (meta?.ordinal) {
-                                        content = (
-                                            <span className="f1-num f1-text-muted" style={{ display: 'block', fontWeight: 700, textAlign: align }}>
-                                                {i + 1}
-                                            </span>
-                                        );
-                                    } else {
-                                        content = (
-                                            <div style={{ minWidth: 0, textAlign: align }}>
-                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            </div>
-                                        );
-                                    }
+                                    const content = meta?.ordinal
+                                        ? (
+                                                <span className="f1-num f1-text-muted" style={{ display: 'block', fontWeight: 700, textAlign: align }}>
+                                                    {i + 1}
+                                                </span>
+                                            )
+                                        : (
+                                                <div style={{ minWidth: 0, textAlign: align }}>
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                </div>
+                                            );
 
                                     return (
                                         <TableCell

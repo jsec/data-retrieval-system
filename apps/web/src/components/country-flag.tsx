@@ -1,113 +1,86 @@
 import type { Props as FlagProps } from 'country-flag-icons/react/3x2';
-import type { ComponentProps, JSX } from 'react';
+import type { ComponentProps, JSX, LazyExoticComponent } from 'react';
 
-import AR from 'country-flag-icons/react/3x2/AR';
-import AT from 'country-flag-icons/react/3x2/AT';
-import AU from 'country-flag-icons/react/3x2/AU';
-import BE from 'country-flag-icons/react/3x2/BE';
-import BR from 'country-flag-icons/react/3x2/BR';
-import CA from 'country-flag-icons/react/3x2/CA';
-import CH from 'country-flag-icons/react/3x2/CH';
-import CL from 'country-flag-icons/react/3x2/CL';
-import CN from 'country-flag-icons/react/3x2/CN';
-import CO from 'country-flag-icons/react/3x2/CO';
-import CZ from 'country-flag-icons/react/3x2/CZ';
-import DE from 'country-flag-icons/react/3x2/DE';
-import DK from 'country-flag-icons/react/3x2/DK';
-import EE from 'country-flag-icons/react/3x2/EE';
-import ES from 'country-flag-icons/react/3x2/ES';
-import FI from 'country-flag-icons/react/3x2/FI';
-import FR from 'country-flag-icons/react/3x2/FR';
-import GB from 'country-flag-icons/react/3x2/GB';
-import HK from 'country-flag-icons/react/3x2/HK';
-import HU from 'country-flag-icons/react/3x2/HU';
-import ID from 'country-flag-icons/react/3x2/ID';
-import IE from 'country-flag-icons/react/3x2/IE';
-import IL from 'country-flag-icons/react/3x2/IL';
-import IN from 'country-flag-icons/react/3x2/IN';
-import IT from 'country-flag-icons/react/3x2/IT';
-import JP from 'country-flag-icons/react/3x2/JP';
-import LI from 'country-flag-icons/react/3x2/LI';
-import MA from 'country-flag-icons/react/3x2/MA';
-import MC from 'country-flag-icons/react/3x2/MC';
-import MX from 'country-flag-icons/react/3x2/MX';
-import MY from 'country-flag-icons/react/3x2/MY';
-import NL from 'country-flag-icons/react/3x2/NL';
-import NZ from 'country-flag-icons/react/3x2/NZ';
-import PL from 'country-flag-icons/react/3x2/PL';
-import PT from 'country-flag-icons/react/3x2/PT';
-import RU from 'country-flag-icons/react/3x2/RU';
-import SE from 'country-flag-icons/react/3x2/SE';
-import TH from 'country-flag-icons/react/3x2/TH';
-import US from 'country-flag-icons/react/3x2/US';
-import UY from 'country-flag-icons/react/3x2/UY';
-import VE from 'country-flag-icons/react/3x2/VE';
-import ZA from 'country-flag-icons/react/3x2/ZA';
-import ZW from 'country-flag-icons/react/3x2/ZW';
+import { lazy, Suspense } from 'react';
 
 type FlagComponent = (props: FlagProps) => JSX.Element;
+type FlagLoader = () => Promise<{ default: FlagComponent }>;
 
-const flags: Partial<Record<string, FlagComponent>> = {
-    AR,
-    AT,
-    AU,
-    BE,
-    BR,
-    CA,
-    CH,
-    CL,
-    CN,
-    CO,
-    CZ,
-    DE,
-    DK,
-    EE,
-    ES,
-    FI,
-    FR,
-    GB,
-    HK,
-    HU,
-    ID,
-    IE,
-    IL,
-    IN,
-    IT,
-    JP,
-    LI,
-    MA,
-    MC,
-    MX,
-    MY,
-    NL,
-    NZ,
-    PL,
-    PT,
-    RU,
-    SE,
-    TH,
-    US,
-    UY,
-    VE,
-    ZA,
-    ZW,
+const flagLoaders: Partial<Record<string, FlagLoader>> = {
+    AR: () => import('country-flag-icons/react/3x2/AR'),
+    AT: () => import('country-flag-icons/react/3x2/AT'),
+    AU: () => import('country-flag-icons/react/3x2/AU'),
+    BE: () => import('country-flag-icons/react/3x2/BE'),
+    BR: () => import('country-flag-icons/react/3x2/BR'),
+    CA: () => import('country-flag-icons/react/3x2/CA'),
+    CH: () => import('country-flag-icons/react/3x2/CH'),
+    CL: () => import('country-flag-icons/react/3x2/CL'),
+    CN: () => import('country-flag-icons/react/3x2/CN'),
+    CO: () => import('country-flag-icons/react/3x2/CO'),
+    CZ: () => import('country-flag-icons/react/3x2/CZ'),
+    DE: () => import('country-flag-icons/react/3x2/DE'),
+    DK: () => import('country-flag-icons/react/3x2/DK'),
+    EE: () => import('country-flag-icons/react/3x2/EE'),
+    ES: () => import('country-flag-icons/react/3x2/ES'),
+    FI: () => import('country-flag-icons/react/3x2/FI'),
+    FR: () => import('country-flag-icons/react/3x2/FR'),
+    GB: () => import('country-flag-icons/react/3x2/GB'),
+    HK: () => import('country-flag-icons/react/3x2/HK'),
+    HU: () => import('country-flag-icons/react/3x2/HU'),
+    ID: () => import('country-flag-icons/react/3x2/ID'),
+    IE: () => import('country-flag-icons/react/3x2/IE'),
+    IL: () => import('country-flag-icons/react/3x2/IL'),
+    IN: () => import('country-flag-icons/react/3x2/IN'),
+    IT: () => import('country-flag-icons/react/3x2/IT'),
+    JP: () => import('country-flag-icons/react/3x2/JP'),
+    LI: () => import('country-flag-icons/react/3x2/LI'),
+    MA: () => import('country-flag-icons/react/3x2/MA'),
+    MC: () => import('country-flag-icons/react/3x2/MC'),
+    MX: () => import('country-flag-icons/react/3x2/MX'),
+    MY: () => import('country-flag-icons/react/3x2/MY'),
+    NL: () => import('country-flag-icons/react/3x2/NL'),
+    NZ: () => import('country-flag-icons/react/3x2/NZ'),
+    PL: () => import('country-flag-icons/react/3x2/PL'),
+    PT: () => import('country-flag-icons/react/3x2/PT'),
+    RU: () => import('country-flag-icons/react/3x2/RU'),
+    SE: () => import('country-flag-icons/react/3x2/SE'),
+    TH: () => import('country-flag-icons/react/3x2/TH'),
+    US: () => import('country-flag-icons/react/3x2/US'),
+    UY: () => import('country-flag-icons/react/3x2/UY'),
+    VE: () => import('country-flag-icons/react/3x2/VE'),
+    ZA: () => import('country-flag-icons/react/3x2/ZA'),
+    ZW: () => import('country-flag-icons/react/3x2/ZW'),
 };
+
+const cache = new Map<string, LazyExoticComponent<FlagComponent>>();
 
 type Props = Omit<ComponentProps<FlagComponent>, 'title'> & {
     code: string;
 };
 
 export function CountryFlag({ code, ...props }: Props) {
-    const lookup = code.toUpperCase();
-    const Flag = flags[lookup];
+    const Flag = getFlag(code.toUpperCase());
 
     if (!Flag) {
         return null;
     }
 
     return (
-        <Flag
-            {...props}
-        />
+        <Suspense fallback={null}>
+            <Flag {...props} />
+        </Suspense>
     );
+}
+
+function getFlag(code: string): LazyExoticComponent<FlagComponent> | null {
+    const loader = flagLoaders[code];
+    if (!loader) return null;
+
+    let Flag = cache.get(code);
+
+    if (!Flag) {
+        Flag = lazy(loader);
+        cache.set(code, Flag);
+    }
+    return Flag;
 }

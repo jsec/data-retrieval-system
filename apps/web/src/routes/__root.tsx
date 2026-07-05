@@ -16,7 +16,7 @@ import {
     createRootRouteWithContext,
     Link,
     Outlet,
-    useRouterState,
+    useMatchRoute,
 } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -33,7 +33,6 @@ type MyRouterContext = {
 type NavItem = {
     icon: Icon;
     label: string;
-    match: string[];
     params?: Record<string, string>;
     to: string;
 };
@@ -44,47 +43,37 @@ const navItems: NavItem[] = [
     {
         icon: ChartPieSliceIcon,
         label: 'Overview',
-        match: ['/seasons/' + year + '/races', '/seasons/' + year],
         params: { year },
         to: '/seasons/$year',
     },
     {
         icon: ClockCounterClockwiseIcon,
         label: 'Seasons',
-        match: ['/seasons'],
         to: '/seasons',
     },
     {
         icon: UserListIcon,
         label: 'Drivers',
-        match: ['/drivers'],
         to: '/drivers',
     },
     {
         icon: WrenchIcon,
         label: 'Constructors',
-        match: ['/constructors'],
         to: '/constructors',
     },
     {
         icon: MapTrifoldIcon,
         label: 'Circuits',
-        match: ['/circuits'],
         to: '/circuits',
     },
 ];
-
-const isActive = (pathname: string, item: NavItem): boolean => {
-    if (item.to === '/seasons') return pathname === '/seasons';
-    return item.match.some(m => pathname === m || pathname.startsWith(m + '/'));
-};
 
 const progressPct = Math.round((COMPLETED / TOTAL_ROUNDS) * 100);
 
 const RootLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
     const { resolvedTheme, toggleTheme } = useTheme();
-    const pathname = useRouterState({ select: s => s.location.pathname });
+    const matchRoute = useMatchRoute();
 
     return (
         <div className="f1-app">
@@ -105,7 +94,11 @@ const RootLayout = () => {
 
                 <div className="f1-nav-list">
                     {navItems.map((item) => {
-                        const active = isActive(pathname, item);
+                        const active = !!matchRoute({
+                            fuzzy: true,
+                            params: item.params,
+                            to: item.to,
+                        });
                         return (
                             <Link
                                 className={cn('f1-nav-item', active && 'f1-nav-item--active')}
