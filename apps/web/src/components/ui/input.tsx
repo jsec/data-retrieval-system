@@ -1,21 +1,11 @@
-import type { InputHTMLAttributes } from 'react';
-
-import { forwardRef } from 'react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '#/lib/utils';
 
-export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
-    ({ className, ...props }, ref) => (
-        <input className={cn('ui-input', className)} ref={ref} {...props} />
-    ),
+export const Input = ({ className, ...props }: ComponentProps<'input'>) => (
+    <input className={cn('ui-input', className)} {...props} />
 );
 
-Input.displayName = 'Input';
-
-export const InputGroup = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-    ({ className, ...props }, ref) => (
-        <div className={cn('ui-input-group', className)} ref={ref} {...props} />
-    ),
+export const InputGroup = ({ className, ...props }: ComponentProps<'div'>) => (
+    <div className={cn('ui-input-group', className)} {...props} />
 );
-
-InputGroup.displayName = 'InputGroup';

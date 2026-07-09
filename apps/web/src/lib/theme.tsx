@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, use, useEffect, useMemo, useState } from 'react';
 
 type ResolvedTheme = 'dark' | 'light';
 type Theme = 'dark' | 'light' | 'system';
@@ -16,14 +16,14 @@ const STORAGE_KEY = 'drs-theme';
 const ThemeContext = createContext<null | ThemeContextValue>(null);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+    // eslint-disable-next-line @eslint-react/use-state -- public setter is the wrapped `setTheme` in the context value below
     const [theme, setThemeState] = useState<Theme>(getInitialTheme);
     const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(getSystemTheme);
 
     useEffect(() => {
-        const media = globalThis.matchMedia('(prefers-color-scheme: dark)');
+        const media = matchMedia('(prefers-color-scheme: dark)');
         const updateSystemTheme = () => setSystemTheme(media.matches ? 'dark' : 'light');
 
-        updateSystemTheme();
         media.addEventListener('change', updateSystemTheme);
         return () => media.removeEventListener('change', updateSystemTheme);
     }, []);
@@ -56,7 +56,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useTheme = () => {
-    const context = useContext(ThemeContext);
+    const context = use(ThemeContext);
     if (!context) {
         throw new Error('useTheme must be used within ThemeProvider.');
     }
@@ -65,9 +65,10 @@ export const useTheme = () => {
 
 const getInitialTheme = (): Theme => {
     const stored = localStorage.getItem(STORAGE_KEY);
+    // eslint-disable-next-line unicorn/prefer-includes-over-repeated-comparisons -- the equality chain narrows `stored` to Theme; includes() would not
     return stored === 'dark' || stored === 'light' || stored === 'system' ? stored : 'system';
 };
 
 const getSystemTheme = (): ResolvedTheme => {
-    return globalThis.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };

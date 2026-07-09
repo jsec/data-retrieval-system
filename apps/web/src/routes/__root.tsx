@@ -71,7 +71,7 @@ const navItems: NavItem[] = [
 const progressPct = Math.round((COMPLETED / TOTAL_ROUNDS) * 100);
 
 const RootLayout = () => {
-    const [isCollapsed, setCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(false);
     const { resolvedTheme, toggleTheme } = useTheme();
     const matchRoute = useMatchRoute();
 
@@ -137,7 +137,7 @@ const RootLayout = () => {
                 <header className="f1-header">
                     <Button
                         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                        onClick={() => setCollapsed(c => !c)}
+                        onClick={() => setIsCollapsed(c => !c)}
                         size="icon"
                         variant="ghost"
                     >

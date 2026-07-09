@@ -157,7 +157,7 @@ export const SEASON_CONSTRUCTORS: SeasonConstructor[] = (() => {
             pos: 0,
             wins: CONSTRUCTOR_STATS[k][0],
         }))
-        .sort((a, b) => b.points - a.points)
+        .toSorted((a, b) => b.points - a.points)
         .map((c, i) => ({ ...c, pos: i + 1 }));
 })();
 
@@ -510,11 +510,11 @@ function buildCareer(d: AllTimeDriver): CareerSeason[] {
     const dist = (total: number): number[] => {
         if (total <= 0) return w.map(() => 0);
         const raw = w.map(x => (x / sum) * total);
-        const f = raw.map(Math.floor);
+        const f = raw.map(x => Math.floor(x));
         const rem = total - f.reduce((a, b) => a + b, 0);
         const ord = raw
             .map((x, i): [number, number] => [i, x - Math.floor(x)])
-            .sort((a, b) => b[1] - a[1]);
+            .toSorted((a, b) => b[1] - a[1]);
         for (let k = 0; k < rem; k++) f[ord[k % nS][0]]++;
         return f;
     };
@@ -527,10 +527,11 @@ function buildCareer(d: AllTimeDriver): CareerSeason[] {
 
     const titleIdx = new Set<number>();
     if (d.titles > 0) {
-        for (const a of wins
+        const topWins = wins
             .map((x, i): [number, number] => [i, x])
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, d.titles)) titleIdx.add(a[0]);
+            .toSorted((a, b) => b[1] - a[1])
+            .slice(0, d.titles);
+        for (const a of topWins) titleIdx.add(a[0]);
     }
 
     const out: CareerSeason[] = [];
@@ -569,7 +570,7 @@ function buildCareer(d: AllTimeDriver): CareerSeason[] {
             year: yr,
         });
     }
-    return out.reverse();
+    return out.toReversed();
 }
 
 const CIRCUITS: Circuit[] = [
@@ -680,14 +681,8 @@ export function getDriverSeason(code: string): DriverSeasonDetail | undefined {
             grid: Math.max(1, fin + ((i % 3) - 1)),
             pts: pp,
             round: rc.round,
-            status: isDnf ? 'DNF' : fin <= 3 ? 'PODIUM' : fin <= 10 ? 'POINTS' : '—',
-            statusColor: isDnf
-                ? 'var(--mantine-color-red-6)'
-                : fin <= 3
-                    ? 'var(--mantine-color-yellow-7)'
-                    : fin <= 10
-                        ? 'var(--mantine-color-green-7)'
-                        : 'var(--mantine-color-gray-5)',
+            status: raceStatus(isDnf, fin),
+            statusColor: raceStatusColor(isDnf, fin),
         };
     });
 
@@ -702,4 +697,18 @@ export function getStandings(): Standings {
         leaderPoints: SEASON_DRIVERS[0].points,
         maxConstructor: SEASON_CONSTRUCTORS[0]?.points || 1,
     };
+}
+
+function raceStatus(isDnf: boolean, fin: number): string {
+    if (isDnf) return 'DNF';
+    if (fin <= 3) return 'PODIUM';
+    if (fin <= 10) return 'POINTS';
+    return '—';
+}
+
+function raceStatusColor(isDnf: boolean, fin: number): string {
+    if (isDnf) return 'var(--mantine-color-red-6)';
+    if (fin <= 3) return 'var(--mantine-color-yellow-7)';
+    if (fin <= 10) return 'var(--mantine-color-green-7)';
+    return 'var(--mantine-color-gray-5)';
 }

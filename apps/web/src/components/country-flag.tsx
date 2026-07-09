@@ -59,6 +59,7 @@ type Props = Omit<ComponentProps<FlagComponent>, 'title'> & {
 };
 
 export function CountryFlag({ code, ...props }: Props) {
+    // eslint-disable-next-line @eslint-react/static-components -- flag components are memoized in the module-level cache, not recreated per render
     const Flag = getFlag(code.toUpperCase());
 
     if (!Flag) {
@@ -67,6 +68,7 @@ export function CountryFlag({ code, ...props }: Props) {
 
     return (
         <Suspense fallback={null}>
+            {/* eslint-disable-next-line @eslint-react/static-components -- see above: Flag is a cached module-level component */}
             <Flag {...props} />
         </Suspense>
     );

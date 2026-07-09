@@ -67,6 +67,7 @@ export const LineChart = ({
                 label == null
                     ? null
                     : (
+                            // eslint-disable-next-line @eslint-react/no-array-index-key -- positional axis label, never reordered
                             <text fill={AXIS} fontSize={10} key={`x-${i}`} textAnchor="middle" x={x(i)} y={viewHeight - 7}>
                                 {label}
                             </text>
@@ -76,6 +77,7 @@ export const LineChart = ({
                 const points = s.values.map((v, i) => `${x(i)},${y(v)}`).join(' ');
                 const last = s.values.length - 1;
                 return (
+                    // eslint-disable-next-line @eslint-react/no-array-index-key -- positional series, never reordered
                     <g key={`series-${si}`}>
                         <polyline
                             fill="none"

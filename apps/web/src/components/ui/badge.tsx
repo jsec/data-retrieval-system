@@ -1,19 +1,13 @@
-import type { HTMLAttributes } from 'react';
-
-import { forwardRef } from 'react';
+import type { ComponentProps } from 'react';
 
 import { cn } from '#/lib/utils';
 
-type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
+type BadgeProps = ComponentProps<'span'> & {
     variant?: BadgeVariant;
 };
 
 type BadgeVariant = 'default' | 'secondary' | 'success';
 
-export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-    ({ className, variant = 'default', ...props }, ref) => (
-        <span className={cn('ui-badge', `ui-badge--${variant}`, className)} ref={ref} {...props} />
-    ),
+export const Badge = ({ className, variant = 'default', ...props }: BadgeProps) => (
+    <span className={cn('ui-badge', `ui-badge--${variant}`, className)} {...props} />
 );
-
-Badge.displayName = 'Badge';
