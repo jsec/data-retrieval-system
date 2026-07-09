@@ -1,21 +1,16 @@
 import type { ListSeasonsResponse } from '@drs/contracts';
 
-import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { createColumnHelper, getCoreRowModel } from '@tanstack/react-table';
 
 import { CountryFlag } from '#/components/country-flag';
-import { DataTable } from '#/components/data-table';
 import { TeamSquare } from '#/components/f1-ui';
 
-type Props = {
-    seasons: ListSeasonsResponse;
-};
-
-type Season = ListSeasonsResponse[number];
+export type Season = ListSeasonsResponse[number];
 
 const ch = createColumnHelper<Season>();
-const rowModel = getCoreRowModel<Season>();
+export const rowModel = getCoreRowModel<Season>();
 
-const columns = [
+export const columns = [
     ch.accessor('season', {
         cell: info => (
             <span className="f1-num f1-display" style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.5px' }}>
@@ -63,24 +58,3 @@ const columns = [
         meta: { width: '39%' },
     }),
 ];
-
-const getSeasonLink = (s: Season) => {
-    return {
-        params: {
-            year: String(s.season),
-        },
-        to: '/seasons/$year',
-    } as const;
-};
-
-export const SeasonsTable = ({ seasons }: Props) => {
-    const table = useReactTable({
-        columns,
-        data: seasons,
-        getCoreRowModel: rowModel,
-    });
-
-    return (
-        <DataTable rowLink={getSeasonLink} table={table} />
-    );
-};
