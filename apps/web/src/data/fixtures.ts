@@ -449,16 +449,16 @@ export function getRaceDetail(round: number): RaceDetail | undefined {
         fastestLap: driverByCode.VER,
         laps: 70,
         name: cal.name,
-        paceLines: Object.keys(PACE_LINES).map(code => ({
+        paceLines: Object.entries(PACE_LINES).map(([code, value]) => ({
             code,
             color: driverByCode[code].color,
-            values: PACE_LINES[code],
+            values: value,
         })),
         pole: driverByCode.NOR,
-        positionLines: Object.keys(POSITION_LINES).map(code => ({
+        positionLines: Object.entries(POSITION_LINES).map(([code, value]) => ({
             code,
             color: driverByCode[code].color,
-            values: POSITION_LINES[code],
+            values: value,
         })),
         results: RACE_ORDER.map((code, i) => ({
             code,
@@ -672,16 +672,16 @@ export function getDriverSeason(code: string): DriverSeasonDetail | undefined {
 
     const races: DriverRaceRow[] = CALENDAR.slice(0, COMPLETED).map((rc, i) => {
         const fin = Math.max(1, Math.round(baseP + Math.sin(i * 1.3) * 2));
-        const dnf = code === 'COL' && i === 4;
-        const pp = fin <= 10 && !dnf ? ptsTable[fin - 1] : 0;
+        const isDnf = code === 'COL' && i === 4;
+        const pp = fin <= 10 && !isDnf ? ptsTable[fin - 1] : 0;
         return {
-            finish: dnf ? 'DNF' : fin,
+            finish: isDnf ? 'DNF' : fin,
             gp: rc.name,
             grid: Math.max(1, fin + ((i % 3) - 1)),
             pts: pp,
             round: rc.round,
-            status: dnf ? 'DNF' : fin <= 3 ? 'PODIUM' : fin <= 10 ? 'POINTS' : '—',
-            statusColor: dnf
+            status: isDnf ? 'DNF' : fin <= 3 ? 'PODIUM' : fin <= 10 ? 'POINTS' : '—',
+            statusColor: isDnf
                 ? 'var(--mantine-color-red-6)'
                 : fin <= 3
                     ? 'var(--mantine-color-yellow-7)'

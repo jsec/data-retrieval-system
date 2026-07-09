@@ -20,13 +20,13 @@ const Calendar = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                 {data.calendar.map((r) => {
-                    const done = r.round <= data.completed;
-                    const next = r.round === data.completed + 1;
+                    const isDone = r.round <= data.completed;
+                    const isNext = r.round === data.completed + 1;
                     const winner = r.winner ? getSeasonDriver(r.winner) : null;
                     const row = (
                         <div
+                            className={`f1-card${isDone ? ' f1-row' : ''}`}
                             key={r.round}
-                            className={`f1-card${done ? ' f1-row' : ''}`}
                             style={{ overflow: 'hidden', padding: 0 }}
                         >
                             <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 18, padding: '14px 20px' }}>
@@ -54,7 +54,7 @@ const Calendar = () => {
                                 </div>
                                 <span style={{ color: 'var(--color-muted-foreground)', fontSize: 12.5, width: 120 }}>{r.date}</span>
                                 <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 9, width: 200 }}>
-                                    {done && winner
+                                    {isDone && winner
                                         ? (
                                                 <>
                                                     <span style={{ color: 'var(--color-muted-foreground)', fontSize: 11, fontWeight: 600 }}>WINNER</span>
@@ -63,8 +63,8 @@ const Calendar = () => {
                                                 </>
                                             )
                                         : (
-                                                <span style={{ color: next ? 'var(--color-primary)' : 'var(--color-muted-foreground)', fontSize: 12, fontWeight: 700 }}>
-                                                    {next ? 'UP NEXT' : 'Scheduled'}
+                                                <span style={{ color: isNext ? 'var(--color-primary)' : 'var(--color-muted-foreground)', fontSize: 12, fontWeight: 700 }}>
+                                                    {isNext ? 'UP NEXT' : 'Scheduled'}
                                                 </span>
                                             )}
                                 </div>
@@ -72,7 +72,7 @@ const Calendar = () => {
                             </div>
                         </div>
                     );
-                    if (done) {
+                    if (isDone) {
                         return (
                             <Link
                                 key={r.round}

@@ -221,12 +221,13 @@ const DriversIndex = () => {
 
 export const Route = createFileRoute('/drivers/')({
     component: DriversIndex,
-    loader: async ({ context }) => {
-        await context.queryClient.ensureQueryData(allTimeDriversQuery());
-        return { crumbs: [{ label: 'Drivers' }] };
-    },
     validateSearch: (s: Record<string, unknown>): { category?: Category; sort?: Sort } => ({
         category: CATEGORIES.some(c => c.key === s.category) ? (s.category as Category) : undefined,
         sort: SORTS.some(so => so.key === s.sort) ? (s.sort as Sort) : undefined,
     }),
+    // eslint-disable-next-line perfectionist/sort-objects -- keep TanStack Router's dependency order (validateSearch before loader)
+    loader: async ({ context }) => {
+        await context.queryClient.ensureQueryData(allTimeDriversQuery());
+        return { crumbs: [{ label: 'Drivers' }] };
+    },
 });

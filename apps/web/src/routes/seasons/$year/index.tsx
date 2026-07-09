@@ -1,5 +1,3 @@
-import type { CalendarRound, SeasonDriver } from '#/data/types';
-
 import {
     CalendarDotsIcon,
     CrownIcon,
@@ -9,6 +7,8 @@ import {
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { memo, useMemo } from 'react';
+
+import type { CalendarRound, SeasonDriver } from '#/data/types';
 
 import { GridHeader, SectionCard, StatCard, TeamBar } from '#/components/f1-ui';
 import { LineChart, roundLabels } from '#/components/line-chart';
@@ -24,16 +24,16 @@ type MiniRaceCellProps = {
 };
 
 const MiniRaceCell = memo(function MiniRaceCell({ completed, driverByCode, r, year }: MiniRaceCellProps) {
-    const done = r.round <= completed;
-    const next = r.round === completed + 1;
+    const isDone = r.round <= completed;
+    const isNext = r.round === completed + 1;
     const winner = r.winner ? driverByCode.get(r.winner) : null;
 
     let background: string;
     let border: string;
-    if (done) {
+    if (isDone) {
         background = 'var(--color-card)';
         border = '1px solid var(--color-border)';
-    } else if (next) {
+    } else if (isNext) {
         background = 'color-mix(in srgb, var(--color-primary) 6%, var(--color-background))';
         border = '1px solid color-mix(in srgb, var(--color-primary) 40%, var(--color-border))';
     } else {
@@ -43,11 +43,12 @@ const MiniRaceCell = memo(function MiniRaceCell({ completed, driverByCode, r, ye
 
     const cell = (
         <div
-            className={done ? 'f1-lift' : undefined}
-            style={{ background, border, borderRadius: 7, cursor: done ? 'pointer' : 'default', padding: '9px 10px' }}
+            className={isDone ? 'f1-lift' : undefined}
+            style={{ background, border, borderRadius: 7, cursor: isDone ? 'pointer' : 'default', padding: '9px 10px' }}
         >
             <div className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontSize: 10, fontWeight: 700 }}>
-                R{r.round}
+                R
+                {r.round}
             </div>
             <div style={{ fontSize: 12.5, fontWeight: 700, marginTop: 2 }}>{r.code}</div>
             <div style={{ color: 'var(--color-muted-foreground)', fontSize: 10.5, marginTop: 1 }}>{r.date}</div>
@@ -55,7 +56,7 @@ const MiniRaceCell = memo(function MiniRaceCell({ completed, driverByCode, r, ye
         </div>
     );
 
-    if (done) {
+    if (isDone) {
         return (
             <Link params={{ round: String(r.round), year }} style={{ textDecoration: 'none' }} to="/seasons/$year/races/$round">
                 {cell}

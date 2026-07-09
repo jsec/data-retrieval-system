@@ -91,10 +91,10 @@ const CircuitCard = ({ circuit: c, done, year }: CircuitCardProps) => {
 
     return done
         ? (
-            <Link params={{ round: String(c.round), year }} style={LINK_STYLE} to="/seasons/$year/races/$round">
-                {card}
-            </Link>
-        )
+                <Link params={{ round: String(c.round), year }} style={LINK_STYLE} to="/seasons/$year/races/$round">
+                    {card}
+                </Link>
+            )
         : card;
 };
 

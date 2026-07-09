@@ -71,13 +71,13 @@ const navItems: NavItem[] = [
 const progressPct = Math.round((COMPLETED / TOTAL_ROUNDS) * 100);
 
 const RootLayout = () => {
-    const [collapsed, setCollapsed] = useState(false);
+    const [isCollapsed, setCollapsed] = useState(false);
     const { resolvedTheme, toggleTheme } = useTheme();
     const matchRoute = useMatchRoute();
 
     return (
         <div className="f1-app">
-            <nav className="f1-sidebar" data-collapsed={collapsed}>
+            <nav className="f1-sidebar" data-collapsed={isCollapsed}>
                 <div className="f1-brand">
                     <div className="f1-brand-mark">
                         <FlagCheckeredIcon color="#fff" size={19} weight="bold" />
@@ -94,20 +94,20 @@ const RootLayout = () => {
 
                 <div className="f1-nav-list">
                     {navItems.map((item) => {
-                        const active = !!matchRoute({
+                        const isActive = !!matchRoute({
                             fuzzy: true,
                             params: item.params,
                             to: item.to,
                         });
                         return (
                             <Link
-                                className={cn('f1-nav-item', active && 'f1-nav-item--active')}
+                                className={cn('f1-nav-item', isActive && 'f1-nav-item--active')}
                                 key={item.label}
                                 params={item.params}
-                                title={collapsed ? item.label : undefined}
+                                title={isCollapsed ? item.label : undefined}
                                 to={item.to}
                             >
-                                <item.icon size={18} weight={active ? 'fill' : 'regular'} />
+                                <item.icon size={18} weight={isActive ? 'fill' : 'regular'} />
                                 <span className="f1-nav-label">{item.label}</span>
                             </Link>
                         );
@@ -136,7 +136,7 @@ const RootLayout = () => {
             <div className="f1-main">
                 <header className="f1-header">
                     <Button
-                        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                         onClick={() => setCollapsed(c => !c)}
                         size="icon"
                         variant="ghost"

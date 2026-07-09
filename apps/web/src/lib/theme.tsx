@@ -20,7 +20,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(getSystemTheme);
 
     useEffect(() => {
-        const media = globalThis.window.matchMedia('(prefers-color-scheme: dark)');
+        const media = globalThis.matchMedia('(prefers-color-scheme: dark)');
         const updateSystemTheme = () => setSystemTheme(media.matches ? 'dark' : 'light');
 
         updateSystemTheme();
@@ -38,13 +38,13 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         resolvedTheme,
         setTheme: (nextTheme) => {
             setThemeState(nextTheme);
-            globalThis.window.localStorage.setItem(STORAGE_KEY, nextTheme);
+            localStorage.setItem(STORAGE_KEY, nextTheme);
         },
         theme,
         toggleTheme: () => {
             const nextTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
             setThemeState(nextTheme);
-            globalThis.window.localStorage.setItem(STORAGE_KEY, nextTheme);
+            localStorage.setItem(STORAGE_KEY, nextTheme);
         },
     }), [resolvedTheme, theme]);
 
@@ -64,10 +64,10 @@ export const useTheme = () => {
 };
 
 const getInitialTheme = (): Theme => {
-    const stored = globalThis.window.localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(STORAGE_KEY);
     return stored === 'dark' || stored === 'light' || stored === 'system' ? stored : 'system';
 };
 
 const getSystemTheme = (): ResolvedTheme => {
-    return globalThis.window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return globalThis.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };

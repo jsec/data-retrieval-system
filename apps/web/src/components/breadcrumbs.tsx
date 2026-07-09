@@ -20,10 +20,10 @@ export const Breadcrumbs = () => {
     return (
         <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', fontSize: 13.5, gap: 8, minWidth: 0 }}>
             {crumbs.map((c: Crumb, i: number) => {
-                const last = i === crumbs.length - 1;
+                const isLast = i === crumbs.length - 1;
                 return (
                     <div key={c.to ?? c.label} style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 8 }}>
-                        {c.to && !last
+                        {c.to && !isLast
                             ? (
                                     <Link
                                         params={c.params}
@@ -39,11 +39,11 @@ export const Breadcrumbs = () => {
                                     </Link>
                                 )
                             : (
-                                    <span style={{ fontWeight: last ? 700 : 600, whiteSpace: 'nowrap' }}>
+                                    <span style={{ fontWeight: isLast ? 700 : 600, whiteSpace: 'nowrap' }}>
                                         {c.label}
                                     </span>
                                 )}
-                        {last
+                        {isLast
                             ? null
                             : (
                                     <CaretRightIcon color="var(--neutral-400)" size={11} />

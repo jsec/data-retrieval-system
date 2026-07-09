@@ -175,11 +175,12 @@ const Constructors = () => {
 
 export const Route = createFileRoute('/constructors/')({
     component: Constructors,
+    validateSearch: (s: Record<string, unknown>): { sort?: Sort } => ({
+        sort: SORTS.some(so => so.key === s.sort) ? (s.sort as Sort) : undefined,
+    }),
+    // eslint-disable-next-line perfectionist/sort-objects -- keep TanStack Router's dependency order (validateSearch before loader)
     loader: async ({ context }) => {
         await context.queryClient.ensureQueryData(constructorsQuery);
         return { crumbs: [{ label: 'Constructors' }] };
     },
-    validateSearch: (s: Record<string, unknown>): { sort?: Sort } => ({
-        sort: SORTS.some(so => so.key === s.sort) ? (s.sort as Sort) : undefined,
-    }),
 });
