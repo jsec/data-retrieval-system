@@ -1,12 +1,14 @@
-import myConfig from '@jarsec/eslint-config';
-import turboPlugin from "eslint-plugin-turbo";
+// @ts-check
+
+import reactConfig from '@jarsec/eslint-config/react';
 import onlyWarn from "eslint-plugin-only-warn";
+import turboPlugin from "eslint-plugin-turbo";
 
 /**
  * @type {import("eslint").Linter.Config[]}
  **/
 export const config = [
-    ...myConfig,
+    ...reactConfig,
   {
     plugins: {
       turbo: turboPlugin,

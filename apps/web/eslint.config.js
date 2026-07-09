@@ -1,19 +1,21 @@
 //  @ts-check
 
-import { config } from '@drs/eslint-config/base';
-import { tanstackConfig } from '@tanstack/eslint-config'
+import { config } from '@drs/eslint-config/react';
 
 export default [
     ...config,
-    ...tanstackConfig,
+    {
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+    },
     {
         rules: {
-            'import/no-cycle': 'off',
-            'import/order': 'off',
-            'sort-imports': 'off',
             '@typescript-eslint/array-type': 'off',
             '@typescript-eslint/require-await': 'off',
-            'pnpm/json-enforce-catalog': 'off',
             'unicorn/filename-case': 'off',
         },
     },
