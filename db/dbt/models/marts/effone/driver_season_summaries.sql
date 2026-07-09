@@ -44,6 +44,12 @@ with
             avg(qualifying_position)::numeric(6, 2) as average_qualifying_position
         from qualifying_results
         group by season, driver_id
+    ),
+
+    last_constructor as (
+        select distinct on (season, driver_id) season, driver_id, constructor_id
+        from race_results
+        order by season, driver_id, race_date desc, race_round desc
     )
 
 select
@@ -51,6 +57,7 @@ select
     season_drivers.driver_id,
     drivers.driver_name,
     drivers.driver_code,
+    last_constructor.constructor_id,
     coalesce(race_aggregates.race_entry_count, 0) + coalesce(sprint_aggregates.sprint_entry_count, 0) as entry_count,
     coalesce(race_aggregates.race_start_count, 0) + coalesce(sprint_aggregates.sprint_start_count, 0) as start_count,
     coalesce(race_aggregates.race_entry_count, 0) as race_entry_count,
@@ -100,3 +107,7 @@ left join
     qualifying_aggregates
     on season_drivers.season = qualifying_aggregates.season
     and season_drivers.driver_id = qualifying_aggregates.driver_id
+left join
+    last_constructor
+    on season_drivers.season = last_constructor.season
+    and season_drivers.driver_id = last_constructor.driver_id

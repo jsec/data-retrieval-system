@@ -1587,6 +1587,16 @@ models:
         data_type: boolean
         constraints:
           - type: not_null
+      - name: constructor_id
+        data_type: text
+        description: Constructor the driver raced for in their last race of the season.
+        constraints:
+          - type: not_null
+        tests:
+          - relationships:
+              arguments:
+                to: ref('constructors')
+                field: constructor_id
       - name: driver_code
         data_type: text
         constraints:

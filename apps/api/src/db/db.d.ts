@@ -178,6 +178,7 @@ export type Drivers = {
 export type DriverSeasonSummaries = {
     averageQualifyingPosition: null | Numeric;
     championshipWon: boolean;
+    constructorId: string;
     driverCode: string;
     driverId: string;
     driverName: string;
