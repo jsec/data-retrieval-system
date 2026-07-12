@@ -1,60 +1,43 @@
 import type { ListSeasonsResponse } from '@drs/contracts';
 
-import { createColumnHelper, getCoreRowModel } from '@tanstack/react-table';
-
 import { CountryFlag } from '#/components/country-flag';
+import { makeColumns } from '#/components/data-table';
 import { TeamSquare } from '#/components/f1-ui';
 
 export type Season = ListSeasonsResponse[number];
 
-const ch = createColumnHelper<Season>();
-export const rowModel = getCoreRowModel<Season>();
+const col = makeColumns<Season>();
 
 export const columns = [
-    ch.accessor('season', {
-        cell: info => (
-            <span className="f1-num f1-display" style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.5px' }}>
-                {info.getValue()}
-            </span>
-        ),
+    col.num('season', {
         header: 'SEASON',
-        meta: { width: '12%' },
+        link: s => ({ params: { year: String(s.season) }, to: '/seasons/$year' }),
+        size: 'lg',
+        variant: 'display',
+        width: '12%',
     }),
-    ch.accessor('raceCount', {
-        cell: info => (
-            <span className="f1-num" style={{ color: 'var(--color-muted-foreground)', fontWeight: 700 }}>
-                {info.getValue()}
-            </span>
-        ),
-        header: 'RACES',
-        meta: { align: 'center', width: '10%' },
+    col.num('raceCount', { align: 'center', header: 'RACES', width: '10%' }),
+    col.competitor('wdc', {
+        header: 'WORLD CHAMPION',
+        label: s => s.wdc.name,
+        visual: s => <CountryFlag aria-hidden className="season-champion-flag" code={s.wdc.countryCode} />,
+        width: '39%',
     }),
-    ch.accessor('wdc', {
+    col.custom({
         cell: (info) => {
-            const wdc = info.getValue();
+            const { wcc } = info.row.original;
+            if (!wcc) {
+                return <span className="table-cell-text table-cell-text-muted">—</span>;
+            }
             return (
-                <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 10, minWidth: 0 }}>
-                    <CountryFlag aria-hidden className="season-champion-flag" code={wdc.countryCode} />
-                    <span className="f1-truncate" style={{ fontSize: 14, fontWeight: 600 }}>{wdc.name}</span>
-                </div>
+                <span className="table-cell-entity">
+                    <TeamSquare color={wcc.color} />
+                    <span className="table-cell-entity-label">{wcc.name}</span>
+                </span>
             );
         },
-        header: 'WORLD CHAMPION',
-        meta: { width: '39%' },
-    }),
-    ch.accessor('wcc', {
-        cell: (info) => {
-            const wcc = info.getValue();
-            return wcc
-                ? (
-                        <div style={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: 10, minWidth: 0 }}>
-                            <TeamSquare color={wcc.color} />
-                            <span className="f1-truncate" style={{ fontSize: 14, fontWeight: 600 }}>{wcc.name}</span>
-                        </div>
-                    )
-                : <span style={{ color: 'var(--color-muted-foreground)', fontSize: 13 }}>—</span>;
-        },
         header: 'CONSTRUCTORS\' CHAMPION',
-        meta: { width: '39%' },
+        id: 'wcc',
+        width: '39%',
     }),
 ];

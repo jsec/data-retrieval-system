@@ -1,34 +1,15 @@
 import type { ListSeasonsResponse } from '@drs/contracts';
 
-import { useReactTable } from '@tanstack/react-table';
+import { DataTable, useDataTable } from '#/components/data-table';
 
-import { DataTable } from '#/components/data-table';
-
-import type { Season } from './columns';
-
-import { columns, rowModel } from './columns';
+import { columns } from './columns';
 
 type Props = {
     seasons: ListSeasonsResponse;
 };
 
-const getSeasonLink = (s: Season) => {
-    return {
-        params: {
-            year: String(s.season),
-        },
-        to: '/seasons/$year',
-    } as const;
-};
-
 export const SeasonsTable = ({ seasons }: Props) => {
-    const table = useReactTable({
-        columns,
-        data: seasons,
-        getCoreRowModel: rowModel,
-    });
+    const { table } = useDataTable({ columns, data: seasons });
 
-    return (
-        <DataTable rowLink={getSeasonLink} table={table} />
-    );
+    return <DataTable table={table} />;
 };

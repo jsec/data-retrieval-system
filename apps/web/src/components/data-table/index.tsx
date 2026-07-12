@@ -1,6 +1,8 @@
 import type { LinkProps } from '@tanstack/react-router';
 import type { RowData, Table } from '@tanstack/react-table';
+import type { ReactNode } from 'react';
 
+import { CaretRightIcon } from '@phosphor-icons/react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { flexRender } from '@tanstack/react-table';
 
@@ -15,12 +17,17 @@ import {
 } from '#/components/ui/table';
 import { cn } from '#/lib/utils';
 
+export { makeColumns } from './columns';
+export { useDataTable } from './use-data-table';
+
 declare module '@tanstack/react-table' {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions, @typescript-eslint/no-unused-vars
     interface ColumnMeta<TData extends RowData, TValue> {
         align?: 'center' | 'right';
+        link?: (row: TData) => LinkProps | undefined;
         ordinal?: boolean;
-        width: string;
+        trailing?: 'caret';
+        width?: string;
     }
 }
 
@@ -29,22 +36,22 @@ const LINK_STYLE = { color: 'inherit', display: 'block', textDecoration: 'none' 
 type DataTableProps<T> = {
     headerPy?: number;
     px?: number;
-    rowLink?: (row: T) => LinkProps | undefined;
     rowPy?: number;
     table: Table<T>;
 };
 
-export function DataTable<T>({
-    headerPy = 12,
-    px = 18,
-    rowLink,
-    rowPy = 10,
-    table,
-}: DataTableProps<T>) {
+export function DataTable<T>({ headerPy = 12, px = 18, rowPy = 10, table }: DataTableProps<T>) {
     const navigate = useNavigate();
     const columns = table.getVisibleLeafColumns();
     const headers = table.getHeaderGroups()[0]?.headers ?? [];
     const rows = table.getRowModel().rows;
+
+    const linkColumns = columns.filter(column => column.columnDef.meta?.link);
+    if (import.meta.env.DEV && linkColumns.length > 1) {
+        throw new Error('DataTable: only one column may declare a `link`.');
+    }
+    const linkColumn = linkColumns[0];
+    const hasCaret = linkColumn?.columnDef.meta?.trailing === 'caret';
 
     return (
         <TableContainer>
@@ -73,11 +80,7 @@ export function DataTable<T>({
                 </TableHeader>
                 <TableBody>
                     {rows.map((row, i) => {
-                        const visibleCells = row.getVisibleCells();
-                        const link = rowLink?.(row.original);
-                        const linkCellIndex = link
-                            ? visibleCells.findIndex(cell => !cell.column.columnDef.meta?.ordinal)
-                            : -1;
+                        const link = linkColumn?.columnDef.meta?.link?.(row.original);
 
                         return (
                             <TableRow
@@ -85,13 +88,14 @@ export function DataTable<T>({
                                 key={row.id}
                                 onClick={link ? () => void navigate(link) : undefined}
                             >
-                                {visibleCells.map((cell, index) => {
+                                {row.getVisibleCells().map((cell) => {
                                     const meta = cell.column.columnDef.meta;
                                     const align = meta?.align ?? 'left';
+                                    const isLinkCell = link != null && cell.column.id === linkColumn?.id;
 
-                                    const content = meta?.ordinal
+                                    let content: ReactNode = meta?.ordinal
                                         ? (
-                                                <span className="f1-num f1-text-muted" style={{ display: 'block', fontWeight: 700, textAlign: align }}>
+                                                <span className="table-cell-rank" style={{ display: 'block', textAlign: align }}>
                                                     {i + 1}
                                                 </span>
                                             )
@@ -101,12 +105,21 @@ export function DataTable<T>({
                                                 </div>
                                             );
 
+                                    if (isLinkCell && hasCaret) {
+                                        content = (
+                                            <span className="table-cell-linkrow">
+                                                {content}
+                                                <CaretRightIcon className="table-cell-caret" size={13} />
+                                            </span>
+                                        );
+                                    }
+
                                     return (
                                         <TableCell
                                             key={cell.id}
                                             style={{ paddingBlock: rowPy, paddingInline: px, textAlign: align }}
                                         >
-                                            {link && index === linkCellIndex
+                                            {isLinkCell
                                                 ? (
                                                         <Link
                                                             {...link}
