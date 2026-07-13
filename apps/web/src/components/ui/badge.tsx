@@ -2,6 +2,8 @@ import type { ComponentProps } from 'react';
 
 import { cn } from '#/lib/utils';
 
+import './badge.css';
+
 type BadgeProps = ComponentProps<'span'> & {
     variant?: BadgeVariant;
 };

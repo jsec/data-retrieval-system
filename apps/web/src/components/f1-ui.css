@@ -1,0 +1,64 @@
+@layer features {
+.f1-mini-stat,
+.f1-stat-card {
+  padding: var(--space-4);
+}
+
+.f1-mini-stat {
+  text-align: center;
+}
+
+.f1-mini-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.f1-mini-stat-label {
+  margin-top: 2px;
+  color: var(--color-muted-foreground);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.f1-stat-card-label-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.f1-stat-card-icon {
+  display: flex;
+  font-size: 15px;
+}
+
+.f1-stat-card-label {
+  color: var(--color-muted-foreground);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.f1-stat-card-value {
+  margin-top: 9px;
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.f1-stat-card-sub {
+  margin-top: 2px;
+  color: var(--color-muted-foreground);
+  font-size: 12px;
+}
+
+.f1-trophy-count {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 3px;
+  color: var(--gold-500);
+  font-weight: 700;
+}
+}

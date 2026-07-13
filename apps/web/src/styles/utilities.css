@@ -1,0 +1,64 @@
+.f1-num {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.f1-display {
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-tight);
+}
+
+.f1-row {
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.f1-row--clickable {
+  cursor: pointer;
+}
+.f1-row:hover {
+  background-color: var(--color-accent);
+}
+
+.f1-lift {
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.f1-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: color-mix(in srgb, var(--color-primary) 30%, var(--color-border));
+}
+
+.f1-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.f1-scroll::-webkit-scrollbar-thumb {
+  background: var(--neutral-300);
+  border-radius: 8px;
+  border: 2px solid var(--color-background);
+}
+
+.f1-control-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.f1-sort-label {
+  margin-right: var(--space-1);
+  color: var(--color-muted-foreground);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.f1-text-muted {
+  color: var(--color-muted-foreground);
+}
+
+.f1-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

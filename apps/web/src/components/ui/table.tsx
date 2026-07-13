@@ -2,6 +2,8 @@ import type { ComponentProps } from 'react';
 
 import { cn } from '#/lib/utils';
 
+import './table.css';
+
 export const TableContainer = ({ className, ...props }: ComponentProps<'div'>) => (
     <div className={cn('ui-table-container', className)} {...props} />
 );

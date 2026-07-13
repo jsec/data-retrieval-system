@@ -1,0 +1,206 @@
+:root {
+  --red-50:  #fff1f0;
+  --red-100: #ffdedc;
+  --red-200: #ffc2be;
+  --red-300: #ff958d;
+  --red-400: #fb5b50;
+  --red-500: #e10600;
+  --red-600: #c10500;
+  --red-700: #a00400;
+  --red-800: #840a06;
+  --red-900: #6e0f0c;
+  --red-950: #3c0301;
+
+  --neutral-0:    #ffffff;
+  --neutral-50:   #fafafa;
+  --neutral-100:  #f4f4f5;
+  --neutral-200:  #e4e4e7;
+  --neutral-300:  #d4d4d8;
+  --neutral-400:  #a1a1aa;
+  --neutral-500:  #71717a;
+  --neutral-600:  #52525b;
+  --neutral-700:  #3f3f46;
+  --neutral-800:  #27272a;
+  --neutral-900:  #18181b;
+  --neutral-950:  #15151e;
+  --neutral-1000: #0b0b10;
+
+  --teal-500:   #00b3a4;
+  --teal-600:   #009a8e;
+  --orange-500: #ff8000;
+  --orange-600: #e36f00;
+  --blue-500:   #3671c6;
+  --blue-600:   #2c5ea8;
+  --gold-500:   #ffb800;
+  --gold-600:   #e0a000;
+  --green-500:  #16a34a;
+  --green-600:  #15803d;
+  --amber-500:  #d97706;
+  --sky-500:    #0284c7;
+
+  --tyre-soft:   #e10600;
+  --tyre-medium: #ffb800;
+  --tyre-hard:   #f4f4f5;
+  --tyre-inter:  #16a34a;
+  --tyre-wet:    #2563eb;
+}
+
+:root {
+  --color-background:        var(--neutral-0);
+  --color-foreground:        var(--neutral-950);
+
+  --color-card:              var(--neutral-0);
+  --color-card-foreground:   var(--neutral-950);
+
+  --color-popover:           var(--neutral-0);
+  --color-popover-foreground:var(--neutral-950);
+
+  --color-primary:           var(--red-500);
+  --color-primary-hover:     var(--red-600);
+  --color-primary-foreground:var(--neutral-0);
+
+  --color-secondary:         var(--neutral-100);
+  --color-secondary-foreground: var(--neutral-900);
+
+  --color-muted:             var(--neutral-100);
+  --color-muted-foreground:  var(--neutral-500);
+
+  --color-accent:            var(--neutral-100);
+  --color-accent-foreground: var(--neutral-900);
+
+  --color-destructive:       #dc2626;
+  --color-destructive-foreground: var(--neutral-0);
+
+  --color-success:           var(--green-500);
+  --color-success-foreground:var(--neutral-0);
+  --color-warning:           var(--gold-500);
+  --color-warning-foreground:var(--neutral-950);
+  --color-info:              var(--sky-500);
+  --color-info-foreground:   var(--neutral-0);
+
+  --color-border:            var(--neutral-200);
+  --color-input:             var(--neutral-200);
+  --color-ring:              var(--red-500);
+
+  --chart-1: var(--red-500);
+  --chart-2: var(--teal-500);
+  --chart-3: var(--orange-500);
+  --chart-4: var(--blue-500);
+  --chart-5: var(--gold-500);
+
+  --color-sidebar:                    var(--neutral-950);
+  --color-sidebar-foreground:         var(--neutral-300);
+  --color-sidebar-muted:              var(--neutral-500);
+  --color-sidebar-primary:            var(--red-500);
+  --color-sidebar-primary-foreground: var(--neutral-0);
+  --color-sidebar-accent:             rgba(255, 255, 255, 0.06);
+  --color-sidebar-accent-foreground:  var(--neutral-0);
+  --color-sidebar-border:             rgba(255, 255, 255, 0.08);
+  --color-sidebar-ring:               var(--red-500);
+}
+
+.dark {
+  --color-background:        var(--neutral-950);
+  --color-foreground:        var(--neutral-50);
+
+  --color-card:              #1d1d27;
+  --color-card-foreground:   var(--neutral-50);
+
+  --color-popover:           #1d1d27;
+  --color-popover-foreground:var(--neutral-50);
+
+  --color-primary:           var(--red-500);
+  --color-primary-hover:     var(--red-400);
+  --color-primary-foreground:var(--neutral-0);
+
+  --color-secondary:         var(--neutral-800);
+  --color-secondary-foreground: var(--neutral-50);
+
+  --color-muted:             var(--neutral-800);
+  --color-muted-foreground:  var(--neutral-400);
+
+  --color-accent:            #2a2a36;
+  --color-accent-foreground: var(--neutral-50);
+
+  --color-destructive:       #ef4444;
+  --color-destructive-foreground: var(--neutral-50);
+
+  --color-success:           #22c55e;
+  --color-warning:           var(--gold-500);
+  --color-info:              #38bdf8;
+
+  --color-border:            rgba(255, 255, 255, 0.10);
+  --color-input:             rgba(255, 255, 255, 0.12);
+  --color-ring:              var(--red-500);
+
+  --chart-1: var(--red-500);
+  --chart-2: var(--teal-500);
+  --chart-3: var(--orange-500);
+  --chart-4: #6ea8ff;
+  --chart-5: var(--gold-500);
+
+  --color-sidebar:               var(--neutral-1000);
+  --color-sidebar-foreground:    var(--neutral-300);
+  --color-sidebar-muted:         var(--neutral-500);
+  --color-sidebar-accent:        rgba(255, 255, 255, 0.06);
+  --color-sidebar-accent-foreground: var(--neutral-0);
+  --color-sidebar-border:        rgba(255, 255, 255, 0.08);
+}
+
+:root {
+  --font-display: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-sans:    'Titillium Web', system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --text-xs:   12px;
+  --text-sm:   14px;
+  --text-md:   15px;
+  --text-base: 16px;
+  --text-lg:   18px;
+  --text-xl:   20px;
+  --text-2xl:  24px;
+  --text-3xl:  30px;
+  --text-4xl:  36px;
+  --text-5xl:  48px;
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0em;
+  --tracking-wide:   0.04em;
+  --tracking-caps:   0.08em;
+}
+
+:root {
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+
+  --radius-xs:   2px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   10px;
+  --radius-xl:   14px;
+  --radius-2xl:  18px;
+  --radius-full: 9999px;
+  --radius:      var(--radius-md);
+
+  --shadow-xs: 0 1px 2px 0 rgba(0,0,0,0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.10), 0 1px 2px -1px rgba(0,0,0,0.10);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.10), 0 2px 4px -2px rgba(0,0,0,0.10);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -4px rgba(0,0,0,0.10);
+
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:  120ms;
+  --dur-base:  180ms;
+  --dur-slow:  280ms;
+}
+
+:root {
+  --table-text-sm: 12.5px;
+  --table-text-md: 14px;
+  --table-text-lg: 20px;
+}

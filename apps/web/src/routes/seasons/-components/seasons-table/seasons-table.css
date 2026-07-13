@@ -1,0 +1,9 @@
+@layer features {
+.season-champion-flag {
+  flex-shrink: 0;
+  width: 24px;
+  height: 16px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+}

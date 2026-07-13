@@ -1,0 +1,61 @@
+@layer features {
+.table-cell-num {
+  color: var(--color-muted-foreground);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+.table-cell-num-display {
+  color: var(--color-foreground);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+.table-cell-rank {
+  color: var(--color-muted-foreground);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.table-cell-text {
+  color: var(--color-foreground);
+}
+.table-cell-text-muted {
+  color: var(--color-muted-foreground);
+}
+.table-cell-entity {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+.table-cell-entity-label {
+  overflow: hidden;
+  font-size: var(--table-text-md);
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.table-cell-trophy {
+  display: flex;
+  justify-content: center;
+}
+.table-cell-linkrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.table-cell-linkrow > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+.table-cell-caret {
+  flex-shrink: 0;
+  color: var(--neutral-400);
+}
+.table-cell-sm {
+  font-size: var(--table-text-sm);
+}
+.table-cell-lg {
+  font-size: var(--table-text-lg);
+}
+}

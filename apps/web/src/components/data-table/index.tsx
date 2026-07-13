@@ -17,6 +17,8 @@ import {
 } from '#/components/ui/table';
 import { cn } from '#/lib/utils';
 
+import './data-table.css';
+
 export { makeColumns } from './columns';
 export { useDataTable } from './use-data-table';
 

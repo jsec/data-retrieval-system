@@ -2,6 +2,8 @@ import type { ComponentProps } from 'react';
 
 import { cn } from '#/lib/utils';
 
+import './card.css';
+
 export const Card = ({ className, ...props }: ComponentProps<'div'>) => (
     <div className={cn('ui-card', className)} {...props} />
 );

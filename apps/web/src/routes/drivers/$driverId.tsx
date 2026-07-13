@@ -9,6 +9,8 @@ import { GOLD, MiniStat } from '#/components/f1-ui';
 import { CURRENT_YEAR } from '#/data/fixtures';
 import { driverCareerQuery } from '#/data/queries';
 
+import './driver-hero.css';
+
 const COLS = '84px 1fr 64px 60px 78px 60px 80px 24px';
 
 const getPositionColor = (pos: number): string => {

@@ -2,6 +2,8 @@ import type { ComponentProps } from 'react';
 
 import { cn } from '#/lib/utils';
 
+import './button.css';
+
 type ButtonProps = ComponentProps<'button'> & {
     size?: ButtonSize;
     variant?: ButtonVariant;

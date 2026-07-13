@@ -9,7 +9,7 @@ import TanStackQueryDevtools from './lib/query/devtools';
 import { queryClient } from './lib/query/root-provider';
 import { ThemeProvider } from './lib/theme';
 import { router } from './router';
-import './styles.css';
+import './styles/index.css';
 
 const rootElement = document.querySelector('#app');
 

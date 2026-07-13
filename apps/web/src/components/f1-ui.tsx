@@ -12,6 +12,7 @@ import {
     CardHeader,
     CardTitle,
 } from './ui/card';
+import './f1-ui.css';
 
 export const GOLD = 'var(--gold-500)';
 
