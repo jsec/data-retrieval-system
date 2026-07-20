@@ -37,14 +37,11 @@ type NavItem = {
     to: string;
 };
 
-const year = String(CURRENT_YEAR);
-
 const navItems: NavItem[] = [
     {
         icon: ChartPieSliceIcon,
         label: 'Overview',
-        params: { year },
-        to: '/seasons/$year',
+        to: '/',
     },
     {
         icon: ClockCounterClockwiseIcon,
@@ -95,7 +92,7 @@ const RootLayout = () => {
                 <div className="f1-nav-list">
                     {navItems.map((item) => {
                         const isActive = !!matchRoute({
-                            fuzzy: true,
+                            fuzzy: item.to !== '/',
                             params: item.params,
                             to: item.to,
                         });

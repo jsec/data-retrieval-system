@@ -127,6 +127,7 @@ export type RaceResult = {
 
 export type SeasonConstructor = {
     color: string;
+    flag: string;
     key: TeamKey;
     name: string;
     podiums: number;
@@ -142,6 +143,7 @@ export type SeasonDriver = {
     color: string;
     colorDark: string;
     country: string;
+    flag: string;
     name: string;
     number: number;
     podiums: number;

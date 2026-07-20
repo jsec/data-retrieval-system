@@ -94,6 +94,36 @@ const CAREER_TOTALS: Record<string, [number, number, number, number, number, num
 
 const driverByCode: Record<string, SeasonDriver> = {};
 
+const COUNTRY_FLAG: Record<string, string> = {
+    'Argentina': '🇦🇷',
+    'Australia': '🇦🇺',
+    'Brazil': '🇧🇷',
+    'Canada': '🇨🇦',
+    'France': '🇫🇷',
+    'Germany': '🇩🇪',
+    'Italy': '🇮🇹',
+    'Japan': '🇯🇵',
+    'Monaco': '🇲🇨',
+    'Netherlands': '🇳🇱',
+    'New Zealand': '🇳🇿',
+    'Spain': '🇪🇸',
+    'Thailand': '🇹🇭',
+    'United Kingdom': '🇬🇧',
+};
+
+const TEAM_FLAG: Record<TeamKey, string> = {
+    alp: '🇫🇷',
+    ast: '🇬🇧',
+    fer: '🇮🇹',
+    haa: '🇺🇸',
+    mcl: '🇬🇧',
+    mer: '🇩🇪',
+    rb: '🇮🇹',
+    rbr: '🇦🇹',
+    sau: '🇩🇪',
+    wil: '🇬🇧',
+};
+
 export const SEASON_DRIVERS: SeasonDriver[] = GRID_2026.map((d) => {
     const team = TEAMS[d[3]];
     const c = CAREER_TOTALS[d[0]] ?? [0, 0, 0, 0, 0, CURRENT_YEAR];
@@ -110,6 +140,7 @@ export const SEASON_DRIVERS: SeasonDriver[] = GRID_2026.map((d) => {
         color: team.color,
         colorDark: team.dark,
         country: d[9],
+        flag: COUNTRY_FLAG[d[9]] ?? '🏁',
         name: d[1],
         number: d[4],
         podiums: d[7],
@@ -149,6 +180,7 @@ export const SEASON_CONSTRUCTORS: SeasonConstructor[] = (() => {
     return (Object.keys(TEAMS) as TeamKey[])
         .map(k => ({
             color: TEAMS[k].color,
+            flag: TEAM_FLAG[k],
             key: k,
             name: TEAMS[k].name,
             podiums: CONSTRUCTOR_STATS[k][1],
