@@ -2,7 +2,7 @@ import type { LinkProps } from '@tanstack/react-router';
 import type { RowData, Table } from '@tanstack/react-table';
 import type { ReactNode } from 'react';
 
-import { CaretRightIcon } from '@phosphor-icons/react';
+import { CaretDownIcon, CaretRightIcon, CaretUpIcon } from '@phosphor-icons/react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { flexRender } from '@tanstack/react-table';
 
@@ -42,7 +42,7 @@ type DataTableProps<T> = {
     table: Table<T>;
 };
 
-export function DataTable<T>({ headerPy = 12, px = 18, rowPy = 10, table }: DataTableProps<T>) {
+export function DataTable<T>({ headerPy = 14, px = 18, rowPy = 14, table }: DataTableProps<T>) {
     const navigate = useNavigate();
     const columns = table.getVisibleLeafColumns();
     const headers = table.getHeaderGroups()[0]?.headers ?? [];
@@ -65,19 +65,38 @@ export function DataTable<T>({ headerPy = 12, px = 18, rowPy = 10, table }: Data
                 </colgroup>
                 <TableHeader>
                     <tr>
-                        {headers.map(h => (
-                            <TableHead
-                                key={h.id}
-                                scope="col"
-                                style={{
-                                    paddingBlock: headerPy,
-                                    paddingInline: px,
-                                    textAlign: h.column.columnDef.meta?.align ?? 'left',
-                                }}
-                            >
-                                {!h.isPlaceholder && flexRender(h.column.columnDef.header, h.getContext())}
-                            </TableHead>
-                        ))}
+                        {headers.map((h) => {
+                            const label = h.isPlaceholder
+                                ? null
+                                : flexRender(h.column.columnDef.header, h.getContext());
+                            const sorted = h.column.getIsSorted();
+
+                            return (
+                                <TableHead
+                                    key={h.id}
+                                    scope="col"
+                                    style={{
+                                        paddingBlock: headerPy,
+                                        paddingInline: px,
+                                        textAlign: h.column.columnDef.meta?.align ?? 'left',
+                                    }}
+                                >
+                                    {h.column.getCanSort()
+                                        ? (
+                                                <span className="table-head-sort">
+                                                    {label}
+                                                    {sorted === 'asc' && (
+                                                        <CaretUpIcon className="table-head-caret" size={12} weight="bold" />
+                                                    )}
+                                                    {sorted === 'desc' && (
+                                                        <CaretDownIcon className="table-head-caret" size={12} weight="bold" />
+                                                    )}
+                                                </span>
+                                            )
+                                        : label}
+                                </TableHead>
+                            );
+                        })}
                     </tr>
                 </TableHeader>
                 <TableBody>

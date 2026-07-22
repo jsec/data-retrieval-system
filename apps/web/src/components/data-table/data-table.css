@@ -52,6 +52,16 @@
   flex-shrink: 0;
   color: var(--neutral-400);
 }
+.table-head-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.table-head-caret {
+  flex-shrink: 0;
+  color: var(--color-muted-foreground);
+  opacity: 0.6;
+}
 .table-cell-sm {
   font-size: var(--table-text-sm);
 }
