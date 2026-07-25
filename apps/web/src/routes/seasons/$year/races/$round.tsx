@@ -4,6 +4,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { DriverAvatar, GridHeader, SectionCard, TeamBar } from '#/components/f1-ui';
 import { LineChart } from '#/components/line-chart';
 import { raceDetailQuery } from '#/data/queries';
+import { parseRound, parseYear } from '#/lib/route-params';
 
 const MEDALS = ['#f59f00', '#adb5bd', '#e8590c'];
 const RESULT_COLS = '36px 1fr 72px 90px 48px';
@@ -130,6 +131,7 @@ const RaceDetail = () => {
                         Track position lap-by-lap · top 5
                     </div>
                     <LineChart
+                        ariaLabel="Track position lap by lap, top 5 drivers"
                         height={240}
                         invertY
                         series={positionSeries}
@@ -147,6 +149,7 @@ const RaceDetail = () => {
                         Lap time (s) · lower is faster
                     </div>
                     <LineChart
+                        ariaLabel="Race pace, lap time in seconds"
                         height={240}
                         series={paceSeries}
                         ticks={5}
@@ -240,9 +243,9 @@ const RaceDetail = () => {
 export const Route = createFileRoute('/seasons/$year/races/$round')({
     component: RaceDetail,
     loader: async ({ context, params }) => {
-        const year = Number(params.year);
+        const year = parseYear(params.year);
         const race = await context.queryClient.ensureQueryData(
-            raceDetailQuery(year, Number(params.round)),
+            raceDetailQuery(year, parseRound(params.round)),
         );
         return {
             crumbs: [

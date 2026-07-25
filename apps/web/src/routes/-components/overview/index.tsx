@@ -9,7 +9,7 @@ import { standingsQuery } from '#/data/queries';
 
 import './overview.css';
 
-type Record = { icon: ReactNode; label: string; sub: string; value: number };
+type RecordStat = { icon: ReactNode; label: string; sub: string; value: number };
 type Total = { label: string; meta: string; value: number };
 
 const TOTALS: Total[] = [
@@ -19,7 +19,7 @@ const TOTALS: Total[] = [
     { label: 'Circuits', meta: '34 countries', value: 77 },
 ];
 
-const RECORDS: Record[] = [
+const RECORDS: RecordStat[] = [
     { icon: <CrownIcon color="var(--gold-500)" size={15} weight="fill" />, label: 'WDC', sub: '🇬🇧 Hamilton · 🇩🇪 Schumacher', value: 7 },
     { icon: <WrenchIcon color="#DC0000" size={15} weight="fill" />, label: 'WCC', sub: '🇮🇹 Scuderia Ferrari', value: 16 },
     { icon: <TrophyIcon color="var(--color-primary)" size={15} weight="fill" />, label: 'Most wins', sub: '🇬🇧 Lewis Hamilton', value: 105 },

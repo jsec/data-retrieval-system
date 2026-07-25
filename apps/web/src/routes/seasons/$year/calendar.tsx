@@ -4,6 +4,7 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 
 import { getSeasonDriver, TOTAL_ROUNDS } from '#/data/fixtures';
 import { calendarQuery } from '#/data/queries';
+import { parseYear } from '#/lib/route-params';
 
 const Calendar = () => {
     const { year } = Route.useParams();
@@ -95,7 +96,7 @@ const Calendar = () => {
 export const Route = createFileRoute('/seasons/$year/calendar')({
     component: Calendar,
     loader: async ({ context, params }) => {
-        await context.queryClient.ensureQueryData(calendarQuery(Number(params.year)));
+        await context.queryClient.ensureQueryData(calendarQuery(parseYear(params.year)));
         return {
             crumbs: [
                 { label: params.year, params: { year: params.year }, to: '/seasons/$year' },

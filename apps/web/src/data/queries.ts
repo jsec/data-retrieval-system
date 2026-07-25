@@ -23,7 +23,7 @@ export const allTimeDriversQuery = () =>
         queryKey: ['all-time-drivers'],
     });
 
-export const driverCareerQuery = (driverId: number) =>
+export const driverCareerQuery = (driverId: string) =>
     queryOptions({
         queryFn: () => {
             const career = getDriverCareer(driverId);

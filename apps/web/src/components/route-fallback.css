@@ -1,0 +1,53 @@
+.route-fallback {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-10) var(--space-5);
+    text-align: center;
+}
+
+.route-fallback-title {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    letter-spacing: var(--tracking-tight);
+}
+
+.route-fallback-message {
+    color: var(--color-muted-foreground);
+    font-size: var(--text-sm);
+    margin: 0;
+    max-width: 46ch;
+}
+
+.route-fallback-detail {
+    background: var(--color-accent);
+    border-radius: var(--radius-sm);
+    color: var(--color-muted-foreground);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    max-width: 100%;
+    overflow-x: auto;
+    padding: var(--space-3);
+    text-align: left;
+    white-space: pre-wrap;
+}
+
+.route-fallback-actions {
+    align-items: center;
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+}
+
+.route-fallback-link {
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.route-fallback-link:hover {
+    text-decoration: underline;
+}

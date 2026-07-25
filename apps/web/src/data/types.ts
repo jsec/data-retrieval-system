@@ -14,7 +14,8 @@ export type AllTimeDriver = {
     code: string;
     color: string;
     countryCode?: string;
-    id: number;
+    /** Stable URL slug derived from `name`; independent of array order. */
+    id: string;
     name: string;
     nat: string;
     podiums: number;

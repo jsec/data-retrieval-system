@@ -1,9 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 
 import { GridHeader, MiniStat } from '#/components/f1-ui';
 import { LineChart, roundLabels } from '#/components/line-chart';
+import { getSeasonDriver } from '#/data/fixtures';
 import { driverSeasonQuery } from '#/data/queries';
+import { parseYear } from '#/lib/route-params';
 
 const COLS = '44px 1fr 70px 70px 70px 60px';
 
@@ -84,6 +86,7 @@ const DriverSeason = () => {
                 <div className="f1-card" style={{ padding: 16 }}>
                     <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>Points Progression</div>
                     <LineChart
+                        ariaLabel={`${driver.name} cumulative points progression`}
                         height={200}
                         series={[{ color: driver.color, values: data.progression }]}
                         ticks={5}
@@ -167,8 +170,12 @@ const DriverSeason = () => {
 export const Route = createFileRoute('/seasons/$year/drivers/$driverId')({
     component: DriverSeason,
     loader: async ({ context, params }) => {
+        const year = parseYear(params.year);
+        if (!getSeasonDriver(params.driverId)) {
+            throw notFound();
+        }
         const detail = await context.queryClient.ensureQueryData(
-            driverSeasonQuery(Number(params.year), params.driverId),
+            driverSeasonQuery(year, params.driverId),
         );
         return {
             crumbs: [

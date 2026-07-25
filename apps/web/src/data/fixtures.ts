@@ -20,7 +20,7 @@ import type {
 export const TOTAL_ROUNDS = 24;
 export const COMPLETED = 10;
 export const CURRENT_YEAR = 2026;
-export const GRAY_FALLBACK = 'var(--mantine-color-gray-7)';
+export const GRAY_FALLBACK = 'var(--neutral-500)';
 
 export const TEAMS: Record<TeamKey, Team> = {
     alp: { color: '#0093CC', dark: '#006a94', key: 'alp', name: 'Alpine' },
@@ -36,16 +36,16 @@ export const TEAMS: Record<TeamKey, Team> = {
 };
 
 const GRID_2026: [
-    string,
-    string,
-    string,
-    TeamKey,
-    number,
-    number,
-    number,
-    number,
-    number,
-    string,
+    code: string,
+    name: string,
+    short: string,
+    team: TeamKey,
+    carNumber: number,
+    points: number,
+    wins: number,
+    podiums: number,
+    poles: number,
+    country: string,
 ][] = [
     ['NOR', 'Lando Norris', 'L. Norris', 'mcl', 4, 241, 4, 8, 3, 'United Kingdom'],
     ['PIA', 'Oscar Piastri', 'O. Piastri', 'mcl', 81, 224, 3, 7, 2, 'Australia'],
@@ -69,7 +69,10 @@ const GRID_2026: [
     ['COL', 'Franco Colapinto', 'F. Colapinto', 'alp', 43, 2, 0, 0, 0, 'Argentina'],
 ];
 
-const CAREER_TOTALS: Record<string, [number, number, number, number, number, number]> = {
+const CAREER_TOTALS: Record<
+    string,
+    [races: number, wins: number, poles: number, podiums: number, titles: number, debut: number]
+> = {
     ALB: [111, 0, 0, 2, 0, 2019],
     ALO: [416, 32, 22, 106, 2, 2001],
     ANT: [28, 0, 0, 2, 0, 2025],
@@ -124,32 +127,35 @@ const TEAM_FLAG: Record<TeamKey, string> = {
     wil: '🇬🇧',
 };
 
-export const SEASON_DRIVERS: SeasonDriver[] = GRID_2026.map((d) => {
-    const team = TEAMS[d[3]];
-    const c = CAREER_TOTALS[d[0]] ?? [0, 0, 0, 0, 0, CURRENT_YEAR];
+export const SEASON_DRIVERS: SeasonDriver[] = GRID_2026.map((row) => {
+    const [code, name, short, teamKey, carNumber, points, wins, podiums, poles, country] = row;
+    const team = TEAMS[teamKey];
+    const [careerRaces, careerWins, careerPoles, careerPodiums, careerTitles, debut]
+        = CAREER_TOTALS[code] ?? [0, 0, 0, 0, 0, CURRENT_YEAR];
+
     const driver: SeasonDriver = {
         car: {
-            debut: c[5],
-            podiums: c[3],
-            poles: c[2],
-            races: c[0],
-            titles: c[4],
-            wins: c[1],
+            debut,
+            podiums: careerPodiums,
+            poles: careerPoles,
+            races: careerRaces,
+            titles: careerTitles,
+            wins: careerWins,
         },
-        code: d[0],
+        code,
         color: team.color,
         colorDark: team.dark,
-        country: d[9],
-        flag: COUNTRY_FLAG[d[9]] ?? '🏁',
-        name: d[1],
-        number: d[4],
-        podiums: d[7],
-        points: d[5],
-        poles: d[8],
-        short: d[2],
-        team: d[3],
+        country,
+        flag: COUNTRY_FLAG[country] ?? '🏁',
+        name,
+        number: carNumber,
+        podiums,
+        points,
+        poles,
+        short,
+        team: teamKey,
         teamName: team.name,
-        wins: d[6],
+        wins,
     };
     driverByCode[driver.code] = driver;
     return driver;
@@ -203,7 +209,14 @@ export const PROGRESSION: Record<string, number[]> = {
 };
 const PROGRESSION_ORDER = ['NOR', 'PIA', 'VER', 'LEC', 'RUS', 'HAM'];
 
-const CALENDAR_RAW: [number, string, string, string, string, null | string][] = [
+const CALENDAR_RAW: [
+    round: number,
+    name: string,
+    circuit: string,
+    code: string,
+    date: string,
+    winner: null | string,
+][] = [
     [1, 'Australian GP', 'Albert Park', 'MEL', 'Mar 8', 'NOR'],
     [2, 'Chinese GP', 'Shanghai Intl', 'SHA', 'Mar 22', 'VER'],
     [3, 'Japanese GP', 'Suzuka', 'SUZ', 'Apr 5', 'PIA'],
@@ -230,14 +243,16 @@ const CALENDAR_RAW: [number, string, string, string, string, null | string][] = 
     [24, 'Abu Dhabi GP', 'Yas Marina', 'YAS', 'Dec 6', null],
 ];
 
-export const CALENDAR: CalendarRound[] = CALENDAR_RAW.map(c => ({
-    circuit: c[2],
-    code: c[3],
-    date: c[4],
-    name: c[1],
-    round: c[0],
-    winner: c[5],
-}));
+export const CALENDAR: CalendarRound[] = CALENDAR_RAW.map(
+    ([round, name, circuit, code, date, winner]) => ({
+        circuit,
+        code,
+        date,
+        name,
+        round,
+        winner,
+    }),
+);
 
 const RACE_ORDER = [
     'NOR', 'PIA', 'VER', 'LEC', 'RUS', 'HAM', 'ANT', 'ALB', 'ALO', 'GAS',
@@ -277,7 +292,16 @@ const PACE_LINES: Record<string, number[]> = (() => {
     return out;
 })();
 
-const ALL_TIME_RAW: [string, string, string, number, number, number, number, number][] = [
+const ALL_TIME_RAW: [
+    name: string,
+    nat: string,
+    years: string,
+    starts: number,
+    wins: number,
+    poles: number,
+    podiums: number,
+    titles: number,
+][] = [
     ['Lewis Hamilton', 'GBR', '2007–', 356, 105, 104, 202, 7],
     ['Michael Schumacher', 'GER', '1991–2012', 308, 91, 68, 155, 7],
     ['Juan Manuel Fangio', 'ARG', '1950–1958', 51, 24, 29, 35, 5],
@@ -374,6 +398,16 @@ function initials(name: string): string {
     return last.slice(0, 3).toUpperCase();
 }
 
+/** Driver names are unique in ALL_TIME_RAW, so the slug is a stable id. */
+function slugify(name: string): string {
+    return name
+        .normalize('NFD')
+        .replaceAll(/\p{Diacritic}/gu, '')
+        .toLowerCase()
+        .replaceAll(/[^a-z0-9]+/g, '-')
+        .replaceAll(/^-|-$/g, '');
+}
+
 const activeByName: Partial<Record<string, { code: string; color: string }>> = {};
 for (const d of SEASON_DRIVERS) {
     activeByName[d.name] = { code: d.code, color: d.color };
@@ -405,27 +439,41 @@ const nationalityToCountryCode: Record<string, string> = {
     USA: 'US',
 };
 
-export const ALL_TIME_DRIVERS: AllTimeDriver[] = ALL_TIME_RAW.map((a, i) => {
-    const active = activeByName[a[0]];
+export const ALL_TIME_DRIVERS: AllTimeDriver[] = ALL_TIME_RAW.map((row) => {
+    const [name, nat, years, starts, wins, poles, podiums, titles] = row;
+    const active = activeByName[name];
+
     return {
         active: !!active,
-        code: active ? active.code : initials(a[0]),
-        color: active ? active.color : (a[7] > 0 ? '#c79100' : GRAY_FALLBACK),
-        countryCode: nationalityToCountryCode[a[1]],
-        id: i,
-        name: a[0],
-        nat: a[1],
-        podiums: a[6],
-        poles: a[5],
-        starts: a[3],
-        titles: a[7],
-        wins: a[4],
-        years: a[2],
+        code: active ? active.code : initials(name),
+        color: active ? active.color : (titles > 0 ? '#c79100' : GRAY_FALLBACK),
+        countryCode: nationalityToCountryCode[nat],
+        id: slugify(name),
+        name,
+        nat,
+        podiums,
+        poles,
+        starts,
+        titles,
+        wins,
+        years,
     };
 });
 
+const driverBySlug: Partial<Record<string, AllTimeDriver>> = {};
+for (const driver of ALL_TIME_DRIVERS) {
+    driverBySlug[driver.id] = driver;
+}
+
 const ALL_TIME_CONSTRUCTORS_RAW: [
-    string, string, string, number, number, number, number, boolean,
+    name: string,
+    color: string,
+    years: string,
+    titles: number,
+    wins: number,
+    poles: number,
+    podiums: number,
+    active: boolean,
 ][] = [
     ['Ferrari', '#E8002D', '1950–', 16, 248, 253, 812, true],
     ['McLaren', '#FF8000', '1966–', 8, 200, 165, 524, true],
@@ -450,24 +498,29 @@ const ALL_TIME_CONSTRUCTORS_RAW: [
 ];
 
 export const ALL_TIME_CONSTRUCTORS: AllTimeConstructor[] = ALL_TIME_CONSTRUCTORS_RAW.map(
-    c => ({
-        active: c[7],
-        color: c[1],
-        name: c[0],
-        podiums: c[6],
-        poles: c[5],
-        titles: c[3],
-        wins: c[4],
-        years: c[2],
+    ([name, color, years, titles, wins, poles, podiums, active]) => ({
+        active,
+        color,
+        name,
+        podiums,
+        poles,
+        titles,
+        wins,
+        years,
     }),
 );
+
+/** Cheap existence check for route guards; does not build the career series. */
+export function getAllTimeDriver(id: string): AllTimeDriver | undefined {
+    return driverBySlug[id];
+}
 
 export function getAllTimeDrivers(): AllTimeDriver[] {
     return ALL_TIME_DRIVERS;
 }
 
-export function getDriverCareer(id: number): DriverCareer | undefined {
-    const driver = ALL_TIME_DRIVERS[id];
+export function getDriverCareer(id: string): DriverCareer | undefined {
+    const driver = driverBySlug[id];
     if (!driver) return undefined;
     return { driver, seasons: buildCareer(driver) };
 }
@@ -697,7 +750,7 @@ export function getDriverSeason(code: string): DriverSeasonDetail | undefined {
     for (let i = 0; i < COMPLETED; i++) {
         const p = Math.max(1, Math.round(baseP + Math.sin(i * 1.3) * 2));
         finishes.push({
-            color: p <= 3 ? '#f59f00' : (p <= 10 ? driver.color : 'var(--mantine-color-gray-4)'),
+            color: p <= 3 ? '#f59f00' : (p <= 10 ? driver.color : 'var(--neutral-300)'),
             pos: p,
             round: 'R' + (i + 1),
         });
@@ -739,8 +792,8 @@ function raceStatus(isDnf: boolean, fin: number): string {
 }
 
 function raceStatusColor(isDnf: boolean, fin: number): string {
-    if (isDnf) return 'var(--mantine-color-red-6)';
-    if (fin <= 3) return 'var(--mantine-color-yellow-7)';
-    if (fin <= 10) return 'var(--mantine-color-green-7)';
-    return 'var(--mantine-color-gray-5)';
+    if (isDnf) return 'var(--color-primary)';
+    if (fin <= 3) return 'var(--gold-500)';
+    if (fin <= 10) return 'var(--green-500)';
+    return 'var(--neutral-400)';
 }

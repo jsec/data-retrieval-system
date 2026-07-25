@@ -7,6 +7,16 @@ import { cn } from '#/lib/utils';
 
 type Alignment = 'center' | 'right';
 
+/**
+ * Keys of `T` whose value is assignable to `V` (e.g. numeric or renderable
+ * columns). Constrains which columns a builder accepts; TypeScript will not
+ * narrow `T[K]` back to `V` through this, so the cell still coerces the read,
+ * but that coercion is now guaranteed sound by the key constraint.
+ */
+type KeysMatching<T, V> = string & {
+    [K in keyof T]-?: T[K] extends V ? K : never;
+}[keyof T];
+
 type Shared<T> = {
     align?: Alignment;
     header?: string;
@@ -57,8 +67,8 @@ export function makeColumns<T>() {
         sortingFn: opts.sort,
     });
 
-    const num = (
-        key: keyof T & string,
+    const num = <K extends KeysMatching<T, ReactNode>>(
+        key: K,
         opts: Shared<T> & { size?: Size; variant?: 'display' | 'muted' } = {},
     ): ColumnDef<T, unknown> => ({
         accessorKey: key,
@@ -70,7 +80,7 @@ export function makeColumns<T>() {
                     sizeClass(opts.size),
                 )}
             >
-                {info.getValue() as ReactNode}
+                {info.row.original[key] as ReactNode}
             </span>
         ),
         enableSorting: opts.sort != null,
@@ -89,13 +99,13 @@ export function makeColumns<T>() {
         meta: { ordinal: true, width: opts.width ?? '4%' },
     });
 
-    const text = (
-        key: keyof T & string,
+    const text = <K extends KeysMatching<T, ReactNode>>(
+        key: K,
         opts: Shared<T> & { fallback?: ReactNode; muted?: boolean; size?: Size } = {},
     ): ColumnDef<T, unknown> => ({
         accessorKey: key,
         cell: (info) => {
-            const value = info.getValue() as ReactNode;
+            const value = info.row.original[key] as ReactNode;
             return (
                 <span
                     className={cn(
@@ -115,14 +125,14 @@ export function makeColumns<T>() {
         sortingFn: opts.sort,
     });
 
-    const trophy = (
-        key: keyof T & string,
+    const trophy = <K extends KeysMatching<T, number>>(
+        key: K,
         opts: Shared<T> & { size?: number } = {},
     ): ColumnDef<T, unknown> => ({
         accessorKey: key,
         cell: info => (
             <span className="table-cell-trophy">
-                <TrophyCount count={info.getValue() as number} size={opts.size} />
+                <TrophyCount count={info.row.original[key] as number} size={opts.size} />
             </span>
         ),
         enableSorting: opts.sort != null,

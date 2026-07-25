@@ -7,6 +7,7 @@ import { Pill } from '#/components/f1-ui';
 import { Card } from '#/components/ui/card';
 import { TOTAL_ROUNDS } from '#/data/fixtures';
 import { standingsQuery } from '#/data/queries';
+import { parseYear } from '#/lib/route-params';
 
 import { makeConstructorColumns, makeDriverColumns } from './-components/standings-table/columns';
 
@@ -47,7 +48,7 @@ const Standings = () => {
 export const Route = createFileRoute('/seasons/$year/standings')({
     component: Standings,
     loader: async ({ context, params }) => {
-        await context.queryClient.ensureQueryData(standingsQuery(Number(params.year)));
+        await context.queryClient.ensureQueryData(standingsQuery(parseYear(params.year)));
         return {
             crumbs: [
                 { label: params.year, params: { year: params.year }, to: '/seasons/$year' },

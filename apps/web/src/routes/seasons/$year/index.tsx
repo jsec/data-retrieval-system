@@ -13,6 +13,7 @@ import type { CalendarRound, SeasonDriver } from '#/data/types';
 import { GridHeader, SectionCard, StatCard, TeamBar } from '#/components/f1-ui';
 import { LineChart, roundLabels } from '#/components/line-chart';
 import { seasonOverviewQuery } from '#/data/queries';
+import { parseYear } from '#/lib/route-params';
 
 const DRIVER_COLS = '34px 1fr 64px 56px 70px';
 
@@ -237,6 +238,7 @@ const SeasonOverview = () => {
                     </div>
                 </div>
                 <LineChart
+                    ariaLabel="Cumulative championship points after each round, top 6 drivers"
                     height={280}
                     series={progressionSeries}
                     ticks={6}
@@ -275,7 +277,7 @@ const SeasonOverview = () => {
 export const Route = createFileRoute('/seasons/$year/')({
     component: SeasonOverview,
     loader: async ({ context, params }) => {
-        const year = Number(params.year);
+        const year = parseYear(params.year);
         await context.queryClient.ensureQueryData(seasonOverviewQuery(year));
         return { crumbs: [{ label: 'Season Overview' }] };
     },

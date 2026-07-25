@@ -1,6 +1,7 @@
 import type { ChartSeries } from '#/data/types';
 
 type LineChartProps = {
+    ariaLabel?: string;
     height?: number;
     invertY?: boolean;
     series: ChartSeries[];
@@ -17,6 +18,7 @@ const GRID = '#e9ecef';
 const AXIS = '#868e96';
 
 export const LineChart = ({
+    ariaLabel = 'Line chart',
     height = 220,
     invertY = false,
     series,
@@ -58,6 +60,7 @@ export const LineChart = ({
 
     return (
         <svg
+            aria-label={ariaLabel}
             role="img"
             style={{ display: 'block', height, width: '100%' }}
             viewBox={`0 0 ${viewWidth} ${viewHeight}`}

@@ -26,7 +26,7 @@ export const columns = [
     col.competitor('name', {
         header: 'DRIVER',
         label: d => d.name,
-        link: d => ({ params: { driverId: String(d.id) }, to: '/drivers/$driverId' }),
+        link: d => ({ params: { driverId: d.id }, to: '/drivers/$driverId' }),
         sort: 'text',
         trailing: 'caret',
         visual: d => <DriverAvatar code={d.code} color={d.color} />,

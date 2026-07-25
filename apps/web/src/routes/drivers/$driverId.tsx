@@ -2,11 +2,11 @@ import type { CSSProperties } from 'react';
 
 import { CaretRightIcon, TrophyIcon } from '@phosphor-icons/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 
 import { CountryFlag } from '#/components/country-flag';
 import { GOLD, MiniStat } from '#/components/f1-ui';
-import { CURRENT_YEAR } from '#/data/fixtures';
+import { CURRENT_YEAR, getAllTimeDriver } from '#/data/fixtures';
 import { driverCareerQuery } from '#/data/queries';
 
 import './driver-hero.css';
@@ -21,7 +21,7 @@ const getPositionColor = (pos: number): string => {
 
 const DriverCareer = () => {
     const { driverId } = Route.useParams();
-    const { data } = useSuspenseQuery(driverCareerQuery(Number(driverId)));
+    const { data } = useSuspenseQuery(driverCareerQuery(driverId));
     const { driver, seasons } = data;
     const countryCode = driver.countryCode;
 
@@ -146,8 +146,11 @@ const DriverCareer = () => {
 export const Route = createFileRoute('/drivers/$driverId')({
     component: DriverCareer,
     loader: async ({ context, params }) => {
+        if (!getAllTimeDriver(params.driverId)) {
+            throw notFound();
+        }
         const { driver } = await context.queryClient.ensureQueryData(
-            driverCareerQuery(Number(params.driverId)),
+            driverCareerQuery(params.driverId),
         );
         return {
             crumbs: [{ label: 'Drivers', to: '/drivers' }, { label: driver.name }],
