@@ -134,6 +134,11 @@
             "groupName": "python dependencies",
             "groupSlug": "python-dependencies",
             "groupSingleUpdates": true
+        },
+        {
+            "description": "Pin Python to 3.13, since dbt doesn't work with 3.14 yet",
+            "matchDepNames": ["python"],
+            "allowedVersions": "<3.14.0"
         }
     ]
 }
